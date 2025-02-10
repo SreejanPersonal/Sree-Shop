@@ -1,21 +1,39 @@
 import React, { useState, useMemo } from 'react';
-import { Star, Check, Search, X, ChevronDown, Zap, Shield } from 'lucide-react';
+import { 
+  Star, 
+  Search, 
+  X, 
+  ChevronDown, 
+  Sparkles,
+  Zap,
+  Shield,
+  Info,
+  ArrowRight,
+  Filter,
+  Check,
+  Cpu
+} from 'lucide-react';
 
-// Model data remains the same
+// Update model data arrays
 const freeModels = [
   "claude-3-5-sonnet-20240620",
   "claude-3-5-sonnet",
   "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
-  "deepseek-r1",
   "deepseek-v3",
-  "gpt-4o",
   "gpt-4o-2024-05-13",
-  "Meta-Llama-3.3-70B-Instruct-Turbo"
+  "Meta-Llama-3.3-70B-Instruct-Turbo",
+  "deepseek-r1"  // Added deepseek-r1 to free models
+];
+
+const betaModels = [
+  "deepseek-r1",
+  "gpt-4o-mini",
+  "o3-mini"  // Added new o3-mini model
 ];
 
 const paidModels = [
   "gpt-3.5-turbo", "gpt-3.5-turbo-202201", "gpt-4o", "gpt-4o-2024-05-13",
-  "gpt-4o-mini-ddg", "gpt-4o-real", "deepseek-r1", "deepseek-v3",
+  "gpt-4o-real", "deepseek-v3",
   "openai/whisper-large-v3", "openai/whisper-large-v3-turbo", "claude",
   "claude-3-5-sonnet", "claude-3-5-sonnet-20240620", "claude-3-5-sonnet-real",
   "claude-3-haiku-ddg", "claude-sonnet-3.5", "gemini-1.5-flash", "gemini-1.5-pro",
@@ -79,12 +97,13 @@ function getProviderFromModel(model: string) {
   return 'Other';
 }
 
-// Custom dropdown component remains the same
-const ProviderDropdown = ({ value, onChange, providers }: { 
-  value: string | null, 
-  onChange: (value: string | null) => void,
-  providers: string[]
-}) => {
+interface ProviderDropdownProps {
+  value: string | null;
+  onChange: (value: string | null) => void;
+  providers: string[];
+}
+
+const ProviderDropdown: React.FC<ProviderDropdownProps> = ({ value, onChange, providers }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -135,6 +154,7 @@ function Models() {
   const providers = useMemo(() => 
     Array.from(new Set([
       ...freeModels.map(getProviderFromModel),
+      ...betaModels.map(getProviderFromModel),
       ...paidModels.map(getProviderFromModel)
     ])).sort()
   , []);
@@ -158,20 +178,28 @@ function Models() {
     filterModels(freeModels)
   , [searchTerm, selectedProvider]);
 
+  const filteredBetaModels = useMemo(() => 
+    filterModels(betaModels)
+  , [searchTerm, selectedProvider]);
+
   const filteredPaidModels = useMemo(() => 
     filterModels(paidModels)
   , [searchTerm, selectedProvider]);
 
-  const noResults = filteredFreeModels.length === 0 && filteredPaidModels.length === 0;
+  const noResults = filteredFreeModels.length === 0 && filteredBetaModels.length === 0 && filteredPaidModels.length === 0;
 
-  const ModelCard = ({ model, isPro }: { model: string, isPro: boolean }) => (
-    <div className={`group relative aspect-square rounded-2xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-${isPro ? 'purple' : 'green'}-500 dark:hover:border-${isPro ? 'purple' : 'green'}-500 transition-all hover:shadow-lg`}>
+  const ModelCard = ({ model, isPro, isBeta }: { model: string; isPro: boolean; isBeta: boolean }) => (
+    <div className={`group relative aspect-square rounded-2xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-${isBeta ? 'yellow' : isPro ? 'purple' : 'green'}-500 dark:hover:border-${isBeta ? 'yellow' : isPro ? 'purple' : 'green'}-500 transition-all hover:shadow-lg`}>
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900"></div>
       <div className="relative h-full p-4 flex flex-col">
         <div className="flex-1">
           <div className="flex items-start justify-between gap-2 mb-3">
             <h3 className="font-medium text-sm line-clamp-2">{model}</h3>
-            {isPro && <Star className="w-4 h-4 flex-shrink-0 text-amber-400" />}
+            {isPro ? (
+              <Star className="w-4 h-4 flex-shrink-0 text-amber-400" />
+            ) : isBeta ? (
+              <Sparkles className="w-4 h-4 flex-shrink-0 text-yellow-400" />
+            ) : null}
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-400 mb-3">
             Provider: {getProviderFromModel(model)}
@@ -181,18 +209,20 @@ function Models() {
         <div className="space-y-2">
           <div className="flex flex-wrap gap-1.5">
             <span className="px-2 py-1 text-[10px] rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-              {isPro ? 'Unlimited RPM' : '3 RPM'}
+              {isPro ? 'Unlimited TPM' : isBeta ? '10 RPM' : '3 RPM'}
             </span>
             <span className="px-2 py-1 text-[10px] rounded-full bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
-              {isPro ? 'Original Context' : '4K Context'}
+              {isPro ? 'Original Context' : isBeta ? '32K Context' : '4K Context'}
             </span>
           </div>
           <span className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded-full ${
-            isPro 
-              ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
-              : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+            isBeta 
+              ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+              : isPro 
+                ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
+                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
           }`}>
-            {isPro ? 'Pro' : 'Free'}
+            {isBeta ? 'Beta (Free Limited Time)' : isPro ? 'Pro' : 'Free'}
           </span>
         </div>
       </div>
@@ -208,7 +238,6 @@ function Models() {
             Access a wide range of state-of-the-art AI models
           </p>
 
-          {/* Search and Filter */}
           <div className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-4 mb-12">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -235,7 +264,6 @@ function Models() {
             />
           </div>
 
-          {/* No Results Message */}
           {noResults && (
             <div className="text-center py-12">
               <p className="text-gray-600 dark:text-gray-400 mb-2">
@@ -254,7 +282,27 @@ function Models() {
           )}
         </div>
 
-        {/* Free Models Section */}
+        {filteredBetaModels.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center gap-4 mb-6">
+              <h2 className="text-2xl font-bold">Beta Tier Models</h2>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 rounded-full">
+                  {filteredBetaModels.length} models
+                </span>
+                <span className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 rounded-full animate-pulse">
+                  Free for Limited Time!
+                </span>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {filteredBetaModels.map((model) => (
+                <ModelCard key={model} model={model} isPro={false} isBeta={true} />
+              ))}
+            </div>
+          </div>
+        )}
+
         {filteredFreeModels.length > 0 && (
           <div className="mb-12">
             <div className="flex items-center gap-4 mb-6">
@@ -265,13 +313,12 @@ function Models() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
               {filteredFreeModels.map((model) => (
-                <ModelCard key={model} model={model} isPro={false} />
+                <ModelCard key={model} model={model} isPro={false} isBeta={false} />
               ))}
             </div>
           </div>
         )}
 
-        {/* Pro Models Section */}
         {filteredPaidModels.length > 0 && (
           <div>
             <div className="flex items-center gap-4 mb-6">
@@ -282,7 +329,7 @@ function Models() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
               {filteredPaidModels.map((model) => (
-                <ModelCard key={model} model={model} isPro={true} />
+                <ModelCard key={model} model={model} isPro={true} isBeta={false} />
               ))}
             </div>
           </div>

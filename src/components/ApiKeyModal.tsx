@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle2, Circle } from 'lucide-react';
+import { X, CheckCircle2, Circle, Play } from 'lucide-react';
 
 interface Step {
   title: string;
@@ -54,13 +54,27 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         <div className="p-6">
-          <div className="aspect-video mb-6 bg-gray-900 rounded-lg overflow-hidden">
-            <iframe
-              src="https://www.youtube.com/embed/your-video-id"
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+          <div className="relative w-full aspect-video mb-6 rounded-lg overflow-hidden group">
+            <a
+              href="https://www.youtube.com/watch?v=FNM8D3Nd-Ok"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
+              {/* Thumbnail Image */}
+              <img
+                src="https://i3.ytimg.com/vi/FNM8D3Nd-Ok/maxresdefault.jpg"
+                alt="Video thumbnail"
+                className="w-full h-full object-cover"
+              />
+              
+              {/* Play Button Overlay */}
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/50 transition-colors">
+                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-600 group-hover:bg-red-700 transition-colors">
+                  <Play className="w-8 h-8 text-white ml-1" />
+                </div>
+              </div>
+            </a>
           </div>
 
           <div className="space-y-6">

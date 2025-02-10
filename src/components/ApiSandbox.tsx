@@ -6,7 +6,7 @@ const INITIAL_CODE = {
   python: `import openai
 
 client = openai.Client(
-    base_url="https://api.yourdomain.com/v1",
+    base_url="https://api.sree.shop/v1",
     api_key="YOUR_API_KEY"
 )
 
@@ -21,7 +21,7 @@ print(response.choices[0].message.content)`,
   javascript: `import OpenAI from 'openai';
 
 const client = new OpenAI({
-  baseURL: 'https://api.yourdomain.com/v1',
+  baseURL: 'https://api.sree.shop/v1',
   apiKey: 'YOUR_API_KEY'
 });
 
@@ -33,7 +33,7 @@ const response = await client.chat.completions.create({
 });
 
 console.log(response.choices[0].message.content);`,
-  curl: `curl https://api.yourdomain.com/v1/chat/completions \\
+  curl: `curl https://api.sree.shop/v1/chat/completions \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -d '{

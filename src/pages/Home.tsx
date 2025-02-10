@@ -1,20 +1,118 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Zap, Shield, Cpu, ArrowRight } from 'lucide-react';
+import { Sparkles, Zap, Shield, Cpu, ArrowRight, ExternalLink, XCircle } from 'lucide-react';
 import ApiSandbox from '../components/ApiSandbox';
+import MainWebsiteModal from '../components/MainWebsiteModal';
+
+interface ErrorModalProps {
+  error: string;
+  onClose: () => void;
+}
+
+const ErrorModal: React.FC<ErrorModalProps> = ({ error, onClose }) => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 shadow-xl">
+      <div className="flex items-center gap-3 mb-4 text-red-500">
+        <XCircle className="w-6 h-6" />
+        <h3 className="text-xl font-semibold">Invalid API Key</h3>
+      </div>
+      <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
+      <button
+        onClick={onClose}
+        className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+      >
+        Try Again
+      </button>
+    </div>
+  </div>
+);
 
 function Home() {
   const [apiKey, setApiKey] = useState('');
+  const [isMainWebsiteModalOpen, setIsMainWebsiteModalOpen] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleDashboardAccess = () => {
-    if (apiKey.trim()) {
-      navigate('/dashboard');
+  const validateApiKey = async (key: string) => {
+    try {
+      const response = await fetch('https://beta.sree.shop/v1/usage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ api_key: key }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Invalid API key. Please check your credentials and try again.');
+        }
+        throw new Error('Failed to validate API key. Please try again later.');
+      }
+
+      // If we get here, the API key is valid
+      sessionStorage.setItem('apiKey', key);
+      return true;
+    } catch (err) {
+      if (err instanceof Error && err.message === 'Failed to fetch') {
+        throw new Error('Network error. Please check your connection and try again.');
+      }
+      throw err;
+    }
+  };
+
+  const handleDashboardAccess = async () => {
+    if (!apiKey.trim()) {
+      const input = document.getElementById('api-key-input');
+      input?.classList.add('animate-shake');
+      setTimeout(() => input?.classList.remove('animate-shake'), 500);
+      return;
+    }
+
+    setIsValidating(true);
+    setError(null);
+
+    try {
+      const isValid = await validateApiKey(apiKey.trim());
+      if (isValid) {
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to validate API key');
+      const input = document.getElementById('api-key-input');
+      input?.classList.add('animate-shake');
+      setTimeout(() => input?.classList.remove('animate-shake'), 500);
+    } finally {
+      setIsValidating(false);
     }
   };
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
+      {/* Floating Main Website Button */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setIsMainWebsiteModalOpen(true)}
+          className="group relative"
+        >
+          {/* Pulsing background effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
+          
+          {/* Button content */}
+          <div className="relative px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl text-white shadow-xl flex items-center gap-3 transform hover:scale-105 transition-all duration-300">
+            <div className="p-1 bg-white/20 rounded-lg">
+              <ExternalLink className="w-4 h-4" />
+            </div>
+            <span className="font-medium">Visit Main Website</span>
+            <div className="absolute -top-1 -right-1 w-3 h-3">
+              <div className="absolute inset-0 bg-yellow-400 rounded-full animate-ping"></div>
+              <div className="absolute inset-0 bg-yellow-400 rounded-full"></div>
+            </div>
+          </div>
+        </button>
+      </div>
+
       {/* Hero Section */}
       <section className="flex-1 flex items-center justify-center py-8 sm:py-12 lg:py-16 px-4 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-6xl mx-auto w-full">
@@ -37,19 +135,38 @@ function Home() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 justify-center mb-8 sm:mb-12">
               <div className="relative flex-1 max-w-md">
                 <input
+                  id="api-key-input"
                   type="text"
                   value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
+                  onChange={(e) => {
+                    setApiKey(e.target.value);
+                    setError(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleDashboardAccess();
+                    }
+                  }}
                   placeholder="Enter your API key"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none transition-all duration-200"
                 />
               </div>
               <button
                 onClick={handleDashboardAccess}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                disabled={isValidating}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                View Dashboard
-                <ArrowRight className="w-4 h-4" />
+                {isValidating ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Validating...
+                  </>
+                ) : (
+                  <>
+                    View Dashboard
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
 
@@ -92,6 +209,14 @@ function Home() {
           <ApiSandbox />
         </div>
       </section>
+
+      {/* Modals */}
+      <MainWebsiteModal
+        isOpen={isMainWebsiteModalOpen}
+        onClose={() => setIsMainWebsiteModalOpen(false)}
+      />
+
+      {error && <ErrorModal error={error} onClose={() => setError(null)} />}
     </div>
   );
 }

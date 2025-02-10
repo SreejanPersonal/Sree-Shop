@@ -5,6 +5,9 @@ import Home from './pages/Home';
 import Pricing from './pages/Pricing';
 import Dashboard from './pages/Dashboard';
 import Models from './pages/Models';
+import About from './pages/About';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
           <Route path="pricing" element={<Pricing />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="models" element={<Models />} />
+          <Route path="about" element={<About />} />
+          <Route path="terms" element={<Terms />} />
+          <Route path="privacy" element={<Privacy />} />
         </Route>
       </Routes>
     </Router>

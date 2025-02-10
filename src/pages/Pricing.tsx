@@ -1,11 +1,40 @@
 import React, { useState } from 'react';
-import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2 } from 'lucide-react';
+import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2, Info } from 'lucide-react';
 import ApiKeyModal from '../components/ApiKeyModal';
 
 interface FAQItem {
   question: string;
   answer: string;
 }
+
+interface TooltipProps {
+  content: string;
+  children: React.ReactNode;
+}
+
+const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <div className="relative inline-flex items-center group">
+      <div
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        className="cursor-help"
+      >
+        {children}
+      </div>
+      {isVisible && (
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 text-sm z-50">
+          <div className="relative">
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white dark:bg-gray-800 border-r border-b border-gray-200 dark:border-gray-700 transform rotate-45"></div>
+            {content}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const faqs: FAQItem[] = [
   {
@@ -44,12 +73,30 @@ function Pricing() {
       highlight: "Perfect for personal projects",
       description: "Get started with unlimited access",
       features: [
-        "3 requests per minute",
-        "4K tokens per response",
-        "4K context window",
-        "100+ AI models access",
-        "OpenAI-compatible API",
-        "Community support"
+        {
+          text: "3 requests per minute",
+          tooltip: "Rate limit of 3 requests per minute, may reduce during high traffic"
+        },
+        {
+          text: "4K tokens per response",
+          tooltip: "Maximum of 4,000 tokens per API response"
+        },
+        {
+          text: "4K context window",
+          tooltip: "Process up to 4,000 tokens of context in each request"
+        },
+        {
+          text: "100+ AI models access",
+          tooltip: "Access to a wide range of AI models including GPT-4, Claude, and more"
+        },
+        {
+          text: "OpenAI-compatible API",
+          tooltip: "Drop-in replacement for OpenAI's API - just change the base URL"
+        },
+        {
+          text: "Community support",
+          tooltip: "Get help from our active community on Telegram"
+        }
       ],
       cta: "Get Started",
       highlighted: false,
@@ -63,35 +110,34 @@ function Pricing() {
       highlight: "Save 90% vs OpenAI ($200/mo)",
       description: "What OpenAI charges $200/month for",
       features: [
-        "Unlimited requests",
-        "No token limits",
-        "100+ AI models access",
-        "Full streaming support",
-        "Priority support",
-        "OpenAI-compatible API"
+        {
+          text: "Unlimited requests under fair use",
+          tooltip: "No hard request limits - use as much as you need within fair usage policy"
+        },
+        {
+          text: "Original model capabilities",
+          tooltip: "Access models with their full context window and capabilities"
+        },
+        {
+          text: "100+ premium AI models",
+          tooltip: "Full access to all models including latest versions and premium variants"
+        },
+        {
+          text: "Full streaming support",
+          tooltip: "Get real-time streaming responses for interactive applications"
+        },
+        {
+          text: "Priority support",
+          tooltip: "Get priority assistance from our dedicated support team"
+        },
+        {
+          text: "OpenAI-compatible API",
+          tooltip: "Seamlessly replace OpenAI's API with our more affordable solution"
+        }
       ],
       cta: "Contact Us",
       highlighted: true,
       gradient: "from-blue-600 to-indigo-600"
-    },
-    {
-      name: "Business",
-      icon: <Building2 className="w-6 h-6" />,
-      price: "Custom",
-      period: "based on usage",
-      highlight: "Enterprise-grade reliability",
-      description: "Tailored solutions for large-scale needs",
-      features: [
-        "Everything in Pro",
-        "90% cost savings vs direct API",
-        "Custom rate limits",
-        "Dedicated support",
-        "SLA guarantee",
-        "Custom features"
-      ],
-      cta: "Contact Sales",
-      highlighted: false,
-      gradient: "from-purple-600 to-pink-600"
     }
   ];
 
@@ -117,7 +163,7 @@ function Pricing() {
             <a href="https://t.me/devsdocode" target="_blank" rel="noopener noreferrer"
                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
               <svg className="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
               </svg>
               <span>Telegram</span>
             </a>
@@ -141,10 +187,18 @@ function Pricing() {
           <p className="text-xl text-gray-600 dark:text-gray-400">
             Start for free, upgrade when you need to
           </p>
+          
+          {/* OpenAI Comparison Banner */}
+          <div className="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20">
+            <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <span className="text-sm font-medium">
+              Get OpenAI-level features at <span className="text-blue-600 dark:text-blue-400">90% lower cost</span>
+            </span>
+          </div>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-24">
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
           {tiers.map((tier, index) => (
             <div
               key={index}
@@ -194,7 +248,12 @@ function Pricing() {
                           }`} />
                         </div>
                       </div>
-                      <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {feature.text}
+                        <Tooltip content={feature.tooltip}>
+                          <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                        </Tooltip>
+                      </span>
                     </li>
                   ))}
                 </ul>
