@@ -16,6 +16,7 @@ function Layout() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isMainWebsiteModalOpen, setIsMainWebsiteModalOpen] = useState(false);
   const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
+  const [buttonsOffset, setButtonsOffset] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -31,6 +32,29 @@ function Layout() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const footer = document.querySelector('footer');
+      if (!footer) return;
+
+      const footerTop = footer.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+      const buffer = 20; // Space to maintain above footer
+
+      if (footerTop < windowHeight) {
+        const overlap = windowHeight - footerTop;
+        setButtonsOffset(overlap + buffer);
+      } else {
+        setButtonsOffset(0);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const toggleDarkMode = () => {
     const newMode = !darkMode;
     setDarkMode(newMode);
@@ -41,18 +65,12 @@ function Layout() {
   const Logo = () => (
     <Link to="/" className="flex items-center gap-2 group">
       <div className="relative">
-        {/* Outer glow effect */}
         <div className="absolute inset-0 bg-gradient-premium from-light-primary-500/50 to-light-accent-500/50 dark:from-dark-primary-400/50 dark:to-dark-accent-400/50 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300 scale-150"></div>
         
-        {/* Main container with gradient border */}
         <div className="relative p-0.5 rounded-xl bg-gradient-premium from-light-primary-500 to-light-accent-500 dark:from-dark-primary-400 dark:to-dark-accent-400">
-          {/* Inner container with glass effect */}
           <div className="relative p-2.5 rounded-[10px] bg-white/90 dark:bg-dark-bg/90 backdrop-blur-sm">
-            {/* Icon with animated gradient */}
             <div className="relative w-6 h-6">
-              {/* Animated gradient background */}
               <div className="absolute inset-0 bg-gradient-premium from-light-primary-500 to-light-accent-500 dark:from-dark-primary-400 dark:to-dark-accent-400 rounded-lg animate-pulse"></div>
-              {/* Icon with transparent cutout effect */}
               <Sparkles className="w-6 h-6 relative z-10 text-white dark:text-white/90" />
             </div>
           </div>
@@ -71,15 +89,12 @@ function Layout() {
 
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text">
-      {/* Header */}
       <header className="fixed w-full top-0 z-50 border-b border-light-primary-100 dark:border-dark-primary-800 backdrop-blur-premium bg-light-bg/50 dark:bg-dark-bg/50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <Logo />
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-8">
-              {/* Main Navigation */}
               <div className="flex items-center gap-6">
                 <Link
                   to="/pricing"
@@ -96,7 +111,7 @@ function Layout() {
                   Models
                 </Link>
                 <a
-                  href="https://status.sree.shop"
+                  href="https://status.deepseek.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-light-primary-600 dark:hover:text-dark-primary-400 transition-colors flex items-center gap-1"
@@ -106,7 +121,6 @@ function Layout() {
                 </a>
               </div>
 
-              {/* Get API Key Button */}
               <button
                 onClick={() => setIsApiKeyModalOpen(true)}
                 className="px-4 py-2 bg-gradient-premium from-light-primary-500 to-light-accent-500 dark:from-dark-primary-500 dark:to-dark-accent-500 text-white rounded-lg hover:from-light-primary-600 hover:to-light-accent-600 dark:hover:from-dark-primary-600 dark:hover:to-dark-accent-600 transition-all shadow-premium-lg hover:shadow-premium-xl flex items-center gap-2"
@@ -115,7 +129,6 @@ function Layout() {
                 Get API Key
               </button>
 
-              {/* Utility Navigation */}
               <div className="flex items-center gap-4 border-l border-light-primary-100 dark:border-dark-primary-700 pl-4">
                 <button
                   onClick={toggleDarkMode}
@@ -125,7 +138,7 @@ function Layout() {
                   {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
                 <a
-                  href="https://github.com/SreejanPersonal"
+                  href="https://github.com/yourusername"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg bg-light-bg-secondary dark:bg-dark-bg-secondary hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-tertiary transition-colors"
@@ -135,7 +148,6 @@ function Layout() {
               </div>
             </nav>
 
-            {/* Mobile Menu Button */}
             <button
               className="md:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -144,7 +156,6 @@ function Layout() {
             </button>
           </div>
 
-          {/* Mobile Navigation */}
           {mobileMenuOpen && (
             <nav className="md:hidden py-4 border-t border-light-primary-100 dark:border-dark-primary-700">
               <div className="flex flex-col gap-4">
@@ -165,7 +176,7 @@ function Layout() {
                   Models
                 </Link>
                 <a
-                  href="https://status.sree.shop"
+                  href="https://status.deepseek.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-light-primary-600 dark:hover:text-dark-primary-400 flex items-center gap-1"
@@ -190,16 +201,13 @@ function Layout() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="pt-16">
         <Outlet />
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-light-primary-100 dark:border-dark-primary-700 bg-light-bg-secondary dark:bg-dark-bg-secondary">
         <div className="container mx-auto px-4 py-8">
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Left Column */}
             <div>
               <Logo />
               <p className="mt-4 text-sm text-light-text-tertiary dark:text-dark-text-tertiary max-w-md">
@@ -207,7 +215,7 @@ function Layout() {
               </p>
               <div className="mt-6 flex flex-wrap gap-4">
                 <a
-                  href="https://github.com/SreejanPersonal"
+                  href="https://github.com/yourusername"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-light-text-tertiary hover:text-light-text dark:text-dark-text-tertiary dark:hover:text-dark-text transition-colors"
@@ -251,7 +259,6 @@ function Layout() {
               </div>
             </div>
 
-            {/* Right Column */}
             <div className="flex flex-col md:items-end justify-between">
               <div className="flex flex-wrap gap-6 md:justify-end">
                 <Link to="/about" className="text-sm text-light-text-tertiary dark:text-dark-text-tertiary hover:text-light-primary-600 dark:hover:text-dark-primary-400">
@@ -289,11 +296,16 @@ function Layout() {
         </div>
       </footer>
 
-      {/* Floating Main Website Button */}
-      <div className="fixed bottom-20 right-6 z-40">
+      <div 
+        className="fixed right-6 z-40 transition-all duration-300 ease-in-out"
+        style={{ 
+          bottom: '1.5rem',
+          transform: `translateY(-${buttonsOffset}px)`
+        }}
+      >
         <button
           onClick={() => setIsMainWebsiteModalOpen(true)}
-          className="group relative"
+          className="group relative mb-4 block"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
           <div className="relative px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl text-white shadow-xl flex items-center gap-3 transform hover:scale-105 transition-all duration-300">
@@ -307,13 +319,10 @@ function Layout() {
             </div>
           </div>
         </button>
-      </div>
 
-      {/* Floating Beta Access Button */}
-      <div className="fixed bottom-6 right-6 z-40">
         <button
           onClick={() => setIsBetaModalOpen(true)}
-          className="group relative"
+          className="group relative block"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
           <div className="relative px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-xl text-white shadow-xl flex items-center gap-3 transform hover:scale-105 transition-all duration-300">
@@ -329,7 +338,6 @@ function Layout() {
         </button>
       </div>
 
-      {/* Modals */}
       <ApiKeyModal
         isOpen={isApiKeyModalOpen}
         onClose={() => setIsApiKeyModalOpen(false)}
