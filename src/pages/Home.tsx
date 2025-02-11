@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Zap, Shield, Cpu, ArrowRight, ExternalLink, XCircle } from 'lucide-react';
+import { Sparkles, Zap, Shield, Cpu, ArrowRight, XCircle } from 'lucide-react';
 import ApiSandbox from '../components/ApiSandbox';
 import MainWebsiteModal from '../components/MainWebsiteModal';
 
@@ -90,29 +90,6 @@ function Home() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
-      {/* Floating Main Website Button */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={() => setIsMainWebsiteModalOpen(true)}
-          className="group relative"
-        >
-          {/* Pulsing background effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
-          
-          {/* Button content */}
-          <div className="relative px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl text-white shadow-xl flex items-center gap-3 transform hover:scale-105 transition-all duration-300">
-            <div className="p-1 bg-white/20 rounded-lg">
-              <ExternalLink className="w-4 h-4" />
-            </div>
-            <span className="font-medium">Visit Main Website</span>
-            <div className="absolute -top-1 -right-1 w-3 h-3">
-              <div className="absolute inset-0 bg-yellow-400 rounded-full animate-ping"></div>
-              <div className="absolute inset-0 bg-yellow-400 rounded-full"></div>
-            </div>
-          </div>
-        </button>
-      </div>
-
       {/* Hero Section */}
       <section className="flex-1 flex items-center justify-center py-8 sm:py-12 lg:py-16 px-4 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-6xl mx-auto w-full">
