@@ -18,79 +18,9 @@ import {
   ExternalLink,
   AlertCircle
 } from 'lucide-react';
-
-// Update model data arrays with new beta models
-const freeModels = [
-  "claude-3-5-sonnet-20240620",
-  "claude-3-5-sonnet",
-  "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
-  "deepseek-v3",
-  "gpt-4o-2024-05-13",
-  "Meta-Llama-3.3-70B-Instruct-Turbo",
-  "deepseek-r1"
-];
-
-const betaModels = [
-  "deepseek-r1",
-  "gpt-4o",
-  "o3-mini",
-  "DeepSeek-R1-Distill-Llama-70B",
-  "DeepSeekV3"
-];
-
-const paidModels = [
-  "gpt-3.5-turbo", "gpt-3.5-turbo-202201", "gpt-4o", "gpt-4o-2024-05-13",
-  "gpt-4o-real", "deepseek-v3",
-  "openai/whisper-large-v3", "openai/whisper-large-v3-turbo", "claude",
-  "claude-3-5-sonnet", "claude-3-5-sonnet-20240620", "claude-3-5-sonnet-real",
-  "claude-3-haiku-ddg", "claude-sonnet-3.5", "gemini-1.5-flash", "gemini-1.5-pro",
-  "gemini-1.5-pro-latest", "gemini-pro", "@cf/google/gemma-2b-it-lora",
-  "@cf/google/gemma-7b-it-lora", "@hf/google/gemma-7b-it", "google/gemma-1.1-2b-it",
-  "google/gemma-1.1-7b-it", "@cf/meta-llama/llama-2-7b-chat-hf-lora",
-  "@cf/meta/llama-2-7b-chat-fp16", "@cf/meta/llama-2-7b-chat-int8",
-  "@cf/meta/llama-3-8b-instruct", "@cf/meta/llama-3.1-8b-instruct", "llama",
-  "llama-3.1-405b", "llama-3.1-70b", "llama-3.1-70b-ddg", "llama-3.1-8b",
-  "meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-3.1-70B-Instruct",
-  "meta-llama/Llama-3.1-8B-Instruct", "meta-llama/Llama-3.2-11B-Vision-Instruct",
-  "meta-llama/Llama-3.2-1B-Instruct", "meta-llama/Llama-3.2-3B-Instruct",
-  "meta-llama/Llama-3.2-90B-Vision-Instruct", "meta-llama/Llama-3.3-70B-Instruct",
-  "meta-llama/Llama-3.3-70B-Instruct-Turbo", "meta-llama/Llama-Guard-3-8B",
-  "meta-llama/Meta-Llama-3-70B-Instruct", "meta-llama/Meta-Llama-3-8B-Instruct",
-  "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo", "01-ai/Yi-1.5-34B-Chat",
-  "01-ai/Yi-34B-Chat", "@cf/deepseek-ai/deepseek-math-7b-base",
-  "@cf/deepseek-ai/deepseek-math-7b-instruct", "@cf/defog/sqlcoder-7b-2",
-  "@cf/microsoft/phi-2", "@cf/mistral/mistral-7b-instruct-v0.1",
-  "@cf/mistral/mistral-7b-instruct-v0.2-lora", "@cf/openchat/openchat-3.5-0106",
-  "@cf/qwen/qwen1.5-0.5b-chat", "@cf/qwen/qwen1.5-1.8b-chat",
-  "@cf/qwen/qwen1.5-14b-chat-awq", "@cf/qwen/qwen1.5-7b-chat-awq",
-  "@cf/thebloke/discolm-german-7b-v1-awq", "@cf/tinyllama/tinyllama-1.1b-chat-v1.0",
-  "@hf/mistralai/mistral-7b-instruct-v0.2", "@hf/nexusflow/starling-lm-7b-beta",
-  "@hf/nousresearch/hermes-2-pro-mistral-7b", "@hf/thebloke/deepseek-coder-6.7b-base-awq",
-  "@hf/thebloke/deepseek-coder-6.7b-instruct-awq", "@hf/thebloke/llama-2-13b-chat-awq",
-  "@hf/thebloke/llamaguard-7b-awq", "@hf/thebloke/mistral-7b-instruct-v0.1-awq",
-  "@hf/thebloke/neural-chat-7b-v3-1-awq", "@hf/thebloke/openhermes-2.5-mistral-7b-awq",
-  "@hf/thebloke/zephyr-7b-beta-awq", "blackboxai", "blackboxai-pro", "Cipher-20b",
-  "codellama/CodeLlama-34b-Instruct-hf", "cognitivecomputations/dolphin-2.6-mixtral-8x7b",
-  "cognitivecomputations/dolphin-2.9.1-llama-3-70b", "CohereForAI/c4ai-command-r-plus-08-2024",
-  "command-r", "databricks/dbrx-instruct", "dbrx-instruct", "deepseek-ai/DeepSeek-V2.5",
-  "deepseek-llm-67b-chat", "distil-whisper/distil-large-v3", "flux", "HelpingAI-15B",
-  "HelpingAI2-3b", "HelpingAI2-6B", "HelpingAI2-9B", "HelpingAI2.5-10B",
-  "Helpingai2.5-10b-1m", "HelpingAI2.5-2B", "HELVETE", "HELVETE-X",
-  "HuggingFaceH4/starchat2-15b-v0.1", "HuggingFaceH4/zephyr-7b-alpha",
-  "HuggingFaceH4/zephyr-7b-beta", "Meta-Llama-3.1-405B-Instruct-Turbo",
-  "Meta-Llama-3.3-70B-Instruct-Turbo", "microsoft/DialoGPT-medium",
-  "microsoft/Phi-3-medium-4k-instruct", "microsoft/Phi-3-mini-4k-instruct",
-  "microsoft/Phi-3.5-mini-instruct", "microsoft/WizardLM-2-8x22B", "midijourney",
-  "mistral", "Mistral-7B-Instruct-v0.2", "mistral-large",
-  "mistralai/Mistral-7B-Instruct-v0.2", "mistralai/Mistral-7B-Instruct-v0.3",
-  "mistralai/Mixtral-8x22B-Instruct-v0.1", "mistralai/Mixtral-8x7B-Instruct-v0.1",
-  "mixtral-8x7b-ddg", "Nous-Hermes-2-Mixtral-8x7B-DPO",
-  "NousResearch/Hermes-3-Llama-3.1-8B", "NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO",
-  "nvidia/Llama-3.1-Nemotron-70B-Instruct", "openbmb/MiniCPM-Llama3-V-2_5",
-  "openchat/openchat-3.6-8b", "p1", "Priya-3B", "qwen-coder", "Qwen-QwQ-32B-Preview",
-  "Qwen/Qwen2-72B-Instruct", "Qwen/Qwen2.5-3B-Instruct", "Qwen/Qwen2.5-72B-Instruct",
-  "Qwen/Qwen2.5-Coder-32B-Instruct", "Qwen/QwQ-32B-Preview", "Qwen2.5-72B-Instruct"
-];
+import freeModels from '../utility/freeModels.json';
+import betaModels from '../utility/betaModels.json';
+import paidModels from '../utility/paidModels.json';
 
 function getProviderFromModel(model: string) {
   if (model.toLowerCase().includes('deepseek') || model === 'DeepSeekV3') return 'DeepSeek';
