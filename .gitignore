@@ -1,3 +1,4 @@
 bin/
 .qodo/
 node_modules/
+build/
