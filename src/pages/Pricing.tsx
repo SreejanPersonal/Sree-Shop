@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2, Info } from 'lucide-react';
 import ApiKeyModal from '../components/ApiKeyModal';
+import ContactModal from '../components/ContactModal';
+import BetaAccessModal from '../components/BetaAccessModal';
 
 interface FAQItem {
   question: string;
@@ -61,7 +63,8 @@ const faqs: FAQItem[] = [
 
 function Pricing() {
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
-  const [showContactInfo, setShowContactInfo] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
   const tiers = [
@@ -140,44 +143,6 @@ function Pricing() {
       gradient: "from-blue-600 to-indigo-600"
     }
   ];
-
-  const ContactInfo = () => (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6">
-        <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
-        <div className="space-y-4 mb-6">
-          <p className="text-gray-600 dark:text-gray-400">
-            Get in touch through any of these platforms:
-          </p>
-          <div className="space-y-3">
-            <a href="https://linkedin.com/in/developer-sreejan" target="_blank" rel="noopener noreferrer" 
-               className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-              <Linkedin className="w-5 h-5 text-blue-600" />
-              <span>LinkedIn</span>
-            </a>
-            <a href="https://twitter.com/Anand_Sreejan" target="_blank" rel="noopener noreferrer"
-               className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-              <Twitter className="w-5 h-5 text-blue-400" />
-              <span>Twitter</span>
-            </a>
-            <a href="https://t.me/devsdocode" target="_blank" rel="noopener noreferrer"
-               className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-              <svg className="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-              </svg>
-              <span>Telegram</span>
-            </a>
-          </div>
-        </div>
-        <button
-          onClick={() => setShowContactInfo(false)}
-          className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  );
 
   return (
     <div className="py-16 px-4">
@@ -264,7 +229,7 @@ function Pricing() {
                     if (tier.name === "Free") {
                       setIsApiKeyModalOpen(true);
                     } else {
-                      setShowContactInfo(true);
+                      setIsContactModalOpen(true);
                     }
                   }}
                   className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 ${
@@ -315,7 +280,14 @@ function Pricing() {
         isOpen={isApiKeyModalOpen}
         onClose={() => setIsApiKeyModalOpen(false)}
       />
-      {showContactInfo && <ContactInfo />}
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+      />
+      <BetaAccessModal
+        isOpen={isBetaModalOpen}
+        onClose={() => setIsBetaModalOpen(false)}
+      />
     </div>
   );
 }

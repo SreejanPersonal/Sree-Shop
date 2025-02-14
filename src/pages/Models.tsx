@@ -8,13 +8,15 @@ import {
   Zap,
   Shield,
   Info,
-  ArrowRight,
   Filter,
   Check,
-  Cpu
+  Gauge,
+  Brain,
+  Workflow,
+  Rocket
 } from 'lucide-react';
 
-// Update model data arrays
+// Update model data arrays with new beta models
 const freeModels = [
   "claude-3-5-sonnet-20240620",
   "claude-3-5-sonnet",
@@ -22,13 +24,15 @@ const freeModels = [
   "deepseek-v3",
   "gpt-4o-2024-05-13",
   "Meta-Llama-3.3-70B-Instruct-Turbo",
-  "deepseek-r1"  // Added deepseek-r1 to free models
+  "deepseek-r1"
 ];
 
 const betaModels = [
   "deepseek-r1",
-  "gpt-4o-mini",
-  "o3-mini"  // Added new o3-mini model
+  "gpt-4o",
+  "o3-mini",
+  "DeepSeek-R1-Distill-Llama-70B",
+  "DeepSeekV3"
 ];
 
 const paidModels = [
@@ -86,13 +90,13 @@ const paidModels = [
 ];
 
 function getProviderFromModel(model: string) {
-  if (model.includes('gpt') || model.includes('openai')) return 'OpenAI';
+  if (model.toLowerCase().includes('deepseek') || model === 'DeepSeekV3') return 'DeepSeek';
+  if (model.includes('gpt') || model.includes('openai') || model === 'o3-mini') return 'OpenAI';
   if (model.includes('claude')) return 'Anthropic';
   if (model.includes('gemini') || model.includes('google')) return 'Google';
   if (model.includes('llama') || model.includes('meta')) return 'Meta';
   if (model.includes('mistral')) return 'Mistral AI';
   if (model.includes('qwen')) return 'Qwen';
-  if (model.includes('deepseek')) return 'DeepSeek';
   if (model.includes('yi')) return '01.AI';
   return 'Other';
 }
@@ -112,9 +116,12 @@ const ProviderDropdown: React.FC<ProviderDropdownProps> = ({ value, onChange, pr
         onClick={() => setIsOpen(!isOpen)}
         className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-between gap-2 group"
       >
-        <span className="text-sm font-medium">
-          {value || 'All Providers'}
-        </span>
+        <div className="flex items-center gap-2">
+          <Filter className="w-4 h-4 text-gray-400" />
+          <span className="text-sm font-medium">
+            {value || 'All Providers'}
+          </span>
+        </div>
         <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
       
@@ -125,8 +132,11 @@ const ProviderDropdown: React.FC<ProviderDropdownProps> = ({ value, onChange, pr
               onChange(null);
               setIsOpen(false);
             }}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
           >
+            <span className="w-4 h-4 flex items-center justify-center">
+              {!value && <Check className="w-4 h-4 text-blue-500" />}
+            </span>
             All Providers
           </button>
           {providers.map(provider => (
@@ -136,8 +146,11 @@ const ProviderDropdown: React.FC<ProviderDropdownProps> = ({ value, onChange, pr
                 onChange(provider);
                 setIsOpen(false);
               }}
-              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
             >
+              <span className="w-4 h-4 flex items-center justify-center">
+                {value === provider && <Check className="w-4 h-4 text-blue-500" />}
+              </span>
               {provider}
             </button>
           ))}
@@ -188,46 +201,89 @@ function Models() {
 
   const noResults = filteredFreeModels.length === 0 && filteredBetaModels.length === 0 && filteredPaidModels.length === 0;
 
-  const ModelCard = ({ model, isPro, isBeta }: { model: string; isPro: boolean; isBeta: boolean }) => (
-    <div className={`group relative aspect-square rounded-2xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-${isBeta ? 'yellow' : isPro ? 'purple' : 'green'}-500 dark:hover:border-${isBeta ? 'yellow' : isPro ? 'purple' : 'green'}-500 transition-all hover:shadow-lg`}>
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900"></div>
-      <div className="relative h-full p-4 flex flex-col">
-        <div className="flex-1">
-          <div className="flex items-start justify-between gap-2 mb-3">
-            <h3 className="font-medium text-sm line-clamp-2">{model}</h3>
-            {isPro ? (
-              <Star className="w-4 h-4 flex-shrink-0 text-amber-400" />
-            ) : isBeta ? (
-              <Sparkles className="w-4 h-4 flex-shrink-0 text-yellow-400" />
-            ) : null}
+  const ModelCard = ({ model, isPro, isBeta }: { model: string; isPro: boolean; isBeta: boolean }) => {
+    const provider = getProviderFromModel(model);
+
+    const features = [
+      {
+        name: 'RPM',
+        value: isPro ? 'Unlimited' : isBeta ? '10 RPM' : '3 RPM',
+        icon: <Gauge className="w-3.5 h-3.5" />
+      },
+      {
+        name: 'Context',
+        value: isPro ? 'Original' : isBeta ? '32K' : '4K',
+        icon: <Brain className="w-3.5 h-3.5" />
+      },
+      {
+        name: 'Processing',
+        value: isPro ? 'Priority' : isBeta ? 'Enhanced' : 'Standard',
+        icon: <Workflow className="w-3.5 h-3.5" />
+      }
+    ];
+
+    return (
+      <div className={`relative bg-white dark:bg-gray-800 rounded-lg p-3 border transition-colors ${
+        isBeta 
+          ? 'border-yellow-200 dark:border-yellow-800'
+          : isPro 
+            ? 'border-purple-200 dark:border-purple-800'
+            : 'border-green-200 dark:border-green-800'
+      }`}>
+        {/* Header */}
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className={`p-1.5 rounded-md ${
+              isBeta 
+                ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                : isPro 
+                  ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                  : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+            }`}>
+              {isBeta ? <Rocket className="w-4 h-4" /> : isPro ? <Star className="w-4 h-4" /> : <Zap className="w-4 h-4" />}
+            </div>
+            <div className="min-w-0">
+              <h3 className="font-medium text-sm truncate" title={model}>
+                {model.split('/').pop()}
+              </h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                {provider}
+              </p>
+            </div>
           </div>
-          <div className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-            Provider: {getProviderFromModel(model)}
-          </div>
-        </div>
-        
-        <div className="space-y-2">
-          <div className="flex flex-wrap gap-1.5">
-            <span className="px-2 py-1 text-[10px] rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-              {isPro ? 'Unlimited TPM' : isBeta ? '10 RPM' : '3 RPM'}
-            </span>
-            <span className="px-2 py-1 text-[10px] rounded-full bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
-              {isPro ? 'Original Context' : isBeta ? '32K Context' : '4K Context'}
-            </span>
-          </div>
-          <span className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded-full ${
+          <div className={`px-2 py-1 text-[10px] font-medium rounded-full ${
             isBeta 
               ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
               : isPro 
                 ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
                 : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
           }`}>
-            {isBeta ? 'Beta (Free Limited Time)' : isPro ? 'Pro' : 'Free'}
-          </span>
+            {isBeta ? 'Beta' : isPro ? 'Pro' : 'Free'}
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className="grid grid-cols-3 gap-2">
+          {features.map((feature, index) => (
+            <div key={index} className="flex flex-col items-center text-center p-1.5 rounded-md bg-gray-50 dark:bg-gray-900/50">
+              <div className={`mb-1 ${
+                isBeta 
+                  ? 'text-yellow-600 dark:text-yellow-400'
+                  : isPro 
+                    ? 'text-purple-600 dark:text-purple-400'
+                    : 'text-green-600 dark:text-green-400'
+              }`}>
+                {feature.icon}
+              </div>
+              <span className="text-[10px] font-medium text-gray-600 dark:text-gray-400">
+                {feature.value}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="py-16 px-4">
@@ -295,7 +351,7 @@ function Models() {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {filteredBetaModels.map((model) => (
                 <ModelCard key={model} model={model} isPro={false} isBeta={true} />
               ))}
@@ -311,7 +367,7 @@ function Models() {
                 {filteredFreeModels.length} models
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {filteredFreeModels.map((model) => (
                 <ModelCard key={model} model={model} isPro={false} isBeta={false} />
               ))}
@@ -327,7 +383,7 @@ function Models() {
                 {filteredPaidModels.length} models
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {filteredPaidModels.map((model) => (
                 <ModelCard key={model} model={model} isPro={true} isBeta={false} />
               ))}

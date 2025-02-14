@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Zap, Shield, Cpu, ArrowRight, XCircle } from 'lucide-react';
+import { Sparkles, Zap, Shield, Cpu, ArrowRight, XCircle, Rocket, AlertCircle } from 'lucide-react';
 import ApiSandbox from '../components/ApiSandbox';
 import MainWebsiteModal from '../components/MainWebsiteModal';
 
 interface ErrorModalProps {
   error: string;
+  onClose: () => void;
+}
+
+interface InfoModalProps {
   onClose: () => void;
 }
 
@@ -27,16 +31,58 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ error, onClose }) => (
   </div>
 );
 
+const StableApiInfoModal: React.FC<InfoModalProps> = ({ onClose }) => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 shadow-xl">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/30">
+            <AlertCircle className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+          </div>
+          <h3 className="text-xl font-semibold">Oops! Our Bad 😅</h3>
+        </div>
+        <button
+          onClick={onClose}
+          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        >
+          <XCircle className="w-5 h-5" />
+        </button>
+      </div>
+      
+      <p className="text-gray-600 dark:text-gray-400 mb-6">
+        Looks like our developer was too busy playing with the new beta features and forgot to add the usage route for the stable API! 
+        Don't worry though, it's coming soon™ (probably after they finish their coffee ☕️).
+      </p>
+      
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 mb-6">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          In the meantime, why not try our shiny new beta API? It's got all the cool features, plus a working dashboard! 🚀
+        </p>
+      </div>
+
+      <button
+        onClick={onClose}
+        className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-medium transition-colors"
+      >
+        Got it, I'll check back later!
+      </button>
+    </div>
+  </div>
+);
+
 function Home() {
   const [apiKey, setApiKey] = useState('');
   const [isMainWebsiteModalOpen, setIsMainWebsiteModalOpen] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [apiType, setApiType] = useState<'stable' | 'beta'>('beta');
+  const [showStableApiInfo, setShowStableApiInfo] = useState(false);
   const navigate = useNavigate();
 
   const validateApiKey = async (key: string) => {
     try {
-      const response = await fetch('https://beta.sree.shop/v1/usage', {
+      const baseUrl = apiType === 'beta' ? 'https://beta.sree.shop' : 'https://api.sree.shop';
+      const response = await fetch(`${baseUrl}/v1/usage`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,6 +113,11 @@ function Home() {
       const input = document.getElementById('api-key-input');
       input?.classList.add('animate-shake');
       setTimeout(() => input?.classList.remove('animate-shake'), 500);
+      return;
+    }
+
+    if (apiType === 'stable') {
+      setShowStableApiInfo(true);
       return;
     }
 
@@ -108,6 +159,50 @@ function Home() {
               or upgrade to Pro for the price of a coffee ☕️
             </p>
 
+            {/* API Type Selector */}
+            <div className="inline-flex p-1 rounded-xl bg-gray-100 dark:bg-gray-800 backdrop-blur-sm mb-6">
+              <button
+                onClick={() => setApiType('stable')}
+                className={`relative px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  apiType === 'stable'
+                    ? 'text-white shadow-lg'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                {apiType === 'stable' && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg transition-all duration-300">
+                    <div className="absolute inset-0 bg-white/20 rounded-lg"></div>
+                  </div>
+                )}
+                <div className="relative flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  <span>Stable API</span>
+                </div>
+              </button>
+              <button
+                onClick={() => setApiType('beta')}
+                className={`relative px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  apiType === 'beta'
+                    ? 'text-white shadow-lg'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                {apiType === 'beta' && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg transition-all duration-300">
+                    <div className="absolute inset-0 bg-white/20 rounded-lg"></div>
+                  </div>
+                )}
+                <div className="relative flex items-center gap-2">
+                  <Rocket className="w-4 h-4" />
+                  <span>Beta API</span>
+                  <div className="absolute -top-1 -right-1 w-2 h-2">
+                    <div className="absolute inset-0 bg-yellow-400 rounded-full animate-ping"></div>
+                    <div className="absolute inset-0 bg-yellow-400 rounded-full"></div>
+                  </div>
+                </div>
+              </button>
+            </div>
+
             {/* API Key Check */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 justify-center mb-8 sm:mb-12">
               <div className="relative flex-1 max-w-md">
@@ -124,7 +219,7 @@ function Home() {
                       handleDashboardAccess();
                     }
                   }}
-                  placeholder="Enter your API key"
+                  placeholder={`Enter your ${apiType === 'beta' ? 'beta' : 'stable'} API key`}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none transition-all duration-200"
                 />
               </div>
@@ -194,6 +289,7 @@ function Home() {
       />
 
       {error && <ErrorModal error={error} onClose={() => setError(null)} />}
+      {showStableApiInfo && <StableApiInfoModal onClose={() => setShowStableApiInfo(false)} />}
     </div>
   );
 }

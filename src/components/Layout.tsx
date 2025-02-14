@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Github, Moon, Sun, Key, Menu, X, Database, Youtube, Linkedin, Instagram, CreditCard, Activity, Sparkles, ExternalLink } from 'lucide-react';
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { 
+  Github, 
+  Moon, 
+  Sun, 
+  Key, 
+  Menu, 
+  X, 
+  Database, 
+  Youtube, 
+  Linkedin, 
+  Instagram, 
+  CreditCard, 
+  Activity, 
+  Sparkles, 
+  ExternalLink,
+  BookOpen
+} from 'lucide-react';
 import ApiKeyModal from './ApiKeyModal';
 import ContactModal from './ContactModal';
 import BetaAccessModal from './BetaAccessModal';
@@ -18,7 +34,6 @@ function Layout() {
   const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
   const [buttonsOffset, setButtonsOffset] = useState(0);
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (darkMode) {
@@ -110,15 +125,20 @@ function Layout() {
                   <Database className="w-4 h-4" />
                   Models
                 </Link>
-                <a
-                  href="https://status.deepseek.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/docs"
+                  className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-light-primary-600 dark:hover:text-dark-primary-400 transition-colors flex items-center gap-1"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  Documentation
+                </Link>
+                <Link
+                  to="/status"
                   className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-light-primary-600 dark:hover:text-dark-primary-400 transition-colors flex items-center gap-1"
                 >
                   <Activity className="w-4 h-4" />
                   Status
-                </a>
+                </Link>
               </div>
 
               <button
@@ -175,16 +195,22 @@ function Layout() {
                   <Database className="w-4 h-4" />
                   Models
                 </Link>
-                <a
-                  href="https://status.deepseek.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/docs"
+                  className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-light-primary-600 dark:hover:text-dark-primary-400 flex items-center gap-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <BookOpen className="w-4 h-4" />
+                  Documentation
+                </Link>
+                <Link
+                  to="/status"
                   className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-light-primary-600 dark:hover:text-dark-primary-400 flex items-center gap-1"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Activity className="w-4 h-4" />
                   Status
-                </a>
+                </Link>
                 <button
                   onClick={() => {
                     setIsApiKeyModalOpen(true);
