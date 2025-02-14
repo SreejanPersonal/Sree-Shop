@@ -151,7 +151,7 @@ function Status() {
                     For now, you can track important updates here.
                   </p>
                   <a
-                    href="https://status.deepseek.com"
+                    href="https://status.beta.sree.shop"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
