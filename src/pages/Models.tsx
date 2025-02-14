@@ -18,9 +18,9 @@ import {
   ExternalLink,
   AlertCircle
 } from 'lucide-react';
-import freeModels from '../utility/freeModels.json';
-import betaModels from '../utility/betaModels.json';
-import paidModels from '../utility/paidModels.json';
+import freeModels from '../utility/models/freeModels.json';
+import betaModels from '../utility/models/betaModels.json';
+import paidModels from '../utility/models/paidModels.json';
 
 function getProviderFromModel(model: string) {
   if (model.toLowerCase().includes('deepseek') || model === 'DeepSeekV3') return 'DeepSeek';

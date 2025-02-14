@@ -158,7 +158,7 @@ function Layout() {
                   {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
                 <a
-                  href="https://github.com/yourusername"
+                  href="https://github.com/SreejanPersonal"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg bg-light-bg-secondary dark:bg-dark-bg-secondary hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-tertiary transition-colors"
@@ -241,7 +241,7 @@ function Layout() {
               </p>
               <div className="mt-6 flex flex-wrap gap-4">
                 <a
-                  href="https://github.com/yourusername"
+                  href="https://github.com/SreejanPersonal/ai4free-wrapper"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-light-text-tertiary hover:text-light-text dark:text-dark-text-tertiary dark:hover:text-dark-text transition-colors"
