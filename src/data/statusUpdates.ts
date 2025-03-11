@@ -11,6 +11,15 @@ interface StatusUpdate {
 export const statusUpdates: StatusUpdate[] = [
   // Current Status (Beta API) - Feb 14
   {
+    id: 'beta-update-1',
+    date: 'Feb 28',
+    time: '14:10 IST',
+    message: 'The Beta API has been temporarily closed due to security concerns. We have detected approximately 800+ login attempts from Russian accounts within a single day',
+    type: 'negative',
+    models: ['ALL'],
+    apiType: 'beta'
+  },
+  {
     id: 'beta-current-1',
     date: 'Feb 14',
     time: '10:00 IST',
