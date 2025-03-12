@@ -9,7 +9,16 @@ interface StatusUpdate {
 }
 
 export const statusUpdates: StatusUpdate[] = [
-  // Current Status (Beta API) - Feb 14
+  // Current Status (Beta API) - Mar 11
+  {
+    id: 'beta-update-2',
+    date: 'Mar 11',
+    time: '08:10 IST',
+    message: 'The Beta API is now functional. Providrer 5 has been included',
+    type: 'positive',
+    models: ['ALL'],
+    apiType: 'beta'
+  },
   {
     id: 'beta-update-1',
     date: 'Feb 28',
