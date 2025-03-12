@@ -11,6 +11,15 @@ interface StatusUpdate {
 export const statusUpdates: StatusUpdate[] = [
   // Current Status (Beta API) - Mar 11
   {
+    id: 'beta-update-3',
+    date: 'Mar 11',
+    time: '14:25 IST',
+    message: 'Degraded Performance for generating Beta API Key',
+    type: 'negative',
+    models: ['API Key'],
+    apiType: 'beta'
+  },
+  {
     id: 'beta-update-2',
     date: 'Mar 11',
     time: '08:10 IST',
