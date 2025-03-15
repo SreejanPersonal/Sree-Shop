@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2, Info } from 'lucide-react';
+import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2, Info, Rocket } from 'lucide-react';
 import ApiKeyModal from '../components/ApiKeyModal';
 import ContactModal from '../components/ContactModal';
 import BetaAccessModal from '../components/BetaAccessModal';
