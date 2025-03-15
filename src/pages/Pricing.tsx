@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2, Info, Rocket } from 'lucide-react';
 import ApiKeyModal from '../components/ApiKeyModal';
@@ -193,7 +192,6 @@ function Pricing() {
             Start for free, upgrade when you need to
           </p>
           
-          {/* OpenAI Comparison Banner */}
           <div className="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20">
             <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <span className="text-sm font-medium">
@@ -202,28 +200,23 @@ function Pricing() {
           </div>
         </div>
 
-        {/* Pricing Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
-          {/* Free Tier Card with Stable API and Beta API sections */}
           <div
-            className={`relative group rounded-2xl ${
+            className={`relative group rounded-2xl h-full ${
               tiers[0].highlighted
                 ? 'scale-105 shadow-2xl'
                 : 'hover:scale-105 hover:shadow-xl'
             } transition-all duration-300`}
           >
-            {/* Background with gradient */}
             <div className={`absolute inset-0 bg-gradient-to-br ${tiers[0].gradient} opacity-[0.08] dark:opacity-[0.16] rounded-2xl`} />
             
-            {/* Card Content */}
-            <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
+            <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 h-full flex flex-col">
               {tiers[0].highlighted && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full shadow-lg">
                   Most Popular
                 </div>
               )}
 
-              {/* Header */}
               <div className="mb-8">
                 <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${tiers[0].gradient} text-white mb-4`}>
                   {tiers[0].icon}
@@ -241,7 +234,6 @@ function Pricing() {
                 </p>
               </div>
 
-              {/* Stable API Features */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-1 rounded-lg bg-blue-100 dark:bg-blue-900/30">
@@ -270,7 +262,6 @@ function Pricing() {
                 </ul>
               </div>
 
-              {/* Beta API Features */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-1 rounded-lg bg-amber-100 dark:bg-amber-900/30">
@@ -300,8 +291,7 @@ function Pricing() {
                 </ul>
               </div>
 
-              {/* CTA Buttons */}
-              <div className="space-y-3">
+              <div className="space-y-3 mt-auto">
                 <button
                   onClick={() => setIsApiKeyModalOpen(true)}
                   className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 font-medium`}
@@ -321,26 +311,22 @@ function Pricing() {
             </div>
           </div>
 
-          {/* Pro Tier Card */}
           <div
-            className={`relative group rounded-2xl ${
+            className={`relative group rounded-2xl h-full ${
               tiers[1].highlighted
                 ? 'scale-105 shadow-2xl'
                 : 'hover:scale-105 hover:shadow-xl'
             } transition-all duration-300`}
           >
-            {/* Background with gradient */}
             <div className={`absolute inset-0 bg-gradient-to-br ${tiers[1].gradient} opacity-[0.08] dark:opacity-[0.16] rounded-2xl`} />
             
-            {/* Card Content */}
-            <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
+            <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 h-full flex flex-col">
               {tiers[1].highlighted && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full shadow-lg">
                   Most Popular
                 </div>
               )}
 
-              {/* Header */}
               <div className="mb-8">
                 <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${tiers[1].gradient} text-white mb-4`}>
                   {tiers[1].icon}
@@ -358,8 +344,7 @@ function Pricing() {
                 </p>
               </div>
 
-              {/* Features */}
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-4 mb-8 flex-grow">
                 {tiers[1].features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start gap-3">
                     <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[1].gradient}`}>
@@ -379,10 +364,17 @@ function Pricing() {
                 ))}
               </ul>
 
-              {/* CTA Button */}
+              <div className="flex-grow flex flex-col justify-center">
+                <div className="py-4 px-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl mb-8">
+                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                    Perfect for developers who need reliable API access with premium features and support.
+                  </p>
+                </div>
+              </div>
+
               <button
                 onClick={() => setIsContactModalOpen(true)}
-                className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 ${
+                className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 mt-auto ${
                   tiers[1].highlighted
                     ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700'
                     : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -395,7 +387,6 @@ function Pricing() {
           </div>
         </div>
 
-        {/* FAQ Section */}
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
           <div className="space-y-4">
@@ -424,7 +415,6 @@ function Pricing() {
         </div>
       </div>
 
-      {/* Modals */}
       <ApiKeyModal
         isOpen={isApiKeyModalOpen}
         onClose={() => setIsApiKeyModalOpen(false)}
