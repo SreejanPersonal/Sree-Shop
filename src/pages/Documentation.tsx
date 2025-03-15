@@ -57,7 +57,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "user", "content": "Hello!"}
     ]
@@ -72,7 +72,7 @@ const client = new OpenAI({
 });
 
 const response = await client.chat.completions.create({
-  model: 'gpt-4',
+  model: 'gpt-4o',
   messages: [
     { role: 'user', content: 'Hello!' }
   ]
@@ -83,7 +83,7 @@ console.log(response.choices[0].message.content);`,
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer ddc-xxx" \\
   -d '{
-    "model": "gpt-4",
+    "model": "gpt-4o",
     "messages": [
       {"role": "user", "content": "Hello!"}
     ]
@@ -98,7 +98,7 @@ client = OpenAI(
 )
 
 stream = client.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "user", "content": "Write a story"}
     ],
@@ -116,7 +116,7 @@ const client = new OpenAI({
 });
 
 const stream = await client.chat.completions.create({
-  model: 'gpt-4',
+  model: 'gpt-4o',
   messages: [
     { role: 'user', content: 'Write a story' }
   ],
@@ -130,7 +130,7 @@ for await (const chunk of stream) {
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer ddc-xxx" \\
   -d '{
-    "model": "gpt-4",
+    "model": "gpt-4o",
     "messages": [
       {"role": "user", "content": "Write a story"}
     ],

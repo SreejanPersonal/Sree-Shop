@@ -96,7 +96,7 @@ function Pricing() {
             },
             {
               text: `${freeModels.length}+ AI models access`,
-              tooltip: `Access to ${freeModels.length}+ AI models including selected GPT-4 and Claude models`
+              tooltip: `Access to ${freeModels.length}+ AI models including selected GPT-4 oand Claude models`
             },
             {
               text: "Production ready",
