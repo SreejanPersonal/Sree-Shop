@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2, Info } from 'lucide-react';
+import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2, Info, Rocket } from 'lucide-react';
 import ApiKeyModal from '../components/ApiKeyModal';
 import ContactModal from '../components/ContactModal';
 import BetaAccessModal from '../components/BetaAccessModal';
+import betaModels from '../utility/models/betaModels.json';
+import freeModels from '../utility/models/freeModels.json';
 
 interface FAQItem {
   question: string;
@@ -75,33 +77,70 @@ function Pricing() {
       period: "forever",
       highlight: "Perfect for personal projects",
       description: "Get started with unlimited access",
-      features: [
+      subOptions: [
         {
-          text: "3 requests per minute",
-          tooltip: "Rate limit of 3 requests per minute, may reduce during high traffic"
+          name: "Stable API",
+          icon: <Shield className="w-5 h-5" />,
+          features: [
+            {
+              text: "3 requests per minute",
+              tooltip: "Rate limit of 3 requests per minute, may reduce during high traffic"
+            },
+            {
+              text: "4K tokens per response",
+              tooltip: "Maximum of 4,000 tokens per API response"
+            },
+            {
+              text: "4K context window",
+              tooltip: "Process up to 4,000 tokens of context in each request"
+            },
+            {
+              text: `${freeModels.length}+ AI models access`,
+              tooltip: `Access to ${freeModels.length}+ AI models including selected GPT-4 and Claude models`
+            },
+            {
+              text: "Production ready",
+              tooltip: "Stable environment suitable for production use cases"
+            },
+            {
+              text: "Community support",
+              tooltip: "Get help from our active community on Telegram"
+            }
+          ]
         },
         {
-          text: "4K tokens per response",
-          tooltip: "Maximum of 4,000 tokens per API response"
-        },
-        {
-          text: "4K context window",
-          tooltip: "Process up to 4,000 tokens of context in each request"
-        },
-        {
-          text: "100+ AI models access",
-          tooltip: "Access to a wide range of AI models including GPT-4, Claude, and more"
-        },
-        {
-          text: "OpenAI-compatible API",
-          tooltip: "Drop-in replacement for OpenAI's API - just change the base URL"
-        },
-        {
-          text: "Community support",
-          tooltip: "Get help from our active community on Telegram"
+          name: "Beta API",
+          icon: <Rocket className="w-5 h-5" />,
+          features: [
+            {
+              text: "10 requests per minute",
+              tooltip: "Higher rate limit of 10 requests per minute for development"
+            },
+            {
+              text: "8K tokens per response",
+              tooltip: "Double the tokens per response compared to Stable API"
+            },
+            {
+              text: "32K context window",
+              tooltip: "Extended context window for more complex tasks"
+            },
+            {
+              text: `${betaModels.length}+ cutting-edge models`,
+              tooltip: `Access to ${betaModels.length}+ latest AI models including experimental versions`
+            },
+            {
+              text: "Early access to new features",
+              tooltip: "Be the first to try new capabilities and improvements"
+            },
+            {
+              text: "Dashboard access",
+              tooltip: "Monitor your usage with our beta dashboard"
+            }
+          ]
         }
       ],
       cta: "Get Started",
+      betaCta: "Get Beta Access",
       highlighted: false,
       gradient: "from-gray-500 to-gray-600"
     },
@@ -153,7 +192,6 @@ function Pricing() {
             Start for free, upgrade when you need to
           </p>
           
-          {/* OpenAI Comparison Banner */}
           <div className="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20">
             <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <span className="text-sm font-medium">
@@ -162,54 +200,54 @@ function Pricing() {
           </div>
         </div>
 
-        {/* Pricing Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
-          {tiers.map((tier, index) => (
-            <div
-              key={index}
-              className={`relative group rounded-2xl ${
-                tier.highlighted
-                  ? 'scale-105 shadow-2xl'
-                  : 'hover:scale-105 hover:shadow-xl'
-              } transition-all duration-300`}
-            >
-              {/* Background with gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${tier.gradient} opacity-[0.08] dark:opacity-[0.16] rounded-2xl`} />
-              
-              {/* Card Content */}
-              <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
-                {tier.highlighted && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full shadow-lg">
-                    Most Popular
-                  </div>
-                )}
-
-                {/* Header */}
-                <div className="mb-8">
-                  <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${tier.gradient} text-white mb-4`}>
-                    {tier.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
-                  <div className="mb-4">
-                    <span className="text-4xl font-bold">{tier.price}</span>
-                    <span className="text-gray-500 dark:text-gray-400">/{tier.period}</span>
-                  </div>
-                  <div className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-2">
-                    {tier.highlight}
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {tier.description}
-                  </p>
+          <div
+            className={`relative group rounded-2xl h-full ${
+              tiers[0].highlighted
+                ? 'scale-105 shadow-2xl'
+                : 'hover:scale-105 hover:shadow-xl'
+            } transition-all duration-300`}
+          >
+            <div className={`absolute inset-0 bg-gradient-to-br ${tiers[0].gradient} opacity-[0.08] dark:opacity-[0.16] rounded-2xl`} />
+            
+            <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 h-full flex flex-col">
+              {tiers[0].highlighted && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full shadow-lg">
+                  Most Popular
                 </div>
+              )}
 
-                {/* Features */}
-                <ul className="space-y-4 mb-8">
-                  {tier.features.map((feature, featureIndex) => (
+              <div className="mb-8">
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${tiers[0].gradient} text-white mb-4`}>
+                  {tiers[0].icon}
+                </div>
+                <h3 className="text-2xl font-bold mb-2">{tiers[0].name}</h3>
+                <div className="mb-4">
+                  <span className="text-4xl font-bold">{tiers[0].price}</span>
+                  <span className="text-gray-500 dark:text-gray-400">/{tiers[0].period}</span>
+                </div>
+                <div className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-2">
+                  {tiers[0].highlight}
+                </div>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {tiers[0].description}
+                </p>
+              </div>
+
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="p-1 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                    {tiers[0].subOptions[0].icon}
+                  </div>
+                  <h4 className="font-medium">{tiers[0].subOptions[0].name}</h4>
+                </div>
+                <ul className="space-y-4 mb-6 pl-2 border-l-2 border-blue-200 dark:border-blue-800">
+                  {tiers[0].subOptions[0].features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start gap-3">
-                      <div className={`p-0.5 rounded-full bg-gradient-to-br ${tier.gradient}`}>
+                      <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[0].gradient}`}>
                         <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
                           <Check className={`w-4 h-4 ${
-                            tier.highlighted ? 'text-blue-600' : 'text-gray-600'
+                            tiers[0].highlighted ? 'text-blue-600' : 'text-gray-600'
                           }`} />
                         </div>
                       </div>
@@ -222,31 +260,133 @@ function Pricing() {
                     </li>
                   ))}
                 </ul>
+              </div>
 
-                {/* CTA Button */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="p-1 rounded-lg bg-amber-100 dark:bg-amber-900/30">
+                    {tiers[0].subOptions[1].icon}
+                  </div>
+                  <h4 className="font-medium">{tiers[0].subOptions[1].name}</h4>
+                  <div className="px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
+                    New
+                  </div>
+                </div>
+                <ul className="space-y-4 mb-6 pl-2 border-l-2 border-amber-200 dark:border-amber-800">
+                  {tiers[0].subOptions[1].features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-start gap-3">
+                      <div className={`p-0.5 rounded-full bg-gradient-to-br from-amber-500 to-orange-500`}>
+                        <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
+                          <Check className="w-4 h-4 text-amber-600" />
+                        </div>
+                      </div>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {feature.text}
+                        <Tooltip content={feature.tooltip}>
+                          <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                        </Tooltip>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="space-y-3 mt-auto">
                 <button
-                  onClick={() => {
-                    if (tier.name === "Free") {
-                      setIsApiKeyModalOpen(true);
-                    } else {
-                      setIsContactModalOpen(true);
-                    }
-                  }}
-                  className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 ${
-                    tier.highlighted
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700'
-                      : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
-                  } transition-all duration-300 font-medium`}
+                  onClick={() => setIsApiKeyModalOpen(true)}
+                  className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 font-medium`}
                 >
-                  {tier.cta}
+                  Get Stable API
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                
+                <button
+                  onClick={() => setIsBetaModalOpen(true)}
+                  className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all duration-300 font-medium`}
+                >
+                  Get Beta Access
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
-          ))}
+          </div>
+
+          <div
+            className={`relative group rounded-2xl h-full ${
+              tiers[1].highlighted
+                ? 'scale-105 shadow-2xl'
+                : 'hover:scale-105 hover:shadow-xl'
+            } transition-all duration-300`}
+          >
+            <div className={`absolute inset-0 bg-gradient-to-br ${tiers[1].gradient} opacity-[0.08] dark:opacity-[0.16] rounded-2xl`} />
+            
+            <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 h-full flex flex-col">
+              {tiers[1].highlighted && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full shadow-lg">
+                  Most Popular
+                </div>
+              )}
+
+              <div className="mb-8">
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${tiers[1].gradient} text-white mb-4`}>
+                  {tiers[1].icon}
+                </div>
+                <h3 className="text-2xl font-bold mb-2">{tiers[1].name}</h3>
+                <div className="mb-4">
+                  <span className="text-4xl font-bold">{tiers[1].price}</span>
+                  <span className="text-gray-500 dark:text-gray-400">/{tiers[1].period}</span>
+                </div>
+                <div className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-2">
+                  {tiers[1].highlight}
+                </div>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {tiers[1].description}
+                </p>
+              </div>
+
+              <ul className="space-y-4 mb-8 flex-grow">
+                {tiers[1].features.map((feature, featureIndex) => (
+                  <li key={featureIndex} className="flex items-start gap-3">
+                    <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[1].gradient}`}>
+                      <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
+                        <Check className={`w-4 h-4 ${
+                          tiers[1].highlighted ? 'text-blue-600' : 'text-gray-600'
+                        }`} />
+                      </div>
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {feature.text}
+                      <Tooltip content={feature.tooltip}>
+                        <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                      </Tooltip>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex-grow flex flex-col justify-center">
+                <div className="py-4 px-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl mb-8">
+                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                    Perfect for developers who need reliable API access with premium features and support.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsContactModalOpen(true)}
+                className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 mt-auto ${
+                  tiers[1].highlighted
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700'
+                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                } transition-all duration-300 font-medium`}
+              >
+                {tiers[1].cta}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* FAQ Section */}
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
           <div className="space-y-4">
@@ -275,7 +415,6 @@ function Pricing() {
         </div>
       </div>
 
-      {/* Modals */}
       <ApiKeyModal
         isOpen={isApiKeyModalOpen}
         onClose={() => setIsApiKeyModalOpen(false)}

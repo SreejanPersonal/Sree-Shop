@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { X, CheckCircle2, Circle, Sparkles, Zap, Gift } from 'lucide-react';
 
