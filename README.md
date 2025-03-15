@@ -1,69 +1,153 @@
-# Welcome to your Lovable project
+# 🛍️ Sree-Shop - Unlimited Free AI API Access
 
-## Project info
+![GitHub last commit](https://img.shields.io/github/last-commit/SreejanPersonal/Sree-Shop)
+![GitHub issues](https://img.shields.io/github/issues/SreejanPersonal/Sree-Shop)
+![GitHub stars](https://img.shields.io/github/stars/SreejanPersonal/Sree-Shop?style=social)
 
-**URL**: https://lovable.dev/projects/4f984bad-e17a-48cf-b3fa-0cdc7a7be2e6
+Welcome to **Sree-Shop**, your one-stop solution for unlimited access to 100+ AI models with no hidden limits. Whether you're a developer, researcher, or hobbyist, this platform offers a generous free tier and premium features at unbeatable prices.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🌟 Features
 
-**Use Lovable**
+- **Truly Unlimited Access**: No hidden limits—use the API freely with a 3 RPM rate limit.
+- **Premium Models**: Access GPT-4, Claude, Gemini, and 100+ more models.
+- **Developer-Friendly**: OpenAI-compatible API with excellent documentation.
+- **Free Tier**: Start building now with our generous free tier.
+- **Pro Tier**: Upgrade for unlimited requests, full streaming support, and priority support.
+- **Enterprise Solutions**: Tailored solutions for large-scale needs.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4f984bad-e17a-48cf-b3fa-0cdc7a7be2e6) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Quick Start
 
-**Use your preferred IDE**
+### Prerequisites
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Node.js (v18+)
+- npm or yarn
+- Git
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Installation
 
-Follow these steps:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/SreejanPersonal/Sree-Shop.git
+   cd Sree-Shop
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+4. Open your browser and navigate to `http://localhost:5173`.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+---
+
+## 📦 Project Structure
+
+```
+Sree-Shop/
+├── src/                # Core application code
+│   ├── components/     # Reusable UI components
+│   ├── pages/          # Application pages (Home, Dashboard, Pricing, etc.)
+│   └── App.tsx         # Main application routing
+├── public/             # Static assets
+├── .github/            # GitHub workflows and templates
+├── .husky/             # Git hooks for pre-commit checks
+├── .vscode/            # VS Code settings
+├── tailwind.config.js  # Tailwind CSS configuration
+├── vite.config.ts      # Vite configuration
+└── README.md           # This file
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🛠️ Development Workflow
 
-**Use GitHub Codespaces**
+### Running the App Locally
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-## What technologies are used for this project?
+2. **Run the Development Server**:
+   ```bash
+   npm run dev
+   ```
 
-This project is built with .
+3. **Build for Production**:
+   ```bash
+   npm run build
+   ```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+4. **Preview the Production Build**:
+   ```bash
+   npm run preview
+   ```
 
-## How can I deploy this project?
+5. **Linting**:
+   ```bash
+   npm run lint
+   ```
 
-Simply open [Lovable](https://lovable.dev/projects/4f984bad-e17a-48cf-b3fa-0cdc7a7be2e6) and click on Share -> Publish.
+---
 
-## I want to use a custom domain - is that possible?
+## 🧪 Testing
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+This project uses ESLint for code quality checks. To run tests:
+
+```bash
+npm run lint
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 📞 Contact
+
+For any questions or feedback, feel free to reach out:
+
+- **Email**: [sreejan@example.com](mailto:sreejan@example.com)
+- **LinkedIn**: [@sreejan](https://www.linkedin.com/in/sreejan/)
+- **Twitter**: [@sreejan](https://twitter.com/sreejan)
+
+---
+
+## 🙏 Support the Project
+
+If you find this project useful, consider supporting us by:
+
+- **Starring the Repository**: ⭐️
+- **Sharing the Project**: Spread the word!
+- **Buying Me a Coffee**: ☕️ [Buy Me a Coffee](https://buymeacoffee.com/sreejan)
+
+---
+
+## 📈 Roadmap
+
+- Add more AI models and integrations.
+- Improve API performance and scalability.
+- Introduce a dashboard for usage analytics.
+- Expand documentation and tutorials.
+
+---
+
+Thank you for visiting **Sree-Shop**! We hope you enjoy using it as much as we enjoyed building it. 🚀
