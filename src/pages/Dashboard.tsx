@@ -155,7 +155,6 @@ import {
   UploadCloud,
   PlusCircle,
   MinusCircle,
-  HelpCircle,
   Info,
   AlertCircle,
   CheckCircle2,
@@ -163,8 +162,6 @@ import {
   QuestionMarkCircle,
   ShieldCheck,
   ShieldAlert,
-  Eye,
-  EyeOff,
   Zap,
   Flame,
   Package,
@@ -232,7 +229,6 @@ import {
   WebCrawler,
   WiseNut,
   WolframAlpha,
-  Yandex,
   Entireweb,
   HotBot,
   InfoSpace,
@@ -258,7 +254,8 @@ import {
   NetFind,
   NorthernLight,
   SearchCom,
-  Snap
+  Snap,
+  ArrowDownRight
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -458,32 +455,16 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <div className="bg-white dark:bg-gray-800 shadow rounded-md p-4">
             <h2 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Monthly Revenue</h2>
-            <LineChart width={500} height={300} data={data}>
-              <XAxis dataKey="name" stroke="#8884d8" />
-              <YAxis stroke="#8884d8" />
-              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="value" stroke="#8884d8" />
-            </LineChart>
+            <div className="h-64 flex items-center justify-center text-gray-400">
+              Line Chart Placeholder - Data Visualization Component
+            </div>
           </div>
 
           <div className="bg-white dark:bg-gray-800 shadow rounded-md p-4">
             <h2 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">Sales by Category</h2>
-            <PieChart width={500} height={300}>
-              <Pie
-                data={pieData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
-              />
-              <Tooltip />
-              <Legend />
-            </PieChart>
+            <div className="h-64 flex items-center justify-center text-gray-400">
+              Pie Chart Placeholder - Data Visualization Component
+            </div>
           </div>
         </div>
 
@@ -758,4 +739,83 @@ const Dashboard = () => {
                         </label>
                         <input
                           type="text"
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500"
+                          id="name"
+                          name="name"
+                          value={newUser.name}
+                          onChange={handleNewInputChange}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-300">
+                          Email:
+                        </label>
+                        <input
+                          type="email"
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500"
+                          id="email"
+                          name="email"
+                          value={newUser.email}
+                          onChange={handleNewInputChange}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="role" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-300">
+                          Role:
+                        </label>
+                        <select
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500"
+                          id="role"
+                          name="role"
+                          value={newUser.role}
+                          onChange={handleNewInputChange}
+                        >
+                          <option>Admin</option>
+                          <option>Editor</option>
+                          <option>Viewer</option>
+                        </select>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="status" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-300">
+                          Status:
+                        </label>
+                        <select
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500"
+                          id="status"
+                          name="status"
+                          value={newUser.status}
+                          onChange={handleNewInputChange}
+                        >
+                          <option>Active</option>
+                          <option>Inactive</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse dark:bg-gray-700">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-400"
+                  onClick={createUser}
+                >
+                  Create
+                </button>
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-500 dark:focus:ring-indigo-400"
+                  onClick={closeModal}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Dashboard;
