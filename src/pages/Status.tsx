@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   AlertCircle, 
   CheckCircle2, 
   Clock,
-  ExternalLink 
+  ExternalLink,
+  Info as InfoIcon,
+  Shield as ShieldIcon,
+  Rocket as RocketIcon,
+  Zap as ZapIcon,
+  Construction as ConstructionIcon,
+  AlertTriangle as AlertTriangleIcon,
+  Sparkles as SparklesIcon
 } from 'lucide-react';
 import { statusUpdates } from '../data/statusUpdates';
 
@@ -21,7 +28,7 @@ function Status() {
       case 'negative':
         return <AlertCircle className="w-5 h-5 text-red-500" />;
       default:
-        return <Info className="w-5 h-5 text-blue-500" />;
+        return <InfoIcon className="w-5 h-5 text-blue-500" />;
     }
   };
 
@@ -79,7 +86,7 @@ function Status() {
                 </div>
               )}
               <div className="relative flex items-center gap-2">
-                <Shield className="w-4 h-4" />
+                <ShieldIcon className="w-4 h-4" />
                 <span>Stable API</span>
               </div>
             </button>
@@ -97,7 +104,7 @@ function Status() {
                 </div>
               )}
               <div className="relative flex items-center gap-2">
-                <Rocket className="w-4 h-4" />
+                <RocketIcon className="w-4 h-4" />
                 <span>Beta API</span>
                 <div className="absolute -top-1 -right-1 w-2 h-2">
                   <div className="absolute inset-0 bg-yellow-400 rounded-full animate-ping"></div>
@@ -113,11 +120,11 @@ function Status() {
           {selectedApiType === 'beta' ? (
             <div className="relative overflow-hidden bg-gradient-to-br from-yellow-500/10 to-orange-500/10 dark:from-yellow-500/20 dark:to-orange-500/20 rounded-2xl p-6 border border-yellow-200 dark:border-yellow-800 shadow-premium-md backdrop-blur-premium">
               <div className="absolute top-0 right-0 p-4">
-                <Rocket className="w-16 h-16 text-yellow-500/20 animate-pulse" />
+                <RocketIcon className="w-16 h-16 text-yellow-500/20 animate-pulse" />
               </div>
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-xl bg-yellow-100 dark:bg-yellow-900/50 shadow-premium-sm">
-                  <Zap className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                  <ZapIcon className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold mb-2">Beta API Status</h2>
@@ -140,11 +147,11 @@ function Status() {
           ) : (
             <div className="relative overflow-hidden bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-2xl p-6 border border-indigo-200 dark:border-indigo-800 shadow-premium-md backdrop-blur-premium">
               <div className="absolute top-0 right-0 p-4">
-                <Construction className="w-16 h-16 text-indigo-500/20 animate-pulse" />
+                <ConstructionIcon className="w-16 h-16 text-indigo-500/20 animate-pulse" />
               </div>
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 shadow-premium-sm">
-                  <AlertTriangle className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                  <AlertTriangleIcon className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold mb-2">Status Page Under Development</h2>
@@ -217,7 +224,7 @@ function Status() {
                                     : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-200'
                                 }`}
                               >
-                                <Sparkles className="w-3 h-3" />
+                                <SparklesIcon className="w-3 h-3" />
                                 {model}
                               </span>
                             ))}

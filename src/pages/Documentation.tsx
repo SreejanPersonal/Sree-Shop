@@ -3,7 +3,6 @@ import {
   ChevronRight,
   Search,
   BookOpen,
-  Cpu,
   Shield,
   Sparkles,
   X,
@@ -13,7 +12,9 @@ import {
   AlertCircle,
   HelpCircle,
   Check,
-  FileCode
+  FileCode,
+  Zap,
+  MessageSquare
 } from 'lucide-react';
 import CodeEditor from '../components/CodeEditor';
 
@@ -34,13 +35,6 @@ function Documentation() {
   const [activeSection, setActiveSection] = useState('quickstart');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState<'python' | 'javascript' | 'curl'>('python');
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
-
-  const handleCopy = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedCode(code);
-    setTimeout(() => setCopiedCode(null), 2000);
-  };
 
   const codeExamples: Record<string, CodeExample> = {
     basic: {
@@ -245,7 +239,6 @@ console.log(response.choices[0].message.content);`,
                   Choose your preferred language and try this example:
                 </p>
                 
-                {/* Language Selector */}
                 <div className="flex gap-2 mb-4">
                   {(['python', 'javascript', 'curl'] as const).map((lang) => (
                     <button
@@ -332,7 +325,6 @@ console.log(response.choices[0].message.content);`,
           <div className="space-y-4">
             <h3 className="font-semibold">Authentication Example</h3>
             
-            {/* Language Selector */}
             <div className="flex gap-2 mb-4">
               {(['python', 'javascript', 'curl'] as const).map((lang) => (
                 <button
@@ -425,7 +417,7 @@ console.log(response.choices[0].message.content);`,
                   </ul>
                 </div>
               </div>
-
+              
               {/* Models */}
               <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-4">
@@ -479,7 +471,6 @@ console.log(response.choices[0].message.content);`,
           <div className="space-y-4">
             <h3 className="font-semibold">Streaming Example</h3>
             
-            {/* Language Selector */}
             <div className="flex gap-2 mb-4">
               {(['python', 'javascript', 'curl'] as const).map((lang) => (
                 <button
@@ -563,7 +554,6 @@ console.log(response.choices[0].message.content);`,
           <div className="space-y-4">
             <h3 className="font-semibold">Beta API Example</h3>
             
-            {/* Language Selector */}
             <div className="flex gap-2 mb-4">
               {(['python', 'javascript', 'curl'] as const).map((lang) => (
                 <button
@@ -598,7 +588,6 @@ console.log(response.choices[0].message.content);`,
   return (
     <div className="min-h-screen py-16">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6">
             <BookOpen className="w-4 h-4" />
@@ -613,7 +602,6 @@ console.log(response.choices[0].message.content);`,
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar */}
           <div className="lg:w-64 flex-shrink-0">
             <div className="sticky top-20">
               <div className="relative mb-4">
@@ -654,7 +642,6 @@ console.log(response.choices[0].message.content);`,
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="flex-1">
             <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-xl border border-gray-100 dark:border-gray-700">
               {sections.find(s => s.id === activeSection)?.content}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Heart, Star, Coffee, Github, Code2, ChevronDown } from 'lucide-react';
+import { Heart, Star, Coffee, Github, Code2, ChevronDown, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface Contributor {
   github: string;

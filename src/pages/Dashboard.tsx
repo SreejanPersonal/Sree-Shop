@@ -233,7 +233,7 @@ function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
             {
-              icon: <ArrowUpRight className="w-5 h-5 text-blue-500" />,
+              icon: <ArrowUpRight className="w-3.5 h-3.5" />,
               label: "Input Tokens",
               value: usageData?.input_tokens.toLocaleString() || '0',
               subtext: "Total prompt tokens",
@@ -563,4 +563,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
