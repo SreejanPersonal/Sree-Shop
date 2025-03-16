@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Gauge, Brain, Workflow, Rocket, Star, Zap } from 'lucide-react';
+import { Gauge, Brain, Workflow, Rocket, Star, Zap, Image } from 'lucide-react';
 
 interface ModelCardProps {
   model: string;
@@ -12,24 +12,43 @@ interface ModelCardProps {
 
 const ModelCard: React.FC<ModelCardProps> = ({ model, isPro, isBeta, provider, onClick }) => {
   const modelName = model.split('/').pop() || model;
+  const isImageModel = model.includes("flux-");
 
-  const features = [
-    {
-      name: 'RPM',
-      value: isPro ? 'Unlimited' : isBeta ? '10 RPM' : '3 RPM',
-      icon: <Gauge className="w-3.5 h-3.5" />
-    },
-    {
-      name: 'Context',
-      value: isPro ? 'Original' : isBeta ? '32K' : '4K',
-      icon: <Brain className="w-3.5 h-3.5" />
-    },
-    {
-      name: 'Priority',
-      value: isPro ? 'High' : isBeta ? 'Medium' : 'Normal',
-      icon: <Workflow className="w-3.5 h-3.5" />
-    }
-  ];
+  const features = isImageModel 
+    ? [
+        {
+          name: 'RPM',
+          value: isBeta ? '5 IPM' : isPro ? 'Unlimited' : '3 RPM',
+          icon: <Gauge className="w-3.5 h-3.5" />
+        },
+        {
+          name: 'Type',
+          value: 'Image',
+          icon: <Image className="w-3.5 h-3.5" />
+        },
+        {
+          name: 'Priority',
+          value: isPro ? 'High' : isBeta ? 'Medium' : 'Normal',
+          icon: <Workflow className="w-3.5 h-3.5" />
+        }
+      ] 
+    : [
+        {
+          name: 'RPM',
+          value: isPro ? 'Unlimited' : isBeta ? '10 RPM' : '3 RPM',
+          icon: <Gauge className="w-3.5 h-3.5" />
+        },
+        {
+          name: 'Context',
+          value: isPro ? 'Original' : isBeta ? '32K' : '4K',
+          icon: <Brain className="w-3.5 h-3.5" />
+        },
+        {
+          name: 'Priority',
+          value: isPro ? 'High' : isBeta ? 'Medium' : 'Normal',
+          icon: <Workflow className="w-3.5 h-3.5" />
+        }
+      ];
 
   return (
     <button
