@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Terminal, Play, Check, Copy, Code2, Loader2, Sparkles } from 'lucide-react';
+import { Terminal, Play, Loader2, Sparkles } from 'lucide-react';
 import CodeEditor from './CodeEditor';
 
 const INITIAL_CODE = {
@@ -67,11 +67,9 @@ const SAMPLE_RESPONSE = {
 const LoadingAnimation = () => (
   <div className="flex flex-col items-center justify-center h-[400px] gap-6">
     <div className="relative">
-      {/* Outer rings */}
       <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 blur-lg opacity-20 animate-pulse"></div>
       <div className="w-20 h-20 border-4 border-blue-100 dark:border-blue-900/50 rounded-full"></div>
       <div className="w-20 h-20 border-4 border-blue-600 dark:border-blue-400 rounded-full border-t-transparent absolute top-0 left-0 animate-spin"></div>
-      {/* Inner spinner */}
       <div className="absolute inset-[6px] rounded-full border-2 border-indigo-400 dark:border-indigo-300 border-dashed animate-spin-slow"></div>
     </div>
     <div className="space-y-2 text-center">

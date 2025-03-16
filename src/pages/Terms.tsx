@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Shield, AlertCircle, Check, ExternalLink } from 'lucide-react';
 
 function Terms() {

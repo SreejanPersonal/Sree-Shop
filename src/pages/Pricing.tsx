@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Check, ArrowRight, AlertCircle, Linkedin, Twitter, Instagram, ChevronDown, Zap, Shield, Sparkles, Coffee, Building2, Info, Rocket } from 'lucide-react';
+import { Check, ArrowRight, ChevronDown, Info, Rocket, Shield, Sparkles, Coffee } from 'lucide-react';
 import ApiKeyModal from '../components/ApiKeyModal';
 import ContactModal from '../components/ContactModal';
 import BetaAccessModal from '../components/BetaAccessModal';
@@ -237,12 +238,12 @@ function Pricing() {
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-1 rounded-lg bg-blue-100 dark:bg-blue-900/30">
-                    {tiers[0].subOptions[0].icon}
+                    {tiers[0].subOptions?.[0]?.icon}
                   </div>
-                  <h4 className="font-medium">{tiers[0].subOptions[0].name}</h4>
+                  <h4 className="font-medium">{tiers[0].subOptions?.[0]?.name}</h4>
                 </div>
                 <ul className="space-y-4 mb-6 pl-2 border-l-2 border-blue-200 dark:border-blue-800">
-                  {tiers[0].subOptions[0].features.map((feature, featureIndex) => (
+                  {tiers[0].subOptions?.[0]?.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start gap-3">
                       <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[0].gradient}`}>
                         <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
@@ -265,15 +266,15 @@ function Pricing() {
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-1 rounded-lg bg-amber-100 dark:bg-amber-900/30">
-                    {tiers[0].subOptions[1].icon}
+                    {tiers[0].subOptions?.[1]?.icon}
                   </div>
-                  <h4 className="font-medium">{tiers[0].subOptions[1].name}</h4>
+                  <h4 className="font-medium">{tiers[0].subOptions?.[1]?.name}</h4>
                   <div className="px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
                     New
                   </div>
                 </div>
                 <ul className="space-y-4 mb-6 pl-2 border-l-2 border-amber-200 dark:border-amber-800">
-                  {tiers[0].subOptions[1].features.map((feature, featureIndex) => (
+                  {tiers[0].subOptions?.[1]?.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start gap-3">
                       <div className={`p-0.5 rounded-full bg-gradient-to-br from-amber-500 to-orange-500`}>
                         <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
@@ -345,7 +346,7 @@ function Pricing() {
               </div>
 
               <ul className="space-y-4 mb-8 flex-grow">
-                {tiers[1].features.map((feature, featureIndex) => (
+                {tiers[1].features?.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start gap-3">
                     <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[1].gradient}`}>
                       <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">

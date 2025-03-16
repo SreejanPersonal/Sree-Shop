@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, CheckCircle2, Circle, Play } from 'lucide-react';
 
 interface Step {
@@ -14,7 +14,7 @@ interface ApiKeyModalProps {
 }
 
 const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose }) => {
-  const [steps, setSteps] = useState<Step[]>([
+  const [steps] = useState<Step[]>([
     {
       title: 'Join our Community',
       description: 'Join our Telegram group to get started',
