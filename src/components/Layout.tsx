@@ -139,6 +139,13 @@ function Layout() {
                   <Activity className="w-4 h-4" />
                   Status
                 </Link>
+                <Link
+                  to="/content"
+                  className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-light-primary-600 dark:hover:text-dark-primary-400 transition-colors flex items-center gap-1"
+                >
+                  <Youtube className="w-4 h-4" />
+                  Content Hub
+                </Link>
               </div>
 
               <button
@@ -210,6 +217,14 @@ function Layout() {
                 >
                   <Activity className="w-4 h-4" />
                   Status
+                </Link>
+                <Link
+                  to="/content"
+                  className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-light-primary-600 dark:hover:text-dark-primary-400 flex items-center gap-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Youtube className="w-4 h-4" />
+                  Content Hub
                 </Link>
                 <button
                   onClick={() => {
@@ -295,6 +310,9 @@ function Layout() {
                 </Link>
                 <Link to="/privacy" className="text-sm text-light-text-tertiary dark:text-dark-text-tertiary hover:text-light-primary-600 dark:hover:text-dark-primary-400">
                   Privacy Policy
+                </Link>
+                <Link to="/refund-policy" className="text-sm text-light-text-tertiary dark:text-dark-text-tertiary hover:text-light-primary-600 dark:hover:text-dark-primary-400">
+                  Refund Policy
                 </Link>
               </div>
 
@@ -385,4 +403,3 @@ function Layout() {
 }
 
 export default Layout;
-
