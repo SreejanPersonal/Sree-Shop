@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Check, ArrowRight, ChevronDown, Info, Rocket, Shield, Sparkles, Coffee } from 'lucide-react';
+import { Check, ArrowRight, ChevronDown, Info, Rocket, Shield, Sparkles, Coffee, ChevronUp } from 'lucide-react';
 import ApiKeyModal from '../components/ApiKeyModal';
 import ContactModal from '../components/ContactModal';
 import BetaAccessModal from '../components/BetaAccessModal';
@@ -69,6 +69,16 @@ function Pricing() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const [expandedBetaSection, setExpandedBetaSection] = useState(true);
+  const [expandedProDetailsSection, setExpandedProDetailsSection] = useState(true);
+
+  const toggleBetaSection = () => {
+    setExpandedBetaSection(!expandedBetaSection);
+  };
+
+  const toggleProDetailsSection = () => {
+    setExpandedProDetailsSection(!expandedProDetailsSection);
+  };
 
   const tiers = [
     {
@@ -178,6 +188,25 @@ function Pricing() {
           tooltip: "Seamlessly replace OpenAI's API with our more affordable solution"
         }
       ],
+      // Additional benefits for Pro tier to fill space more effectively
+      additionalBenefits: [
+        {
+          text: "Dedicated technical account manager",
+          tooltip: "Get personalized assistance from a dedicated technical expert"
+        },
+        {
+          text: "Custom API integration support",
+          tooltip: "Receive help with integrating our API into your specific workflow"
+        },
+        {
+          text: "Performance optimization consulting",
+          tooltip: "Get expert advice on optimizing your AI implementation for best results"
+        },
+        {
+          text: "Monthly usage reports",
+          tooltip: "Detailed insights into your API usage patterns and optimization opportunities"
+        }
+      ],
       cta: "Contact Us",
       highlighted: true,
       gradient: "from-blue-600 to-indigo-600"
@@ -202,6 +231,7 @@ function Pricing() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
+          {/* Free Tier Card */}
           <div
             className={`relative group rounded-2xl h-full ${
               tiers[0].highlighted
@@ -264,32 +294,51 @@ function Pricing() {
               </div>
 
               <div className="mb-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-1 rounded-lg bg-amber-100 dark:bg-amber-900/30">
-                    {tiers[0].subOptions?.[1]?.icon}
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1 rounded-lg bg-amber-100 dark:bg-amber-900/30">
+                      {tiers[0].subOptions?.[1]?.icon}
+                    </div>
+                    <h4 className="font-medium">{tiers[0].subOptions?.[1]?.name}</h4>
+                    <div className="px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
+                      New
+                    </div>
                   </div>
-                  <h4 className="font-medium">{tiers[0].subOptions?.[1]?.name}</h4>
-                  <div className="px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
-                    New
-                  </div>
+                  <button 
+                    onClick={toggleBetaSection}
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    aria-expanded={expandedBetaSection}
+                    aria-controls="beta-features"
+                  >
+                    {expandedBetaSection ? (
+                      <ChevronUp className="w-5 h-5" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5" />
+                    )}
+                  </button>
                 </div>
-                <ul className="space-y-4 mb-6 pl-2 border-l-2 border-amber-200 dark:border-amber-800">
-                  {tiers[0].subOptions?.[1]?.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start gap-3">
-                      <div className={`p-0.5 rounded-full bg-gradient-to-br from-amber-500 to-orange-500`}>
-                        <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
-                          <Check className="w-4 h-4 text-amber-600" />
+                
+                <div id="beta-features" className={`transition-all duration-300 overflow-hidden ${
+                  expandedBetaSection ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                }`}>
+                  <ul className="space-y-4 mb-6 pl-2 border-l-2 border-amber-200 dark:border-amber-800">
+                    {tiers[0].subOptions?.[1]?.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-start gap-3">
+                        <div className={`p-0.5 rounded-full bg-gradient-to-br from-amber-500 to-orange-500`}>
+                          <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
+                            <Check className="w-4 h-4 text-amber-600" />
+                          </div>
                         </div>
-                      </div>
-                      <span className="text-gray-700 dark:text-gray-300">
-                        {feature.text}
-                        <Tooltip content={feature.tooltip}>
-                          <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
-                        </Tooltip>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {feature.text}
+                          <Tooltip content={feature.tooltip}>
+                            <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                          </Tooltip>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
               <div className="space-y-3 mt-auto">
@@ -312,6 +361,7 @@ function Pricing() {
             </div>
           </div>
 
+          {/* Pro Tier Card */}
           <div
             className={`relative group rounded-2xl h-full ${
               tiers[1].highlighted
@@ -345,32 +395,75 @@ function Pricing() {
                 </p>
               </div>
 
-              <ul className="space-y-4 mb-8 flex-grow">
-                {tiers[1].features?.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-start gap-3">
-                    <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[1].gradient}`}>
-                      <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
-                        <Check className={`w-4 h-4 ${
-                          tiers[1].highlighted ? 'text-blue-600' : 'text-gray-600'
-                        }`} />
+              {/* Core Features */}
+              <div className="mb-6">
+                <h4 className="font-medium mb-4">Core Features</h4>
+                <ul className="space-y-4 mb-6">
+                  {tiers[1].features?.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-start gap-3">
+                      <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[1].gradient}`}>
+                        <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
+                          <Check className={`w-4 h-4 ${
+                            tiers[1].highlighted ? 'text-blue-600' : 'text-gray-600'
+                          }`} />
+                        </div>
                       </div>
-                    </div>
-                    <span className="text-gray-700 dark:text-gray-300">
-                      {feature.text}
-                      <Tooltip content={feature.tooltip}>
-                        <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
-                      </Tooltip>
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {feature.text}
+                        <Tooltip content={feature.tooltip}>
+                          <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                        </Tooltip>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-              <div className="flex-grow flex flex-col justify-center">
-                <div className="py-4 px-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl mb-8">
-                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
-                    Perfect for developers who need reliable API access with premium features and support.
-                  </p>
+              {/* Additional Benefits Section - Collapsible */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-medium">Additional Benefits</h4>
+                  <button 
+                    onClick={toggleProDetailsSection}
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    aria-expanded={expandedProDetailsSection}
+                    aria-controls="pro-additional-benefits"
+                  >
+                    {expandedProDetailsSection ? (
+                      <ChevronUp className="w-5 h-5" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5" />
+                    )}
+                  </button>
                 </div>
+
+                <div id="pro-additional-benefits" className={`transition-all duration-300 overflow-hidden ${
+                  expandedProDetailsSection ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                }`}>
+                  <ul className="space-y-4 mb-4">
+                    {tiers[1].additionalBenefits?.map((benefit, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[1].gradient}`}>
+                          <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
+                            <Check className="w-4 h-4 text-blue-600" />
+                          </div>
+                        </div>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {benefit.text}
+                          <Tooltip content={benefit.tooltip}>
+                            <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                          </Tooltip>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="py-4 px-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl mb-8">
+                <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                  Perfect for developers who need reliable API access with premium features and support.
+                </p>
               </div>
 
               <button
