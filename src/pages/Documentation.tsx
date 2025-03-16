@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Book, 
-  Code2, 
-  Terminal, 
-  Zap, 
-  ChevronRight, 
-  Copy, 
-  Check,
+  ChevronRight,
   Search,
   BookOpen,
   Cpu,
@@ -16,9 +10,10 @@ import {
   Rocket,
   Globe,
   Settings,
-  MessageSquare,
   AlertCircle,
-  HelpCircle
+  HelpCircle,
+  Check,
+  FileCode
 } from 'lucide-react';
 import CodeEditor from '../components/CodeEditor';
 
@@ -68,7 +63,7 @@ print(response.choices[0].message.content)`,
 
 const client = new OpenAI({
   baseURL: 'https://api.sree.shop/v1',
-  apiKey: 'ddc-xxx'  // Replace with your API key
+  apiKey: 'ddc-xxx'  # Replace with your API key
 });
 
 const response = await client.chat.completions.create({
@@ -112,7 +107,7 @@ for chunk in stream:
 
 const client = new OpenAI({
   baseURL: 'https://api.sree.shop/v1',
-  apiKey: 'ddc-xxx'  // Replace with your API key
+  apiKey: 'ddc-xxx'  # Replace with your API key
 });
 
 const stream = await client.chat.completions.create({
@@ -157,11 +152,11 @@ print(response.choices[0].message.content)`,
 
 const client = new OpenAI({
   baseURL: 'https://beta.sree.shop/v1',
-  apiKey: 'ddc-beta-xxx'  // Replace with your beta API key
+  apiKey: 'ddc-beta-xxx'  # Replace with your beta API key
 });
 
 const response = await client.chat.completions.create({
-  model: 'DeepSeek-R1',  // Beta model
+  model: 'DeepSeek-R1',  # Beta model
   messages: [
     { role: 'user', content: 'Hello!' }
   ]

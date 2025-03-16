@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Star, Coffee, Sparkles, Github, Code2, ChevronDown } from 'lucide-react';
+import { Heart, Star, Coffee, Github, Code2, ChevronDown } from 'lucide-react';
 
 interface Contributor {
   github: string;

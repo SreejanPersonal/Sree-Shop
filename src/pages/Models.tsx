@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { 
   Star, 
   Search, 
@@ -16,7 +15,9 @@ import {
   Workflow,
   Rocket,
   ExternalLink,
-  AlertCircle
+  AlertCircle,
+  Cpu,
+  AlertTriangle
 } from 'lucide-react';
 import freeModels from '../utility/models/freeModels.json';
 import betaModels from '../utility/models/betaModels.json';

@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Terminal, Play, Loader2, Sparkles } from 'lucide-react';
+import { Terminal, Play, Loader2, Sparkles, FileCode } from 'lucide-react';
 import CodeEditor from './CodeEditor';
 
 const INITIAL_CODE = {
@@ -145,7 +146,7 @@ const ApiSandbox: React.FC = () => {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4">
             <div className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-              <Code2 className="w-4 h-4" />
+              <FileCode className="w-4 h-4" />
               Request Editor
             </div>
             <button

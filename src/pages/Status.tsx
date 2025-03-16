@@ -1,18 +1,9 @@
-
 import React, { useState } from 'react';
 import { 
   AlertCircle, 
   CheckCircle2, 
-  Info, 
-  Clock, 
-  ArrowRight, 
-  Construction,
-  AlertTriangle,
-  Sparkles,
-  Rocket,
-  Zap,
-  Shield,
-  ExternalLink
+  Clock,
+  ExternalLink 
 } from 'lucide-react';
 import { statusUpdates } from '../data/statusUpdates';
 

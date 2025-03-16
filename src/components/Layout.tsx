@@ -21,6 +21,8 @@ import ApiKeyModal from './ApiKeyModal';
 import ContactModal from './ContactModal';
 import BetaAccessModal from './BetaAccessModal';
 import MainWebsiteModal from './MainWebsiteModal';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
 function Layout() {
   const [darkMode, setDarkMode] = useState(() => {

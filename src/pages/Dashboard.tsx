@@ -9,11 +9,7 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
-  Area,
-  AreaChart,
-  LineChart,
-  Line
+  Cell
 } from 'recharts';
 import { 
   Key, 
@@ -22,9 +18,6 @@ import {
   Sparkles,
   RefreshCcw,
   Info,
-  ArrowRight,
-  MessageSquare,
-  Loader2,
   ArrowUpRight,
   ArrowDownRight,
   XCircle,
@@ -117,7 +110,6 @@ function Dashboard() {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
         throw new Error(
           response.status === 401 
             ? 'Invalid API key. Please check your credentials.'
@@ -571,3 +563,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
