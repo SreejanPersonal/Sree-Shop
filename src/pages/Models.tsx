@@ -1,12 +1,8 @@
-
 import { useState } from 'react';
 import { 
-  Star, 
   Search, 
-  X, 
-  ChevronDown
+  X 
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import freeModels from '../utility/models/freeModels.json';
 import betaModels from '../utility/models/betaModels.json';
@@ -24,6 +20,7 @@ function getProviderFromModel(model: string) {
   if (model.includes('mistral')) return 'Mistral AI';
   if (model.includes('qwen')) return 'Qwen';
   if (model.includes('yi')) return '01.AI';
+  if (model.includes('flux')) return 'Flux';
   return 'Other';
 }
 
@@ -35,6 +32,7 @@ function Models() {
     provider: string;
     isPro: boolean;
     isBeta: boolean;
+    isImage?: boolean;
   } | null>(null);
 
   const providers = useMemo(() => 
@@ -44,6 +42,8 @@ function Models() {
       ...paidModels.map(getProviderFromModel)
     ])).sort()
   , []);
+
+  const isImageModel = (model: string) => model.includes("flux-");
 
   const filterModels = (models: string[]) => {
     if (!searchTerm && !selectedProvider) return models;
@@ -71,6 +71,14 @@ function Models() {
   const filteredPaidModels = useMemo(() => 
     filterModels(paidModels)
   , [searchTerm, selectedProvider]);
+
+  const betaImageModels = useMemo(() => 
+    filteredBetaModels.filter(model => isImageModel(model))
+  , [filteredBetaModels]);
+
+  const betaTextModels = useMemo(() => 
+    filteredBetaModels.filter(model => !isImageModel(model))
+  , [filteredBetaModels]);
 
   const noResults = filteredFreeModels.length === 0 && filteredBetaModels.length === 0 && filteredPaidModels.length === 0;
 
@@ -140,23 +148,63 @@ function Models() {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {filteredBetaModels.map((model: string) => (
-                <ModelCard 
-                  key={model} 
-                  model={model} 
-                  isPro={false} 
-                  isBeta={true} 
-                  provider={getProviderFromModel(model)}
-                  onClick={() => setSelectedModel({
-                    name: model,
-                    provider: getProviderFromModel(model),
-                    isPro: false,
-                    isBeta: true
-                  })}
-                />
-              ))}
-            </div>
+
+            {betaTextModels.length > 0 && (
+              <>
+                <div className="flex items-center gap-2 mb-4">
+                  <h3 className="text-xl font-semibold">Text Generation Models</h3>
+                  <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400 rounded-full">
+                    {betaTextModels.length}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
+                  {betaTextModels.map((model: string) => (
+                    <ModelCard 
+                      key={model} 
+                      model={model} 
+                      isPro={false} 
+                      isBeta={true} 
+                      provider={getProviderFromModel(model)}
+                      onClick={() => setSelectedModel({
+                        name: model,
+                        provider: getProviderFromModel(model),
+                        isPro: false,
+                        isBeta: true
+                      })}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+
+            {betaImageModels.length > 0 && (
+              <>
+                <div className="flex items-center gap-2 mb-4">
+                  <h3 className="text-xl font-semibold">Image Generation Models</h3>
+                  <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400 rounded-full">
+                    {betaImageModels.length}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {betaImageModels.map((model: string) => (
+                    <ModelCard 
+                      key={model} 
+                      model={model} 
+                      isPro={false} 
+                      isBeta={true} 
+                      provider={getProviderFromModel(model)}
+                      onClick={() => setSelectedModel({
+                        name: model,
+                        provider: getProviderFromModel(model),
+                        isPro: false,
+                        isBeta: true,
+                        isImage: true
+                      })}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
 
@@ -216,13 +264,13 @@ function Models() {
           </div>
         )}
 
-        {/* Model Info Modal */}
         {selectedModel && (
           <ModelInfoModal
             model={selectedModel.name}
             provider={selectedModel.provider}
             isPro={selectedModel.isPro}
             isBeta={selectedModel.isBeta}
+            isImage={selectedModel.isImage}
             onClose={() => setSelectedModel(null)}
           />
         )}

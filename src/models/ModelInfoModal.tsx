@@ -10,7 +10,8 @@ import {
   Info, 
   AlertCircle,
   X,
-  ExternalLink
+  ExternalLink,
+  Image
 } from 'lucide-react';
 
 interface ModelInfoModalProps {
@@ -18,10 +19,11 @@ interface ModelInfoModalProps {
   provider: string;
   isPro: boolean;
   isBeta: boolean;
+  isImage?: boolean;
   onClose: () => void;
 }
 
-const ModelInfoModal: React.FC<ModelInfoModalProps> = ({ model, provider, isPro, isBeta, onClose }) => {
+const ModelInfoModal: React.FC<ModelInfoModalProps> = ({ model, provider, isPro, isBeta, isImage, onClose }) => {
   const navigate = useNavigate();
 
   const handleViewDocs = () => {
@@ -69,16 +71,20 @@ const ModelInfoModal: React.FC<ModelInfoModalProps> = ({ model, provider, isPro,
                 <h4 className="text-sm font-medium">Rate Limit</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {isPro ? 'Unlimited' : isBeta ? '10 RPM' : '3 RPM'}
+                {isImage ? '5 IPM' : (isPro ? 'Unlimited' : isBeta ? '10 RPM' : '3 RPM')}
               </p>
             </div>
             <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
               <div className="flex items-center gap-2 mb-1.5">
-                <Brain className="w-4 h-4 text-purple-500" />
-                <h4 className="text-sm font-medium">Context Window</h4>
+                {isImage ? (
+                  <Image className="w-4 h-4 text-purple-500" />
+                ) : (
+                  <Brain className="w-4 h-4 text-purple-500" />
+                )}
+                <h4 className="text-sm font-medium">{isImage ? 'Type' : 'Context Window'}</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {isPro ? 'Original' : isBeta ? '32K tokens' : '4K tokens'}
+                {isImage ? 'Image' : (isPro ? 'Original' : isBeta ? '32K tokens' : '4K tokens')}
               </p>
             </div>
           </div>
