@@ -1,25 +1,28 @@
+
 import { useState } from 'react';
 import { 
+  Star, 
   Search, 
-  X
+  X, 
+  ChevronDown
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 import freeModels from '../utility/models/freeModels.json';
 import betaModels from '../utility/models/betaModels.json';
 import paidModels from '../utility/models/paidModels.json';
 import ModelInfoModal from '../models/ModelInfoModal';
 import ProviderDropdown from '../models/ProviderDropdown';
 import ModelCard from '../models/ModelCard';
-import { useMemo } from 'react';
 
 function getProviderFromModel(model: string) {
-  if (model.toLowerCase().includes('flux')) return 'Flux AI';
   if (model.toLowerCase().includes('deepseek') || model === 'DeepSeekV3') return 'DeepSeek';
-  if (model.includes('gpt') || model.includes('openai') || model === 'o3-mini' || model === 'o1-mini') return 'OpenAI';
+  if (model.includes('gpt') || model.includes('openai') || model === 'o3-mini') return 'OpenAI';
   if (model.includes('claude')) return 'Anthropic';
   if (model.includes('gemini') || model.includes('google')) return 'Google';
   if (model.includes('llama') || model.includes('meta')) return 'Meta';
   if (model.includes('mistral')) return 'Mistral AI';
-  if (model.includes('qwen')) return 'Alibaba Cloud';
+  if (model.includes('qwen')) return 'Qwen';
   if (model.includes('yi')) return '01.AI';
   return 'Other';
 }

@@ -1,6 +1,6 @@
 
 import { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Pricing from './pages/Pricing';
@@ -35,7 +35,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout><Outlet /></Layout>}>
+        <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="pricing" element={<Pricing />} />
           <Route path="dashboard" element={<Dashboard />} />

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   ChevronRight,
@@ -13,9 +12,9 @@ import {
   AlertCircle,
   HelpCircle,
   Check,
+  FileCode,
   Zap,
-  MessageSquare,
-  Cpu
+  MessageSquare
 } from 'lucide-react';
 import CodeEditor from '../components/CodeEditor';
 

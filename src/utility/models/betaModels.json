@@ -1,21 +1,8 @@
 
 [
-  "DeepSeek-R1",
+  "deepseek-r1",
   "gpt-4o",
   "o3-mini",
   "DeepSeek-R1-Distill-Llama-70B",
-  "DeepSeekV3",
-  "gpt-4o-mini",
-  "o1-mini",
-  "qwen-2.5-coder-32b",
-  "llama-3.3-70b",
-  "deepseek-v3",
-  "claude-3.7-sonnet",
-  "deepseek-r1-distill-qwen-32b",
-  "deepseek-r1-llama-70b",
-  "gemini-2.0-flash",
-  "gemini-2.0-flash-thinking",
-  "flux-1.1-ultra",
-  "flux-pro",
-  "flux-schnell"
+  "DeepSeekV3"
 ]

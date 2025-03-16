@@ -10,8 +10,7 @@ import {
   Info, 
   AlertCircle,
   X,
-  ExternalLink,
-  Image
+  ExternalLink
 } from 'lucide-react';
 
 interface ModelInfoModalProps {
@@ -24,7 +23,6 @@ interface ModelInfoModalProps {
 
 const ModelInfoModal: React.FC<ModelInfoModalProps> = ({ model, provider, isPro, isBeta, onClose }) => {
   const navigate = useNavigate();
-  const isImageModel = model.toLowerCase().includes('flux');
 
   const handleViewDocs = () => {
     onClose(); // Close the modal first
@@ -40,14 +38,12 @@ const ModelInfoModal: React.FC<ModelInfoModalProps> = ({ model, provider, isPro,
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg ${
                 isBeta 
-                  ? isImageModel
-                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
-                    : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                  ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
                   : isPro 
                     ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
                     : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
               }`}>
-                {isImageModel ? <Image className="w-5 h-5" /> : (isBeta ? <Rocket className="w-5 h-5" /> : isPro ? <Star className="w-5 h-5" /> : <Zap className="w-5 h-5" />)}
+                {isBeta ? <Rocket className="w-5 h-5" /> : isPro ? <Star className="w-5 h-5" /> : <Zap className="w-5 h-5" />}
               </div>
               <div>
                 <h3 className="text-lg font-semibold">{model.split('/').pop()}</h3>
@@ -73,20 +69,16 @@ const ModelInfoModal: React.FC<ModelInfoModalProps> = ({ model, provider, isPro,
                 <h4 className="text-sm font-medium">Rate Limit</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {isImageModel ? '5 IPM' : (isPro ? 'Unlimited' : isBeta ? '10 RPM' : '3 RPM')}
+                {isPro ? 'Unlimited' : isBeta ? '10 RPM' : '3 RPM'}
               </p>
             </div>
             <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
               <div className="flex items-center gap-2 mb-1.5">
-                {isImageModel ? (
-                  <Image className="w-4 h-4 text-purple-500" />
-                ) : (
-                  <Brain className="w-4 h-4 text-purple-500" />
-                )}
-                <h4 className="text-sm font-medium">{isImageModel ? 'Type' : 'Context Window'}</h4>
+                <Brain className="w-4 h-4 text-purple-500" />
+                <h4 className="text-sm font-medium">Context Window</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {isImageModel ? 'Image Generation' : (isPro ? 'Original' : isBeta ? '32K tokens' : '4K tokens')}
+                {isPro ? 'Original' : isBeta ? '32K tokens' : '4K tokens'}
               </p>
             </div>
           </div>
