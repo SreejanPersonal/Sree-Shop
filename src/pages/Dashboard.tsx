@@ -1,262 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import {
-  BarChart3,
-  LineChart,
-  PieChart,
-  Sliders,
-  Download,
-  HelpCircle,
-  ArrowUpRight,
-  TrendingUp,
-  TrendingDown,
   User,
   Server,
   MessageSquare,
-  CheckCircle,
-  AlertTriangle,
-  Loader2,
-  Copy,
-  Check,
-  X,
-  Plus,
-  Edit,
-  Trash2,
+  TrendingUp,
+  TrendingDown,
+  ArrowUpRight,
+  ArrowDownRight,
   Search,
   ChevronDown,
   ChevronUp,
-  MoreHorizontal,
-  ExternalLink,
-  Settings,
-  Key,
-  Shield,
-  Bell,
-  Moon,
-  Sun,
-  LayoutDashboard,
-  FileText,
-  CreditCard,
-  Users,
-  Code,
-  Book,
-  Mail,
-  LogOut,
-  ArrowLeft,
-  ArrowRight,
-  AlertOctagon,
-  RefreshCw,
-  Upload,
-  Save,
-  Send,
-  List,
-  Grid,
-  Calendar,
-  Clock,
-  MapPin,
-  Image,
-  Video,
-  File,
-  Folder,
-  Archive,
-  Share2,
-  Printer,
-  ZoomIn,
-  ZoomOut,
-  Eye,
-  EyeOff,
-  Unlock,
-  Lock,
-  Tag,
-  ShoppingCart,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  Flag,
-  Bookmark,
-  Link2,
-  Paperclip,
-  AtSign,
-  Hash,
-  Phone,
-  Wifi,
-  Bluetooth,
-  BatteryCharging,
-  Volume1,
-  Volume2,
-  VolumeX,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
-  Navigation,
-  Compass,
-  Globe,
-  Cloud,
-  CloudRain,
-  CloudSnow,
-  CloudLightning,
-  SunCloud,
-  MoonCloud,
-  Wind,
-  Umbrella,
-  Thermometer,
-  Droplet,
-  Waves,
-  Tree,
-  Mountain,
-  Park,
-  Building,
-  Home,
-  Road,
-  Map,
-  Bus,
-  Car,
-  Truck,
-  Motorcycle,
-  Bicycle,
-  Train,
-  Ship,
-  Plane,
-  Rocket,
-  Star,
-  Award,
-  Gift,
-  Trophy,
-  Puzzle,
-  Dice1,
-  Dice2,
-  Dice3,
-  Dice4,
-  Dice5,
-  Dice6,
-  Keyboard,
-  MousePointer,
-  Disc,
-  Headphones,
-  Music,
-  Film,
-  Tv,
-  Gamepad2,
-  Vr,
-  PenTool,
-  Palette,
-  Scissors,
-  CopyPlus,
-  Layout,
-  Split,
-  Merge,
-  Columns,
-  Rows,
-  Grid2X2,
-  Grid3X3,
-  Maximize2,
-  Minimize2,
-  Move,
-  DownloadCloud,
-  UploadCloud,
-  PlusCircle,
-  MinusCircle,
-  Info,
-  AlertCircle,
-  CheckCircle2,
-  XCircle,
-  QuestionMarkCircle,
-  ShieldCheck,
-  ShieldAlert,
-  Zap,
-  Flame,
-  Package,
-  Box,
-  GitBranch,
-  GitCommit,
-  GitMerge,
-  GitPullRequest,
-  Github,
-  Twitter,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Youtube,
-  Dribbble,
-  Behance,
-  Twitch,
-  Discord,
-  Slack,
-  Reddit,
-  Medium,
-  Spotify,
-  Apple,
-  Android,
-  Windows,
-  Linux,
-  Chrome,
-  Firefox,
-  Safari,
-  Ie,
-  Edge,
-  Opera,
-  Brave,
-  Vivaldi,
-  Tor,
-  Yandex,
-  DuckDuckGo,
-  Ecosia,
-  Startpage,
-  Qwant,
-  Searx,
-  Baidu,
-  Sogou,
-  Naver,
-  Daum,
-  Yippy,
-  Swisscows,
-  Gibiru,
-  Disconnect,
-  Ixquick,
-  Metager,
-  Mojeek,
-  Oscobo,
-  Peekier,
-  Privatelee,
-  SearchEncrypt,
-  YaCy,
-  ZetaAlpha,
-  Etools,
-  Exalead,
-  Gigablast,
-  Lycos,
-  Mamma,
-  Search,
-  WebCrawler,
-  WiseNut,
-  WolframAlpha,
-  Entireweb,
-  HotBot,
-  InfoSpace,
-  LookSmart,
-  Netscape,
-  OpenText,
-  Thunderstone,
-  WhatUseek,
-  WhoWhere,
-  WorldWideWeb,
-  Yahoo,
-  AltaVista,
-  AOLSearch,
-  Ask,
-  Bing,
-  Cuil,
-  Dogpile,
-  Excite,
-  Google,
-  Jeeves,
-  Lygo,
-  MSNSearch,
-  NetFind,
-  NorthernLight,
-  SearchCom,
-  Snap,
-  ArrowDownRight
+  Edit,
+  Trash2,
+  Plus,
+  AlertTriangle
 } from 'lucide-react';
+
+interface UserType {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+}
 
 const Dashboard = () => {
   const [data, setData] = useState([
@@ -281,7 +47,7 @@ const Dashboard = () => {
     { name: 'Group D', value: 200 },
   ]);
 
-  const [users, setUsers] = useState([
+  const [users, setUsers] = useState<UserType[]>([
     { id: 1, name: 'John Doe', email: 'john.doe@example.com', role: 'Admin', status: 'Active' },
     { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', role: 'Editor', status: 'Inactive' },
     { id: 3, name: 'Alice Johnson', email: 'alice.johnson@example.com', role: 'Viewer', status: 'Active' },
@@ -293,15 +59,13 @@ const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [newUser, setNewUser] = useState({ id: 0, name: '', email: '', role: 'Viewer', status: 'Inactive' });
+  const [newUser, setNewUser] = useState<UserType>({ id: 0, name: '', email: '', role: 'Viewer', status: 'Inactive' });
 
   useEffect(() => {
-    // Simulate fetching data from an API
     const fetchData = async () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      // In a real application, you would fetch data from an API here
     };
 
     fetchData();
@@ -311,7 +75,7 @@ const Dashboard = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSort = (column: string) => {
+  const handleSort = (column: keyof UserType) => {
     if (column === sortColumn) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -322,9 +86,10 @@ const Dashboard = () => {
 
   const sortedUsers = [...users].sort((a, b) => {
     if (sortColumn) {
+      const column = sortColumn as keyof UserType;
       const order = sortOrder === 'asc' ? 1 : -1;
-      if (a[sortColumn] < b[sortColumn]) return -order;
-      if (a[sortColumn] > b[sortColumn]) return order;
+      if (a[column] < b[column]) return -order;
+      if (a[column] > b[column]) return order;
     }
     return 0;
   });
@@ -342,7 +107,7 @@ const Dashboard = () => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const openModal = (user: any, editing: boolean = false) => {
+  const openModal = (user: UserType, editing: boolean = false) => {
     setSelectedUser(user);
     setIsEditing(editing);
     setIsModalOpen(true);
@@ -356,10 +121,12 @@ const Dashboard = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setSelectedUser(prevUser => ({
-      ...prevUser,
-      [name]: value
-    }));
+    if (selectedUser) {
+      setSelectedUser({
+        ...selectedUser,
+        [name]: value
+      });
+    }
   };
 
   const handleNewInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -499,28 +266,28 @@ const Dashboard = () => {
               <thead>
                 <tr>
                   <th
-                    className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500"
+                    className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 cursor-pointer"
                     onClick={() => handleSort('name')}
                   >
                     Name
                     {sortColumn === 'name' && (sortOrder === 'asc' ? <ChevronUp className="inline-block ml-1" size={16} /> : <ChevronDown className="inline-block ml-1" size={16} />)}
                   </th>
                   <th
-                    className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500"
+                    className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 cursor-pointer"
                     onClick={() => handleSort('email')}
                   >
                     Email
                     {sortColumn === 'email' && (sortOrder === 'asc' ? <ChevronUp className="inline-block ml-1" size={16} /> : <ChevronDown className="inline-block ml-1" size={16} />)}
                   </th>
                   <th
-                    className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500"
+                    className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 cursor-pointer"
                     onClick={() => handleSort('role')}
                   >
                     Role
                     {sortColumn === 'role' && (sortOrder === 'asc' ? <ChevronUp className="inline-block ml-1" size={16} /> : <ChevronDown className="inline-block ml-1" size={16} />)}
                   </th>
                   <th
-                    className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500"
+                    className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 cursor-pointer"
                     onClick={() => handleSort('status')}
                   >
                     Status
@@ -569,7 +336,7 @@ const Dashboard = () => {
               <ul className="flex pl-0 rounded list-none flex-wrap">
                 <li>
                   <button
-                    className="bg-gray-300 border border-gray-300 text-gray-500 hover:bg-gray-400 hover:text-gray-700 font-bold py-2 px-4 rounded-l"
+                    className="bg-gray-300 border border-gray-300 text-gray-500 hover:bg-gray-400 hover:text-gray-700 font-bold py-2 px-4 rounded-l disabled:opacity-50"
                     onClick={() => paginate(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
@@ -588,7 +355,7 @@ const Dashboard = () => {
                 ))}
                 <li>
                   <button
-                    className="bg-gray-300 border border-gray-300 text-gray-500 hover:bg-gray-400 hover:text-gray-700 font-bold py-2 px-4 rounded-r"
+                    className="bg-gray-300 border border-gray-300 text-gray-500 hover:bg-gray-400 hover:text-gray-700 font-bold py-2 px-4 rounded-r disabled:opacity-50"
                     onClick={() => paginate(currentPage + 1)}
                     disabled={currentPage === Math.ceil(filteredUsers.length / usersPerPage)}
                   >
@@ -601,8 +368,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
+      {isModalOpen && selectedUser && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -633,7 +399,7 @@ const Dashboard = () => {
                               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500"
                               id="name"
                               name="name"
-                              value={selectedUser?.name || ''}
+                              value={selectedUser.name}
                               onChange={handleInputChange}
                             />
                           </div>
@@ -646,7 +412,7 @@ const Dashboard = () => {
                               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500"
                               id="email"
                               name="email"
-                              value={selectedUser?.email || ''}
+                              value={selectedUser.email}
                               onChange={handleInputChange}
                             />
                           </div>
@@ -658,7 +424,7 @@ const Dashboard = () => {
                               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500"
                               id="role"
                               name="role"
-                              value={selectedUser?.role || ''}
+                              value={selectedUser.role}
                               onChange={handleInputChange}
                             >
                               <option>Admin</option>
@@ -674,7 +440,7 @@ const Dashboard = () => {
                               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500"
                               id="status"
                               name="status"
-                              value={selectedUser?.status || ''}
+                              value={selectedUser.status}
                               onChange={handleInputChange}
                             >
                               <option>Active</option>
@@ -712,7 +478,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* New User Modal */}
       {isModalOpen && selectedUser === null && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
