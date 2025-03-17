@@ -79,6 +79,18 @@ export default {
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite',
+        'fadeIn': 'fadeIn 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'scaleIn': 'scaleIn 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
+        },
+        scaleIn: {
+          '0%': { transform: 'scale(0.98) translateZ(0)', opacity: '0' },
+          '100%': { transform: 'scale(1) translateZ(0)', opacity: '1' }
+        }
       },
       boxShadow: {
         'premium-sm': '0 2px 8px -1px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.06)',

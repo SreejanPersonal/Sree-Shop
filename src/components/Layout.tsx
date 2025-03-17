@@ -15,12 +15,14 @@ import {
   Activity, 
   Sparkles, 
   ExternalLink,
-  BookOpen
+  BookOpen,
+  Bot
 } from 'lucide-react';
 import ApiKeyModal from './ApiKeyModal';
 import ContactModal from './ContactModal';
 import BetaAccessModal from './BetaAccessModal';
 import MainWebsiteModal from './MainWebsiteModal';
+import JarvisModal from './JarvisModal';
 
 function Layout() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -32,6 +34,7 @@ function Layout() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isMainWebsiteModalOpen, setIsMainWebsiteModalOpen] = useState(false);
   const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
+  const [isJarvisModalOpen, setIsJarvisModalOpen] = useState(false);
   const [buttonsOffset, setButtonsOffset] = useState(0);
   const location = useLocation();
 
@@ -366,7 +369,7 @@ function Layout() {
 
         <button
           onClick={() => setIsBetaModalOpen(true)}
-          className="group relative block"
+          className="group relative mb-4 block"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
           <div className="relative px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-xl text-white shadow-xl flex items-center gap-3 transform hover:scale-105 transition-all duration-300">
@@ -377,6 +380,23 @@ function Layout() {
             <div className="absolute -top-1 -right-1 w-3 h-3">
               <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping"></div>
               <div className="absolute inset-0 bg-blue-400 rounded-full"></div>
+            </div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => setIsJarvisModalOpen(true)}
+          className="group relative block"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-teal-600 rounded-xl blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
+          <div className="relative px-4 py-3 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 rounded-xl text-white shadow-xl flex items-center gap-3 transform hover:scale-105 transition-all duration-300" style={{ minWidth: '210px' }}>
+            <div className="p-1 bg-white/20 rounded-lg">
+              <Bot className="w-4 h-4" />
+            </div>
+            <span className="font-medium">Jarvis AI Assistant</span>
+            <div className="absolute -top-1 -right-1 w-3 h-3">
+              <div className="absolute inset-0 bg-green-400 rounded-full animate-ping"></div>
+              <div className="absolute inset-0 bg-green-400 rounded-full"></div>
             </div>
           </div>
         </button>
@@ -397,6 +417,10 @@ function Layout() {
       <BetaAccessModal
         isOpen={isBetaModalOpen}
         onClose={() => setIsBetaModalOpen(false)}
+      />
+      <JarvisModal
+        isOpen={isJarvisModalOpen}
+        onClose={() => setIsJarvisModalOpen(false)}
       />
     </div>
   );
