@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { getPostBySlug, urlFor, formatDate } from '../utility/sanity';
 
 interface ContentDetails {
@@ -153,8 +155,52 @@ const ContentDetail = () => {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-light-bg dark:bg-dark-bg rounded-2xl shadow-xl p-6 md:p-10 mb-10">
           {/* Content */}
-          <div className="prose prose-lg dark:prose-invert max-w-none">
-            <ReactMarkdown>
+          <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-headings:text-light-text dark:prose-headings:text-dark-text prose-p:text-light-text-secondary dark:prose-p:text-dark-text-secondary prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-img:shadow-md">
+            <ReactMarkdown
+              components={{
+                code({node, inline, className, children, ...props}: any) {
+                  const match = /language-(\w+)/.exec(className || '');
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      style={vscDarkPlus as any}
+                      language={match[1]}
+                      PreTag="div"
+                      className="rounded-md my-4"
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code className={`${className} px-1 py-0.5 rounded bg-gray-200 dark:bg-gray-800`} {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+                h1: ({node, ...props}) => <h1 className="text-3xl mt-8 mb-4" {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-2xl mt-6 mb-3" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-xl mt-5 mb-2" {...props} />,
+                ul: ({node, ...props}) => <ul className="list-disc pl-6 my-4" {...props} />,
+                ol: ({node, ...props}) => <ol className="list-decimal pl-6 my-4" {...props} />,
+                li: ({node, ...props}) => <li className="mb-1" {...props} />,
+                blockquote: ({node, ...props}) => (
+                  <blockquote className="border-l-4 border-blue-500 pl-4 italic my-4 text-gray-700 dark:text-gray-300" {...props} />
+                ),
+                img: ({node, ...props}) => (
+                  <img className="my-6 mx-auto" {...props} />
+                ),
+                table: ({node, ...props}) => (
+                  <div className="overflow-x-auto my-6">
+                    <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700" {...props} />
+                  </div>
+                ),
+                th: ({node, ...props}) => (
+                  <th className="px-4 py-3 bg-gray-100 dark:bg-gray-800 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" {...props} />
+                ),
+                td: ({node, ...props}) => (
+                  <td className="px-4 py-3 whitespace-nowrap text-sm" {...props} />
+                ),
+              }}
+            >
               {content.body || ''}
             </ReactMarkdown>
           </div>
