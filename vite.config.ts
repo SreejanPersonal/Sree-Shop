@@ -15,7 +15,8 @@ export default defineConfig(({ mode }) => ({
   },
   server: {
     host: "::",
-    port: 8080
+    port: 8080,
+    strictPort: true // Ensure this exact port is used
   },
   resolve: {
     alias: {

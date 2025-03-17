@@ -1,13 +1,26 @@
 import { createClient } from 'next-sanity';
 import imageUrlBuilder from '@sanity/image-url';
 
+// Determine if we're in production or development
+const isProduction = import.meta.env.PROD;
+const baseUrl = isProduction ? 'https://sree.shop' : 'http://localhost:8080';
+
+// Standard Sanity API host without project ID (will be added automatically)
+const apiHost = 'https://api.sanity.io';
+
 // Sanity configuration
 export const config = {
   projectId: '090e1vat',
   dataset: 'production',
   apiVersion: '2023-05-03',
-  useCdn: false, // Set to false for development
-  // Token is not needed for read operations in the browser
+  useCdn: isProduction, // Use CDN in production for better performance
+  // CORS configuration
+  withCredentials: true,
+  apiHost: apiHost,
+  // Add the current origin to the request
+  headers: {
+    Origin: baseUrl
+  }
 };
 
 // For server-side operations that need write access

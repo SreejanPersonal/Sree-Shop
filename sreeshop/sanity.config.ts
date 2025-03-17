@@ -3,6 +3,7 @@ import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {markdownSchema} from 'sanity-plugin-markdown'
 import {schemaTypes} from './schemaTypes'
+import corsConfig from './cors-config'
 
 export default defineConfig({
   name: 'default',
@@ -16,4 +17,15 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
+  
+  // CORS configuration
+  cors: corsConfig.allowedOrigins,
+  // Additional CORS settings
+  api: {
+    cors: {
+      allowOrigins: corsConfig.allowedOrigins,
+      allowCredentials: corsConfig.allowCredentials,
+      maxAge: corsConfig.maxAge,
+    }
+  }
 })
