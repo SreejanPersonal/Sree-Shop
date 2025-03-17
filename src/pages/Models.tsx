@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { 
-  Search, 
-  X 
-} from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { useMemo } from 'react';
 import freeModels from '../utility/models/freeModels.json';
 import betaModels from '../utility/models/betaModels.json';
@@ -85,12 +82,14 @@ function Models() {
   return (
     <div className="py-16 px-4">
       <div className="max-w-7xl mx-auto">
+        {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold mb-4">Available Models</h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
             Access a wide range of state-of-the-art AI models
           </p>
 
+          {/* Search and Filter */}
           <div className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-4 mb-12">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -117,6 +116,7 @@ function Models() {
             />
           </div>
 
+          {/* No Results Message */}
           {noResults && (
             <div className="text-center py-12">
               <p className="text-gray-600 dark:text-gray-400 mb-2">
@@ -135,29 +135,27 @@ function Models() {
           )}
         </div>
 
+        {/* Beta Tier Section */}
         {filteredBetaModels.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center gap-4 mb-6">
-              <h2 className="text-2xl font-bold">Beta Tier Models</h2>
-              <div className="flex items-center gap-2">
+          <div className="mb-16 relative">
+            <div className="pt-6 pb-4 mb-8">
+              <h2 className="text-3xl font-bold text-yellow-800 dark:text-yellow-400">Beta Tier</h2>
+              <div className="flex items-center gap-2 mt-2">
                 <span className="px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 rounded-full">
                   {filteredBetaModels.length} models
                 </span>
-                <span className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 rounded-full animate-pulse">
+                <span className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 rounded-full">
                   Free for Limited Time!
                 </span>
               </div>
             </div>
 
             {betaTextModels.length > 0 && (
-              <>
-                <div className="flex items-center gap-2 mb-4">
-                  <h3 className="text-xl font-semibold">Text Generation Models</h3>
-                  <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400 rounded-full">
-                    {betaTextModels.length}
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
+              <div className="mb-10">
+                <h3 className="text-xl font-semibold text-yellow-800 dark:text-yellow-400 mb-4">
+                  Text Generation Models ({betaTextModels.length})
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                   {betaTextModels.map((model: string) => (
                     <ModelCard 
                       key={model} 
@@ -174,18 +172,15 @@ function Models() {
                     />
                   ))}
                 </div>
-              </>
+              </div>
             )}
 
             {betaImageModels.length > 0 && (
-              <>
-                <div className="flex items-center gap-2 mb-4">
-                  <h3 className="text-xl font-semibold">Image Generation Models</h3>
-                  <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400 rounded-full">
-                    {betaImageModels.length}
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              <div>
+                <h3 className="text-xl font-semibold text-blue-800 dark:text-blue-400 mb-4">
+                  Image Generation Models ({betaImageModels.length})
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                   {betaImageModels.map((model: string) => (
                     <ModelCard 
                       key={model} 
@@ -203,20 +198,23 @@ function Models() {
                     />
                   ))}
                 </div>
-              </>
+              </div>
             )}
           </div>
         )}
 
+        {/* Free Tier Section */}
         {filteredFreeModels.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center gap-4 mb-6">
-              <h2 className="text-2xl font-bold">Free Tier Models</h2>
-              <span className="px-3 py-1 text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">
-                {filteredFreeModels.length} models
-              </span>
+          <div className="mb-16 relative">
+            <div className="pt-6 pb-4 mb-8">
+              <h2 className="text-3xl font-bold text-green-800 dark:text-green-400">Free Tier</h2>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="px-3 py-1 text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+                  {filteredFreeModels.length} models
+                </span>
+              </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
               {filteredFreeModels.map((model: string) => (
                 <ModelCard 
                   key={model} 
@@ -236,15 +234,18 @@ function Models() {
           </div>
         )}
 
+        {/* Pro Tier Section */}
         {filteredPaidModels.length > 0 && (
-          <div>
-            <div className="flex items-center gap-4 mb-6">
-              <h2 className="text-2xl font-bold">Pro Tier Models</h2>
-              <span className="px-3 py-1 text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 rounded-full">
-                {filteredPaidModels.length} models
-              </span>
+          <div className="relative">
+            <div className="pt-6 pb-4 mb-8">
+              <h2 className="text-3xl font-bold text-purple-800 dark:text-purple-400">Pro Tier</h2>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="px-3 py-1 text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 rounded-full">
+                  {filteredPaidModels.length} models
+                </span>
+              </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
               {filteredPaidModels.map((model: string) => (
                 <ModelCard 
                   key={model} 
@@ -264,6 +265,7 @@ function Models() {
           </div>
         )}
 
+        {/* Modal */}
         {selectedModel && (
           <ModelInfoModal
             model={selectedModel.name}
