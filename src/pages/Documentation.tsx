@@ -58,7 +58,7 @@ print(response.choices[0].message.content)`,
 
 const client = new OpenAI({
   baseURL: 'https://api.sree.shop/v1',
-  apiKey: 'ddc-xxx'  // Replace with your API key
+  apiKey: 'ddc-xxx'  # Replace with your API key
 });
 
 const response = await client.chat.completions.create({
@@ -102,7 +102,7 @@ for chunk in stream:
 
 const client = new OpenAI({
   baseURL: 'https://api.sree.shop/v1',
-  apiKey: 'ddc-xxx'  // Replace with your API key
+  apiKey: 'ddc-xxx'  # Replace with your API key
 });
 
 const stream = await client.chat.completions.create({
@@ -147,11 +147,11 @@ print(response.choices[0].message.content)`,
 
 const client = new OpenAI({
   baseURL: 'https://beta.sree.shop/v1',
-  apiKey: 'ddc-beta-xxx'  // Replace with your beta API key
+  apiKey: 'ddc-beta-xxx'  # Replace with your beta API key
 });
 
 const response = await client.chat.completions.create({
-  model: 'DeepSeek-R1',  // Beta model
+  model: 'DeepSeek-R1',  # Beta model
   messages: [
     { role: 'user', content: 'Hello!' }
   ]
@@ -395,12 +395,18 @@ console.log(response.choices[0].message.content);`,
                     POST
                   </div>
                 </div>
-                <code className="block text-sm mb-4">
-                  /chat/completions
-                </code>
-                <div className="space-y-2">
-                  <h5 className="font-medium text-sm">Required Parameters:</h5>
-                  <ul className="text-sm space-y-2">
+                <div className="bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-blue-500 dark:border-blue-400">
+                  <code className="block text-sm font-bold text-blue-700 dark:text-blue-300">
+                    /chat/completions
+                  </code>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    <span className="text-blue-600 dark:text-blue-400 mr-2">⚙️</span> 
+                    Required Parameters
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
                     <li className="flex items-start gap-2">
                       <span className="text-blue-600 dark:text-blue-400">•</span>
                       <div>
@@ -419,6 +425,56 @@ console.log(response.choices[0].message.content);`,
                 </div>
               </div>
               
+              {/* Image Generations */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/30">
+                      <FileCode className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Image Generations</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Generate images from text prompts</p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                    POST
+                  </div>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-green-500 dark:border-green-400">
+                  <code className="block text-sm font-bold text-green-700 dark:text-green-300">
+                    /images/generations
+                  </code>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    <span className="text-green-600 dark:text-green-400 mr-2">⚙️</span> 
+                    Parameters
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 dark:text-green-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">prompt</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">The text prompt to generate an image from</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded mb-2">
+                    <span className="text-green-600 dark:text-green-400 mr-2">📝</span> 
+                    Example
+                  </h5>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg text-sm font-mono border border-gray-200 dark:border-gray-700 shadow-sm">
+                    {`{
+  "prompt": "A beautiful sunset over mountains"
+}`}
+                  </div>
+                </div>
+              </div>
+              
               {/* Models */}
               <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-4">
@@ -432,12 +488,132 @@ console.log(response.choices[0].message.content);`,
                     </div>
                   </div>
                   <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                    GET/POST
+                  </div>
+                </div>
+                <div className="bg-purple-50 dark:bg-purple-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-purple-500 dark:border-purple-400">
+                  <code className="block text-sm font-bold text-purple-700 dark:text-purple-300">
+                    /models
+                  </code>
+                </div>
+              </div>
+              
+              {/* Usage */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/30">
+                      <Settings className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Usage</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Retrieve API usage statistics</p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                    POST
+                  </div>
+                </div>
+                <div className="bg-amber-50 dark:bg-amber-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-amber-500 dark:border-amber-400">
+                  <code className="block text-sm font-bold text-amber-700 dark:text-amber-300">
+                    /usage
+                  </code>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    <span className="text-amber-600 dark:text-amber-400 mr-2">⚙️</span> 
+                    Required Parameters
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber-600 dark:text-amber-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">api_key</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">Your API key</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded mb-2">
+                    <span className="text-amber-600 dark:text-amber-400 mr-2">📝</span> 
+                    Example
+                  </h5>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg text-sm font-mono border border-gray-200 dark:border-gray-700 shadow-sm">
+                    {`{
+  "api_key": "ddc-xxx"
+}`}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Uptime */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
+                      <Zap className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Uptime Check</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Check if a specific model is available</p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
                     GET
                   </div>
                 </div>
-                <code className="block text-sm">
-                  /models
-                </code>
+                <div className="bg-indigo-50 dark:bg-indigo-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-indigo-500 dark:border-indigo-400">
+                  <code className="block text-sm font-bold text-indigo-700 dark:text-indigo-300">
+                    /uptime/&lt;model_id&gt;
+                  </code>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    <span className="text-indigo-600 dark:text-indigo-400 mr-2">🔍</span> 
+                    Path Parameters
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-indigo-600 dark:text-indigo-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">model_id</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">The ID of the model to check</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded mb-2">
+                    <span className="text-indigo-600 dark:text-indigo-400 mr-2">↩️</span> 
+                    Response
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 dark:text-green-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">200 OK</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">Model is available</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-600 dark:text-red-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">404</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">Model not supported</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-600 dark:text-red-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">503</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">No response from provider</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
