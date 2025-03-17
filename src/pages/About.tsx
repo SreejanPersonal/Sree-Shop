@@ -260,7 +260,7 @@ function About() {
             <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
                 <Coffee className="w-6 h-6 text-amber-600" />
-                Maintained with Love
+                Maintained with ❤️
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 Hey there! I'm DevsDoCode, the current maintainer of this project. I'm passionate about making AI technology accessible to everyone, and that's exactly what we're doing here at Sree.shop.

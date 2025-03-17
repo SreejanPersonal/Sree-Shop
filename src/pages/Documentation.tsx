@@ -14,7 +14,8 @@ import {
   Check,
   FileCode,
   Zap,
-  MessageSquare
+  MessageSquare,
+  Cpu
 } from 'lucide-react';
 import CodeEditor from '../components/CodeEditor';
 
@@ -46,7 +47,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "user", "content": "Hello!"}
     ]
@@ -57,11 +58,11 @@ print(response.choices[0].message.content)`,
 
 const client = new OpenAI({
   baseURL: 'https://api.sree.shop/v1',
-  apiKey: 'ddc-xxx'  # Replace with your API key
+  apiKey: 'ddc-xxx'  // Replace with your API key
 });
 
 const response = await client.chat.completions.create({
-  model: 'gpt-4',
+  model: 'gpt-4o',
   messages: [
     { role: 'user', content: 'Hello!' }
   ]
@@ -72,7 +73,7 @@ console.log(response.choices[0].message.content);`,
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer ddc-xxx" \\
   -d '{
-    "model": "gpt-4",
+    "model": "gpt-4o",
     "messages": [
       {"role": "user", "content": "Hello!"}
     ]
@@ -87,7 +88,7 @@ client = OpenAI(
 )
 
 stream = client.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "user", "content": "Write a story"}
     ],
@@ -101,11 +102,11 @@ for chunk in stream:
 
 const client = new OpenAI({
   baseURL: 'https://api.sree.shop/v1',
-  apiKey: 'ddc-xxx'  # Replace with your API key
+  apiKey: 'ddc-xxx'  // Replace with your API key
 });
 
 const stream = await client.chat.completions.create({
-  model: 'gpt-4',
+  model: 'gpt-4o',
   messages: [
     { role: 'user', content: 'Write a story' }
   ],
@@ -119,7 +120,7 @@ for await (const chunk of stream) {
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer ddc-xxx" \\
   -d '{
-    "model": "gpt-4",
+    "model": "gpt-4o",
     "messages": [
       {"role": "user", "content": "Write a story"}
     ],
@@ -146,11 +147,11 @@ print(response.choices[0].message.content)`,
 
 const client = new OpenAI({
   baseURL: 'https://beta.sree.shop/v1',
-  apiKey: 'ddc-beta-xxx'  # Replace with your beta API key
+  apiKey: 'ddc-beta-xxx'  // Replace with your beta API key
 });
 
 const response = await client.chat.completions.create({
-  model: 'DeepSeek-R1',  # Beta model
+  model: 'DeepSeek-R1',  // Beta model
   messages: [
     { role: 'user', content: 'Hello!' }
   ]

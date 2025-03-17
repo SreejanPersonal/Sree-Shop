@@ -11,7 +11,7 @@ Welcome to **Sree-Shop**, your one-stop solution for unlimited access to 100+ AI
 ## 🌟 Features
 
 - **Truly Unlimited Access**: No hidden limits—use the API freely with a 3 RPM rate limit.
-- **Premium Models**: Access GPT-4, Claude, Gemini, and 100+ more models.
+- **Premium Models**: Access gpt-4o, Claude, Gemini, and 100+ more models.
 - **Developer-Friendly**: OpenAI-compatible API with excellent documentation.
 - **Free Tier**: Start building now with our generous free tier.
 - **Pro Tier**: Upgrade for unlimited requests, full streaming support, and priority support.

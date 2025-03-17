@@ -53,7 +53,7 @@ const ContentDetail = () => {
               
               <h2 className="text-2xl font-bold mb-4 mt-8 text-blue-600 dark:text-blue-400">The AI Integration API</h2>
               <p className="mb-6">
-                My flagship API offering provides a unified interface to access multiple AI models through a single endpoint. Instead of managing different API keys, authentication methods, and response formats for each AI provider, developers can use this API to access GPT-4, Claude, Gemini, and other leading models.
+                My flagship API offering provides a unified interface to access multiple AI models through a single endpoint. Instead of managing different API keys, authentication methods, and response formats for each AI provider, developers can use this API to access gpt-4o, Claude, Gemini, and other leading models.
               </p>
               
               <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary p-6 rounded-xl mb-8">
@@ -66,7 +66,7 @@ const ContentDetail = () => {
     'Authorization': 'Bearer YOUR_API_KEY'
   },
   body: JSON.stringify({
-    model: 'gpt-4',
+    model: 'gpt-4o',
     messages: [
       { role: 'system', content: 'You are a helpful assistant.' },
       { role: 'user', content: 'Explain APIs in simple terms.' }

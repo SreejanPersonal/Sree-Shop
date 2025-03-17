@@ -253,7 +253,7 @@ function Home() {
                 {
                   icon: <Shield className="w-6 h-6" />,
                   title: "Premium Models",
-                  description: "Access GPT-4, Claude, Gemini & 100+ more models"
+                  description: "Access gpt-4o, Claude, Gemini & 100+ more models"
                 },
                 {
                   icon: <Cpu className="w-6 h-6" />,

@@ -12,7 +12,7 @@ client = openai.Client(
 )
 
 response = client.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "user", "content": "Hello!"}
     ]
@@ -27,7 +27,7 @@ const client = new OpenAI({
 });
 
 const response = await client.chat.completions.create({
-  model: 'gpt-4',
+  model: 'gpt-4o',
   messages: [
     { role: 'user', content: 'Hello!' }
   ]
@@ -38,7 +38,7 @@ console.log(response.choices[0].message.content);`,
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -d '{
-    "model": "gpt-4",
+    "model": "gpt-4o",
     "messages": [
       {"role": "user", "content": "Hello!"}
     ]
@@ -49,7 +49,7 @@ const SAMPLE_RESPONSE = {
   id: "chatcmpl-123",
   object: "chat.completion",
   created: 1677652288,
-  model: "gpt-4",
+  model: "gpt-4o",
   choices: [{
     index: 0,
     message: {
