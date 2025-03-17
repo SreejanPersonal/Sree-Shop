@@ -21,138 +21,66 @@ import {
   Server,
   Zap
 } from 'lucide-react';
+import { getAllPosts, getAllCategories, urlFor, formatDate } from '../utility/sanity';
 
 // Interface for content card data
 interface ContentCard {
-  id: string;
+  _id: string;
   title: string;
   description: string;
-  icon: React.ReactNode;
-  color: string;
-  date: string;
+  icon: string;
+  iconColor: string;
+  publishedAt: string;
   category: string;
+  slug: {
+    current: string;
+  };
+  mainImage?: any;
 }
 
 const ContentHub = () => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [isIntersecting, setIsIntersecting] = useState<Record<string, boolean>>({});
   const [showAllTags, setShowAllTags] = useState(false);
+  const [contentCards, setContentCards] = useState<ContentCard[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const MAX_VISIBLE_TAGS = 6;
 
-  // Sample content cards data
-  const contentCards: ContentCard[] = [
-    {
-      id: 'api-services',
-      title: 'API Services',
-      description: 'Explore our collection of powerful APIs for developers, including AI integration, data processing, and more.',
-      icon: <Database className="w-6 h-6" />,
-      color: 'from-blue-500 to-indigo-600',
-      date: 'March 15, 2025',
-      category: 'API'
-    },
-    {
-      id: 'jarvis-ai',
-      title: 'Jarvis AI Assistant',
-      description: 'Meet Jarvis, my advanced AI assistant that helps automate tasks, answer questions, and make your life easier.',
-      icon: <Bot className="w-6 h-6" />,
-      color: 'from-emerald-500 to-teal-600',
-      date: 'March 10, 2025',
-      category: 'AI'
-    },
-    {
-      id: 'web-projects',
-      title: 'Web Development Projects',
-      description: 'A showcase of my latest web development projects, featuring modern frameworks and cutting-edge design.',
-      icon: <Globe className="w-6 h-6" />,
-      color: 'from-purple-500 to-pink-600',
-      date: 'March 5, 2025',
-      category: 'Web'
-    },
-    {
-      id: 'python-tools',
-      title: 'Python Tools & Scripts',
-      description: 'Useful Python tools and scripts to automate workflows, process data, and solve common programming challenges.',
-      icon: <Code className="w-6 h-6" />,
-      color: 'from-yellow-500 to-orange-600',
-      date: 'February 28, 2025',
-      category: 'Python'
-    },
-    {
-      id: 'ml-experiments',
-      title: 'Machine Learning Experiments',
-      description: 'Exploring the frontiers of machine learning with experiments, models, and practical applications.',
-      icon: <Cpu className="w-6 h-6" />,
-      color: 'from-red-500 to-rose-600',
-      date: 'February 20, 2025',
-      category: 'ML'
-    },
-    {
-      id: 'cloud-architecture',
-      title: 'Cloud Architecture',
-      description: 'Best practices and implementations for scalable cloud infrastructure using AWS, Azure, and GCP.',
-      icon: <Cloud className="w-6 h-6" />,
-      color: 'from-sky-500 to-blue-600',
-      date: 'February 15, 2025',
-      category: 'Cloud'
-    },
-    {
-      id: 'cybersecurity-tips',
-      title: 'Cybersecurity Tips',
-      description: 'Essential security practices, tools, and techniques to protect your applications and data from threats.',
-      icon: <Lock className="w-6 h-6" />,
-      color: 'from-slate-500 to-slate-700',
-      date: 'February 10, 2025',
-      category: 'Security'
-    },
-    {
-      id: 'mobile-development',
-      title: 'Mobile Development',
-      description: 'Tutorials and insights on building cross-platform mobile applications with React Native and Flutter.',
-      icon: <Smartphone className="w-6 h-6" />,
-      color: 'from-cyan-500 to-blue-500',
-      date: 'February 5, 2025',
-      category: 'Mobile'
-    },
-    {
-      id: 'data-visualization',
-      title: 'Data Visualization',
-      description: 'Creating compelling and interactive data visualizations using D3.js, Chart.js, and other libraries.',
-      icon: <BarChart className="w-6 h-6" />,
-      color: 'from-amber-500 to-orange-500',
-      date: 'January 30, 2025',
-      category: 'DataViz'
-    },
-    {
-      id: 'computer-vision',
-      title: 'Computer Vision',
-      description: 'Exploring image recognition, object detection, and other computer vision applications with Python.',
-      icon: <Camera className="w-6 h-6" />,
-      color: 'from-violet-500 to-purple-600',
-      date: 'January 25, 2025',
-      category: 'CV'
-    },
-    {
-      id: 'serverless-functions',
-      title: 'Serverless Functions',
-      description: 'Building scalable and cost-effective applications using serverless architecture and FaaS.',
-      icon: <Server className="w-6 h-6" />,
-      color: 'from-green-500 to-emerald-600',
-      date: 'January 20, 2025',
-      category: 'Serverless'
-    },
-    {
-      id: 'performance-optimization',
-      title: 'Performance Optimization',
-      description: 'Techniques and strategies to optimize web applications for speed, efficiency, and better user experience.',
-      icon: <Zap className="w-6 h-6" />,
-      color: 'from-yellow-400 to-amber-600',
-      date: 'January 15, 2025',
-      category: 'Performance'
+  // Fetch content cards from Sanity
+  useEffect(() => {
+    async function fetchContent() {
+      try {
+        setIsLoading(true);
+        console.log('Fetching posts from Sanity...');
+        const posts = await getAllPosts();
+        console.log('Posts received:', posts);
+        
+        if (!posts || posts.length === 0) {
+          console.warn('No posts returned from Sanity');
+          setIsLoading(false);
+          return;
+        }
+        
+        setContentCards(posts);
+        
+        // Extract unique categories
+        const categoryList = Array.from(new Set(posts.map((post: ContentCard) => post.category).filter(Boolean)));
+        console.log('Categories extracted:', categoryList);
+        setCategories(categoryList as string[]);
+        
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching content:', error);
+        alert('Error fetching content. See console for details.');
+        setIsLoading(false);
+      }
     }
-  ];
+    
+    fetchContent();
+  }, []);
 
-  const categories = Array.from(new Set(contentCards.map(card => card.category)));
 
   // Filter content cards based on active filter
   const filteredCards = activeFilter 
@@ -296,37 +224,44 @@ const ContentHub = () => {
       <section className="pb-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredCards.map((card, index) => (
+            {isLoading ? (
+              // Loading skeleton
+              Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="animate-pulse">
+                  <div className="h-64 bg-light-bg-tertiary dark:bg-dark-bg-tertiary rounded-2xl"></div>
+                </div>
+              ))
+            ) : filteredCards.map((card, index) => (
               <div 
-                key={card.id}
-                ref={el => cardRefs.current[card.id] = el}
-                data-id={card.id}
+                key={card._id}
+                ref={el => cardRefs.current[card._id] = el}
+                data-id={card._id}
                 className={`group relative transform transition-all duration-700 ${
-                  isIntersecting[card.id] 
+                  isIntersecting[card._id] 
                     ? 'translate-y-0 opacity-100 rotate-0' 
                     : 'translate-y-12 opacity-0 rotate-2'
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <Link to={`/content/${card.id}`} className="block h-full perspective-1000">
+                <Link to={`/content/${card.slug.current}`} className="block h-full perspective-1000">
                   <div className="absolute inset-0 bg-gradient-to-br from-light-bg-tertiary to-light-bg-quaternary dark:from-dark-bg-tertiary dark:to-dark-bg-quaternary rounded-2xl transform transition-all duration-500 group-hover:scale-[0.98]"></div>
                   
                   {/* Card glow effect */}
-                  <div className={`absolute -inset-0.5 bg-gradient-to-r ${card.color} opacity-0 group-hover:opacity-30 rounded-2xl blur-sm transition-all duration-500 group-hover:blur-md animate-pulse`}></div>
+                  <div className={`absolute -inset-0.5 bg-gradient-to-r ${card.iconColor} opacity-0 group-hover:opacity-30 rounded-2xl blur-sm transition-all duration-500 group-hover:blur-md animate-pulse`}></div>
                   
                   {/* Card content */}
                   <div className="relative h-full p-6 rounded-2xl border border-light-primary-100 dark:border-dark-primary-800 bg-light-bg/90 dark:bg-dark-bg/90 backdrop-blur-sm flex flex-col transform transition-all duration-500 group-hover:translate-z-10 group-hover:-translate-y-3 group-hover:shadow-2xl group-hover:scale-[1.02] preserve-3d">
                     <div className="mb-4 flex items-center justify-between">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${card.color} text-white shadow-sm`}>
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${card.iconColor} text-white shadow-sm`}>
                         {card.category}
                       </span>
                       <span className="text-xs text-light-text-tertiary dark:text-dark-text-tertiary flex items-center">
-                        {card.date}
+                        {formatDate(card.publishedAt)}
                       </span>
                     </div>
                     
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center text-white mb-4 transform group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                      {card.icon}
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.iconColor} flex items-center justify-center text-white mb-4 transform group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                      {getIconComponent(card.icon)}
                     </div>
                     
                     <h3 className="text-xl font-bold mb-2 text-light-text dark:text-dark-text group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
@@ -350,6 +285,26 @@ const ContentHub = () => {
       </section>
     </div>
   );
+};
+
+// Helper function to get the icon component based on the icon name string
+const getIconComponent = (iconName: string) => {
+  const iconMap: Record<string, React.ReactNode> = {
+    'Database': <Database className="w-6 h-6" />,
+    'Bot': <Bot className="w-6 h-6" />,
+    'Globe': <Globe className="w-6 h-6" />,
+    'Code': <Code className="w-6 h-6" />,
+    'Cpu': <Cpu className="w-6 h-6" />,
+    'Cloud': <Cloud className="w-6 h-6" />,
+    'Lock': <Lock className="w-6 h-6" />,
+    'Smartphone': <Smartphone className="w-6 h-6" />,
+    'BarChart': <BarChart className="w-6 h-6" />,
+    'Camera': <Camera className="w-6 h-6" />,
+    'Server': <Server className="w-6 h-6" />,
+    'Zap': <Zap className="w-6 h-6" />
+  };
+
+  return iconMap[iconName] || <Database className="w-6 h-6" />;
 };
 
 export default ContentHub;
