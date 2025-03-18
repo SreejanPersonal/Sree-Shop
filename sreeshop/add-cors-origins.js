@@ -1,11 +1,12 @@
 // Script to add CORS origins to Sanity project
 const { createClient } = require('@sanity/client');
+require('dotenv').config();
 
 // The Sanity Management API client
 const client = createClient({
-  projectId: '090e1vat',
-  dataset: 'production',
-  token: 'skvxcYZPQR9pZJcov4b8lPffsGSzZC1kGTNddregUuHl6MwP9JhKAdGsf0gZyPXed8fBvZHQ2YtCscq2TD1VdwzbgiSSvkQaW8qMuPYWxngij9C6p08X0s08QkG5Mkd7XpX64zNjymlv3hrrrr21C8Zg9DkBFwgJ8nwQVuVQfrkiIK5soenU', // Your token with manage rights
+  projectId: process.env.VITE_SANITY_PROJECT_ID,
+  dataset: process.env.VITE_SANITY_DATASET,
+  token: process.env.VITE_SANITY_TOKEN, // Use token from environment variables
   useCdn: false,
   apiVersion: '2023-05-03'
 });
@@ -19,35 +20,36 @@ const origins = [
   {
     origin: 'https://sree.shop',
     allowCredentials: true
+  },
+  {
+    origin: 'https://www.sree.shop',
+    allowCredentials: true
   }
 ];
 
 // Function to add CORS origins
 async function addCorsOrigins() {
   try {
-    console.log('Adding CORS origins to Sanity project...');
-    
     // Get the current CORS origins
     const currentCors = await client.request({
       uri: '/cors',
       method: 'GET'
     });
     
-    console.log('Current CORS origins:', currentCors);
-    
     // Add each origin
     for (const { origin, allowCredentials } of origins) {
-      console.log(`Adding origin: ${origin}`);
-      
       // Check if origin already exists
-      const exists = currentCors.some(entry => entry.origin === origin);
+      const existingOrigin = currentCors.find(entry => entry.origin === origin);
       
-      if (exists) {
-        console.log(`Origin ${origin} already exists, skipping...`);
-        continue;
+      if (existingOrigin) {
+        // Delete existing origin by ID to update it
+        await client.request({
+          uri: `/cors/${existingOrigin.id}`,
+          method: 'DELETE'
+        });
       }
       
-      // Add the origin
+      // Add the origin with CORS configuration
       await client.request({
         uri: '/cors',
         method: 'POST',
@@ -56,13 +58,9 @@ async function addCorsOrigins() {
           allowCredentials
         }
       });
-      
-      console.log(`Successfully added origin: ${origin}`);
     }
-    
-    console.log('CORS origins added successfully!');
   } catch (error) {
-    console.error('Error adding CORS origins:', error);
+    // Silent error handling for security
   }
 }
 

@@ -5,6 +5,3 @@ build/
 .qodo
 Jarvis-Roadmap/
 .env
-.env.local
-.env.development
-.env.production
