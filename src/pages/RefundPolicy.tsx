@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreditCard, RefreshCcw, Clock, AlertCircle, CheckCircle, HelpCircle, Github, Youtube, Linkedin, Instagram } from 'lucide-react';
+import { CreditCard, RefreshCcw, Clock, AlertCircle, CheckCircle, HelpCircle, Github, Youtube, Linkedin, Instagram, Server } from 'lucide-react';
 
 function RefundPolicy() {
   return (
@@ -46,29 +46,92 @@ Refund Eligibility Section
                 </h2>
               </div>
               
-              <div className="space-y-6 text-gray-600 dark:text-gray-400">
-                <p className="leading-relaxed">
-                  At Sree.shop, we offer refunds under the following conditions:
+              <div className="space-y-8 text-gray-600 dark:text-gray-400">
+                <p className="leading-relaxed text-lg">
+                  At Sree.shop, we maintain a transparent refund policy to ensure your satisfaction and service reliability.
                 </p>
-                
-                  <div className="space-y-6 text-gray-600 dark:text-gray-400">
-                    <p className="leading-relaxed">
-                      Refunds are granted in situations where our service becomes unavailable for extended periods. To ensure clarity and manage expectations, please note our refund policy details:
-                    </p>
 
-                    <ul className="list-disc pl-5 space-y-2">
-                      <li>
-                        <strong className="font-semibold">Service Downtime:</strong> Refunds are considered if the service is unavailable for more than 5 days in total within a 30-day period. While we strive for 99.99% uptime and generally do not anticipate downtime, this clause provides assurance in the rare event of extended interruptions.
+                {/* Service Downtime Cards */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl group">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                        <Clock className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-xl font-bold text-purple-700 dark:text-purple-300">Monthly Downtime</h3>
+                    </div>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-2">
+                        <div className="min-w-4 h-4 mt-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500"></div>
+                        <p>Total 6 days downtime in 30 days</p>
                       </li>
-                      <li>
-                        <strong className="font-semibold">Mistaken Purchases and Plan Errors:</strong> Refunds are <strong className="font-semibold">not</strong> typically granted for purchases made by mistake or for choosing the wrong plan. We encourage users to carefully review their selections before purchase.
+                      <li className="flex items-start gap-2">
+                        <div className="min-w-4 h-4 mt-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500"></div>
+                        <p>Continuous 3 days downtime</p>
                       </li>
                     </ul>
-
-                    <p className="leading-relaxed mt-4">
-                      This policy is designed to assure you of our commitment to service reliability, while also setting realistic expectations regarding the scope of refunds. We are dedicated to maintaining high service availability and will communicate proactively in the event of any significant service disruptions.
-                    </p>
                   </div>
+
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl group">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                        <AlertCircle className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-xl font-bold text-blue-700 dark:text-blue-300">Model Availability</h3>
+                    </div>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-2">
+                        <div className="min-w-4 h-4 mt-1 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+                        <p>50% of models down for more than 5 days</p>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="min-w-4 h-4 mt-1 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+                        <p>Top/state-of-art models down for more than 7 days</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* API Compatibility Section */}
+                <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400">
+                      <Server className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold text-indigo-700 dark:text-indigo-300">API Compatibility</h3>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <div className="bg-white dark:bg-gray-800/50 rounded-lg p-4 border border-indigo-100 dark:border-indigo-900/50">
+                      <p className="font-medium text-indigo-700 dark:text-indigo-300 mb-2">❌ Non-Refundable Cases:</p>
+                      <ul className="list-disc pl-5 space-y-1 text-sm">
+                        <li>General tool incompatibility issues</li>
+                        <li>Individual service OpenAI compatibility issues</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-white dark:bg-gray-800/50 rounded-lg p-4 border border-indigo-100 dark:border-indigo-900/50">
+                      <p className="font-medium text-indigo-700 dark:text-indigo-300 mb-2">✅ Refundable Cases:</p>
+                      <ul className="list-disc pl-5 space-y-1 text-sm">
+                        <li>Proven non-OpenAI API compatibility</li>
+                        <li>Demonstrated OpenAI API incompatibility issues</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-indigo-100/50 to-purple-100/50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-lg p-4">
+                      <p className="text-sm">
+                        <strong className="text-indigo-700 dark:text-indigo-300">Note:</strong> Users must provide clear evidence of API incompatibility. Claims will be thoroughly verified before any refund approval.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* General Policy Note */}
+                <div className="bg-gradient-to-r from-purple-100/50 to-blue-100/50 dark:from-purple-900/30 dark:to-blue-900/30 rounded-xl p-6">
+                  <p className="text-sm leading-relaxed">
+                    This refund policy is designed to balance user protection with service sustainability. All refund requests are carefully reviewed on a case-by-case basis. We strive to maintain 99.99% uptime and will communicate proactively about any service disruptions.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

@@ -10,8 +10,8 @@ const apiHost = 'https://api.sanity.io';
 
 // Sanity configuration
 export const config = {
-  projectId: '090e1vat',
-  dataset: 'production',
+  projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
+  dataset: import.meta.env.VITE_SANITY_DATASET,
   apiVersion: '2023-05-03',
   useCdn: isProduction, // Use CDN in production for better performance
   // CORS configuration
@@ -26,7 +26,7 @@ export const config = {
 // For server-side operations that need write access
 export const writeClient = createClient({
   ...config,
-  token: 'skvxcYZPQR9pZJcov4b8lPffsGSzZC1kGTNddregUuHl6MwP9JhKAdGsf0gZyPXed8fBvZHQ2YtCscq2TD1VdwzbgiSSvkQaW8qMuPYWxngij9C6p08X0s08QkG5Mkd7XpX64zNjymlv3hrrrr21C8Zg9DkBFwgJ8nwQVuVQfrkiIK5soenU',
+  token: import.meta.env.VITE_SANITY_TOKEN,
   useCdn: false,
 });
 

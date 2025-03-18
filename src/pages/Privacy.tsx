@@ -65,7 +65,7 @@ function Privacy() {
           </div>
           
           <h1 className="text-4xl font-bold mb-6 relative">
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-400 dark:from-blue-300 dark:via-indigo-200 dark:to-purple-200 bg-clip-text text-transparent">
               Your Privacy is Our Priority
             </span>
             <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"></div>
@@ -88,7 +88,7 @@ function Privacy() {
                 <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
                   <Lock className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-blue-300 dark:to-indigo-200 bg-clip-text text-transparent">
                   Data Collection
                 </h2>
               </div>
@@ -144,7 +144,7 @@ function Privacy() {
                 <div className="p-2 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400">
                   <Eye className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 dark:from-indigo-300 dark:to-purple-200 bg-clip-text text-transparent">
                   Data Usage
                 </h2>
               </div>
@@ -215,7 +215,7 @@ function Privacy() {
                 <div className="p-2 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400">
                   <Server className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-300 dark:to-blue-200 bg-clip-text text-transparent">
                   Third-Party APIs
                 </h2>
               </div>
@@ -271,7 +271,7 @@ function Privacy() {
                 <div className="p-2 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400">
                   <Users className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-blue-500 dark:from-indigo-300 dark:to-blue-200 bg-clip-text text-transparent">
                   Your Rights
                 </h2>
               </div>
@@ -354,7 +354,7 @@ function Privacy() {
                   <span>Get Answers</span>
                 </div>
                 
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 dark:from-indigo-300 dark:via-purple-300 dark:to-blue-200 bg-clip-text text-transparent">
                   Frequently Asked Questions
                 </h2>
                 

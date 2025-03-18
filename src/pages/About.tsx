@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
-import { Heart, Star, Coffee, Github, Code2, ChevronDown, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Heart, Star, Coffee, Github, Code2, Twitter, Globe, Linkedin } from 'lucide-react';
 
 interface Contributor {
   github: string;
   role: string;
   description: string;
-  contributions: string[];
   skills: string[];
-  joinedAt: string;
 }
 
 const contributors: Contributor[] = [
@@ -16,281 +13,293 @@ const contributors: Contributor[] = [
     github: "springmusk026",
     role: "Backend Developer",
     description: "Building robust and scalable backend systems",
-    contributions: [
-      "API Development",
-      "Database Design",
-      "Security Implementation"
-    ],
-    skills: ["Node.js", "PostgreSQL", "System Design", "API Development"],
-    joinedAt: "2023"
+    skills: ["Node.js", "PostgreSQL", "System Design", "API Development"]
   },
   {
     github: "imChronos",
     role: "Core Developer",
-    description: "Driving innovation in AI infrastructure and system architecture",
-    contributions: [
-      "API Infrastructure Development",
-      "Performance Optimization",
-      "System Architecture"
-    ],
-    skills: ["Python", "FastAPI", "DevOps", "AI/ML"],
-    joinedAt: "2023"
+    description: "Driving innovation in AI infrastructure",
+    skills: ["Python", "FastAPI", "DevOps", "AI/ML"]
   },
   {
     github: "nileshpatil6",
     role: "Integration Specialist",
-    description: "Ensuring seamless integration of AI models and services",
-    contributions: [
-      "AI Model Integration",
-      "API Compatibility",
-      "Testing & QA"
-    ],
-    skills: ["Python", "AI Integration", "Testing", "Documentation"],
-    joinedAt: "2023"
+    description: "Ensuring seamless AI integration",
+    skills: ["Python", "AI Integration", "Testing", "Documentation"]
   }
 ];
 
-function About() {
-  const [hoveredContributor, setHoveredContributor] = useState<string | null>(null);
-  const [pinnedContributor, setPinnedContributor] = useState<string | null>(null);
+const About = () => {
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleMouseEnter = (github: string) => {
-    if (!pinnedContributor) {
-      setHoveredContributor(github);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!pinnedContributor) {
-      setHoveredContributor(null);
-    }
-  };
-
-  const togglePin = (github: string) => {
-    if (pinnedContributor === github) {
-      setPinnedContributor(null);
-      setHoveredContributor(null);
-    } else {
-      setPinnedContributor(github);
-      setHoveredContributor(github);
-    }
-  };
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   return (
-    <div className="min-h-screen py-16 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6">
-            <Heart className="w-4 h-4" />
-            <span>Built with ❤️ by the community</span>
-          </div>
-          <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Making AI Accessible to Everyone
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
-            We believe in democratizing AI technology and making it available to developers worldwide.
-          </p>
-        </div>
-
-        <div className="prose prose-lg dark:prose-invert max-w-none mb-16">
-          {/* Special Thanks Section */}
-          <div className="space-y-6">
-            {/* NiansuhAI Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 mb-8">
-              <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
-                <Star className="w-6 h-6 text-amber-400" />
-                Special Thanks
-              </h2>
+    <div className="py-16">
+      <div className="container mx-auto px-4">
+        {/* Main Profile Section - 60% */}
+        <div className={`mb-24 opacity-0 ${isVisible ? 'animate-slideUp' : ''}`}>
+          <div className="max-w-4xl mx-auto">
+            <div className="relative rounded-2xl overflow-hidden bg-light-bg-secondary dark:bg-dark-bg-secondary shadow-premium-lg">
+              <div className="absolute inset-0 bg-gradient-premium from-light-primary-500/5 to-light-accent-500/5 dark:from-dark-primary-400/5 dark:to-dark-accent-400/5"></div>
               
-              {/* NiansuhAI */}
-              <div className="mb-8">
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  This project wouldn't be possible without the incredible contribution of NiansuhAI. As the original creator of the API infrastructure, his vision and expertise laid the foundation for what Sree.shop has become today.
-                </p>
-                <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl">
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <img
-                      src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/385.png"
-                      alt="NiansuhAI"
-                      className="w-16 h-16 rounded-full ring-2 ring-blue-500/20 group-hover:ring-blue-500/40 transition-all duration-300 object-cover bg-white dark:bg-gray-700"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">NiansuhAI</h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      The OG creator who made this possible
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* OE-LUCIFER */}
-              <div>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  A special shoutout to OE-LUCIFER, our resident chaos coordinator and bug-hunting extraordinaire. When he's not breaking things to make them better, he's probably plotting world domination through perfectly aligned code.
-                </p>
-                <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl">
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <img
-                      src="https://github.com/OE-LUCIFER.png"
-                      alt="OE-LUCIFER"
-                      className="w-16 h-16 rounded-full ring-2 ring-purple-500/20 group-hover:ring-purple-500/40 transition-all duration-300 object-cover bg-white dark:bg-gray-700"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">OE-LUCIFER</h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      The debugging wizard who makes bugs disappear like magic ✨
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Contributors Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 mb-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-white">
-                  <Code2 className="w-6 h-6" />
-                </div>
-                <h2 className="text-2xl font-bold">Key Contributors</h2>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {contributors.map((contributor) => (
-                  <div
-                    key={contributor.github}
-                    className="group relative"
-                    onMouseEnter={() => handleMouseEnter(contributor.github)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {/* Base Card */}
-                    <div className="relative h-full p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-600 transition-all duration-300 group-hover:border-purple-500 dark:group-hover:border-purple-400">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-lg opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                            <img
-                              src={`https://github.com/${contributor.github}.png`}
-                              alt={contributor.github}
-                              className="w-12 h-12 rounded-full ring-2 ring-purple-500/20 group-hover:ring-purple-500/40 transition-all duration-300"
-                            />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-sm">{contributor.github}</h3>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">{contributor.role}</p>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => togglePin(contributor.github)}
-                          className={`p-1.5 rounded-lg transition-colors ${
-                            pinnedContributor === contributor.github
-                              ? 'bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400'
-                              : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
-                          }`}
-                        >
-                          <ChevronDown className={`w-4 h-4 transition-transform ${
-                            (hoveredContributor === contributor.github || pinnedContributor === contributor.github) ? 'rotate-180' : ''
-                          }`} />
-                        </button>
+              <div className="relative px-8 py-12">
+                <div className="md:flex items-start gap-12">
+                  {/* Profile Image */}
+                  <div className="md:w-1/3 mb-8 md:mb-0">
+                    <div className="relative group">
+                      <div className="absolute -inset-1 bg-gradient-premium from-light-primary-500 to-light-accent-500 dark:from-dark-primary-400 dark:to-dark-accent-400 rounded-xl opacity-50 group-hover:opacity-70 blur transition-all duration-500"></div>
+                      <div className="relative aspect-square rounded-xl overflow-hidden">
+                        <img
+                          src="https://github.com/devsdocode.png"
+                          alt="DevsDoCode"
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                        />
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                        {contributor.description}
-                      </p>
                     </div>
 
-                    {/* Hover/Pinned Card */}
-                    {(hoveredContributor === contributor.github || pinnedContributor === contributor.github) && (
-                      <div 
-                        className="absolute -top-2 left-0 right-0 transform -translate-y-full z-10"
-                        onMouseEnter={() => handleMouseEnter(contributor.github)}
-                        onMouseLeave={handleMouseLeave}
+                    <div className="mt-8 space-y-3">
+                      <a
+                        href="https://github.com/devsdocode"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-black hover:bg-gray-800 text-white rounded-xl transition-all duration-300 shadow-premium-sm hover:shadow-premium-lg"
                       >
-                        <div className="relative">
-                          <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-xl blur-sm opacity-80"></div>
-                          <div className="relative bg-white dark:bg-gray-800 p-4 rounded-xl shadow-xl border border-gray-200 dark:border-gray-600">
-                            <div className="space-y-4">
-                              <div>
-                                <h4 className="text-sm font-semibold mb-2">Key Contributions</h4>
-                                <ul className="space-y-1">
-                                  {contributor.contributions.map((contribution, index) => (
-                                    <li key={index} className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-2">
-                                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                                      {contribution}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                              <div>
-                                <h4 className="text-sm font-semibold mb-2">Skills</h4>
-                                <div className="flex flex-wrap gap-1">
-                                  {contributor.skills.map((skill, index) => (
-                                    <span
-                                      key={index}
-                                      className="px-2 py-1 text-[10px] rounded-full bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300"
-                                    >
-                                      {skill}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                              <div className="pt-2 border-t border-gray-200 dark:border-gray-600">
-                                <a
-                                  href={`https://github.com/${contributor.github}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 text-xs text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
-                                >
-                                  <Github className="w-3 h-3" />
-                                  View Profile
-                                </a>
-                              </div>
-                            </div>
+                        <Github className="w-5 h-5" />
+                        <span className="font-medium">Follow on GitHub</span>
+                      </a>
+                      <a
+                        href="https://buymeacoffee.com/devsdocode"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-[#FFDD00] hover:bg-[#FFDD00]/90 text-black rounded-xl transition-all duration-300 shadow-premium-sm hover:shadow-premium-lg"
+                      >
+                        <Coffee className="w-5 h-5" />
+                        <span className="font-medium">Buy me a coffee</span>
+                      </a>
+                    </div>
+
+                    <div className="mt-6 flex gap-3">
+                      <a
+                        href="https://github.com/SreejanPersonal"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center p-3 bg-light-bg-secondary dark:bg-dark-bg-secondary hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-tertiary rounded-xl transition-all duration-300 flex-1"
+                      >
+                        <Github className="w-5 h-5" />
+                      </a>
+                      <a
+                        href="https://twitter.com/devsdocode"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center p-3 bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white rounded-xl transition-all duration-300 flex-1"
+                      >
+                        <Twitter className="w-5 h-5" />
+                      </a>
+                      <a
+                        href="https://linkedin.com/in/devsdocode"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center p-3 bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white rounded-xl transition-all duration-300 flex-1"
+                      >
+                        <Linkedin className="w-5 h-5" />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Profile Content */}
+                  <div className="md:w-2/3">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-light-primary-100/50 dark:bg-dark-primary-800/50 text-light-primary-600 dark:text-dark-primary-400 text-sm font-medium mb-6">
+                      <Heart className="w-4 h-4" />
+                      <span>Project Lead & Core Maintainer</span>
+                    </div>
+                    
+                    <h1 className="text-4xl sm:text-5xl font-bold text-light-text dark:text-dark-text mb-4">
+                      DevsDoCode
+                      <span className="text-xl sm:text-2xl text-light-text-secondary dark:text-dark-text-secondary ml-3">(Sree)</span>
+                    </h1>
+                    
+                    <p className="text-lg text-light-text-secondary dark:text-dark-text-secondary mb-8 leading-relaxed">
+                      Passionate about democratizing AI technology and making it accessible to developers worldwide. Leading the development and maintenance of Sree.shop with innovation and excellence.
+                    </p>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
+                      {[
+                        { label: 'Contributions', value: '2.3k+' },
+                        { label: 'Projects', value: '15+' },
+                        { label: 'Experience', value: '5+ Years' },
+                        { label: 'AI Models', value: '50+' }
+                      ].map((stat, index) => (
+                        <div
+                          key={index}
+                          className={`opacity-0 animate-slideUp delay-${(index + 1) * 100}`}
+                        >
+                          <div className="text-2xl font-bold text-light-text dark:text-dark-text mb-1">
+                            {stat.value}
+                          </div>
+                          <div className="text-sm text-light-text-tertiary dark:text-dark-text-tertiary">
+                            {stat.label}
                           </div>
                         </div>
+                      ))}
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold text-light-text dark:text-dark-text">Tech Stack</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          'React', 'Node.js', 'TypeScript', 'Python',
+                          'AI/ML', 'AWS', 'Docker', 'MongoDB'
+                        ].map((tech, index) => (
+                          <span
+                            key={index}
+                            className={`px-4 py-2 rounded-lg bg-light-bg-secondary dark:bg-dark-bg-secondary text-light-text-secondary dark:text-dark-text-secondary text-sm font-medium hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-tertiary transition-colors duration-300 opacity-0 animate-slideUp delay-${(index % 4 + 1) * 100}`}
+                          >
+                            {tech}
+                          </span>
+                        ))}
                       </div>
-                    )}
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700">
-              <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
-                <Coffee className="w-6 h-6 text-amber-600" />
-                Maintained with ❤️
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Hey there! I'm DevsDoCode, the current maintainer of this project. I'm passionate about making AI technology accessible to everyone, and that's exactly what we're doing here at Sree.shop.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://github.com/devsdocode"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                >
-                  <Github className="w-4 h-4" />
-                  <span>Follow on GitHub</span>
-                </a>
-                <a
-                  href="https://buymeacoffee.com/devsdocode"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#FFDD00] hover:bg-[#FFDD00]/90 transition-colors text-black"
-                >
-                  <Coffee className="w-4 h-4" />
-                  <span>Buy me a coffee</span>
-                </a>
+        {/* Core Contributors Section - 30% */}
+        <div className="mb-24">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-center text-light-text dark:text-dark-text mb-4">Core Contributors</h2>
+            <div className="w-24 h-1 bg-gradient-premium from-light-primary-500 to-light-accent-500 dark:from-dark-primary-400 dark:to-dark-accent-400 mx-auto mb-12"></div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* NiansuhAI */}
+              <div className="group">
+                <div className="relative rounded-xl overflow-hidden bg-light-bg-secondary dark:bg-dark-bg-secondary shadow-premium-lg">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 dark:from-purple-400/5 dark:to-pink-400/5"></div>
+                  <div className="relative p-6">
+                    <div className="flex items-center gap-6 mb-6">
+                      <div className="relative rounded-full overflow-hidden w-20 h-20">
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 dark:from-purple-400 dark:to-pink-400 opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <img
+                          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/385.png"
+                          alt="NiansuhAI"
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-light-text dark:text-dark-text">NiansuhAI</h3>
+                        <p className="text-purple-600 dark:text-purple-400">Original Creator & API Architect</p>
+                      </div>
+                    </div>
+                    <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+                      The visionary who laid the foundation for Sree.shop through innovative API infrastructure and system design.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {['API Design', 'System Architecture', 'AI Integration'].map((skill, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              {/* Vortex */}
+              <div className="group">
+                <div className="relative rounded-xl overflow-hidden bg-light-bg-secondary dark:bg-dark-bg-secondary shadow-premium-lg">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 dark:from-blue-400/5 dark:to-cyan-400/5"></div>
+                  <div className="relative p-6">
+                    <div className="flex items-center gap-6 mb-6">
+                      <div className="relative rounded-full overflow-hidden w-20 h-20">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-500 dark:from-blue-400 dark:to-cyan-400 opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <img
+                          src="https://github.com/OE-LUCIFER.png"
+                          alt="Vortex"
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-light-text dark:text-dark-text">Vortex</h3>
+                        <p className="text-blue-600 dark:text-blue-400">Lead Developer & System Architect</p>
+                      </div>
+                    </div>
+                    <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+                      Our debugging wizard and chaos coordinator who ensures everything runs smoothly and efficiently.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {['System Design', 'Performance', 'Security'].map((skill, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Contributors Section - 10% */}
+        <div>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-center text-light-text dark:text-dark-text mb-4">Additional Contributors</h2>
+            <div className="w-16 h-0.5 bg-gradient-to-r from-light-text-tertiary to-light-text-secondary dark:from-dark-text-tertiary dark:to-dark-text-secondary mx-auto mb-12"></div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+              {contributors.map((contributor, index) => (
+                <a
+                  key={index}
+                  href={`https://github.com/${contributor.github}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-lg p-6 shadow-premium-sm hover:shadow-premium-lg transition-all duration-300"
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <div className="relative rounded-full overflow-hidden w-16 h-16 mb-4">
+                      <div className="absolute inset-0 bg-gradient-premium from-light-primary-500/20 to-light-accent-500/20 dark:from-dark-primary-400/20 dark:to-dark-accent-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <img
+                        src={`https://github.com/${contributor.github}.png`}
+                        alt={contributor.github}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                    <h3 className="text-lg font-semibold text-light-text dark:text-dark-text mb-2">
+                      {contributor.github}
+                    </h3>
+                    <p className="text-sm text-light-text-tertiary dark:text-dark-text-tertiary mb-4">
+                      {contributor.role}
+                    </p>
+                    <div className="flex flex-wrap gap-1 justify-center">
+                      {contributor.skills.slice(0, 2).map((skill, skillIndex) => (
+                        <span
+                          key={skillIndex}
+                          className="px-2 py-1 rounded-full bg-light-bg-tertiary dark:bg-dark-bg-tertiary text-light-text-secondary dark:text-dark-text-secondary text-xs"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default About;

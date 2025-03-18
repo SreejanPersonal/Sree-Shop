@@ -216,15 +216,31 @@ console.log(response.choices[0].message.content);`,
                 <div className="space-y-3">
                   <div className="relative">
                     <div className="absolute top-3 left-3 text-gray-500">$</div>
-                    <code className="block bg-gray-100 dark:bg-gray-800 p-3 pl-7 rounded-lg text-sm font-mono">
-                      npm install openai
-                    </code>
+                    <div className="flex justify-between items-center bg-gray-100 dark:bg-gray-800 p-3 pl-7 rounded-lg">
+                      <code className="text-sm font-mono">npm install openai</code>
+                      <button 
+                        onClick={() => navigator.clipboard.writeText('npm install openai')}
+                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                   <div className="relative">
                     <div className="absolute top-3 left-3 text-gray-500">$</div>
-                    <code className="block bg-gray-100 dark:bg-gray-800 p-3 pl-7 rounded-lg text-sm font-mono">
-                      pip install openai
-                    </code>
+                    <div className="flex justify-between items-center bg-gray-100 dark:bg-gray-800 p-3 pl-7 rounded-lg">
+                      <code className="text-sm font-mono">pip install openai</code>
+                      <button 
+                        onClick={() => navigator.clipboard.writeText('pip install openai')}
+                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -323,30 +339,109 @@ console.log(response.choices[0].message.content);`,
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="font-semibold">Authentication Example</h3>
+          <div className="space-y-6">
+            <h3 className="font-semibold text-xl mb-4">Common Authentication Issues</h3>
             
-            <div className="flex gap-2 mb-4">
-              {(['python', 'javascript', 'curl'] as const).map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => setSelectedLanguage(lang)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                    selectedLanguage === lang
-                      ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
-                >
-                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
-                </button>
-              ))}
+            <div className="space-y-4">
+              {/* Invalid API Key */}
+              <div className="p-4 rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-2">Invalid API Key</h4>
+                    <p className="text-sm text-red-600 dark:text-red-400 mb-2">
+                      This error occurs when your API key is incorrect or expired.
+                    </p>
+                    <div className="bg-red-100 dark:bg-red-900/40 p-3 rounded text-sm font-mono text-red-700 dark:text-red-300">
+                      {"Error: Invalid API key provided"}
+                    </div>
+                    <div className="mt-3 text-sm text-red-600 dark:text-red-400">
+                      <strong>Solution:</strong> Double check your API key or generate a new one if needed.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Wrong API Base URL */}
+              <div className="p-4 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-2">Incorrect Base URL</h4>
+                    <p className="text-sm text-amber-600 dark:text-amber-400 mb-2">
+                      This happens when using the wrong API endpoint (beta vs stable).
+                    </p>
+                    <div className="bg-amber-100 dark:bg-amber-900/40 p-3 rounded text-sm font-mono text-amber-700 dark:text-amber-300">
+                      {"Error: Could not resolve host"}
+                    </div>
+                    <div className="mt-3 text-sm text-amber-600 dark:text-amber-400">
+                      <strong>Solution:</strong> Verify you're using the correct base URL for your API key type.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rate Limit */}
+              <div className="p-4 rounded-xl border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-2">Rate Limit Exceeded</h4>
+                    <p className="text-sm text-purple-600 dark:text-purple-400 mb-2">
+                      You've exceeded the requests per minute (RPM) limit.
+                    </p>
+                    <div className="bg-purple-100 dark:bg-purple-900/40 p-3 rounded text-sm font-mono text-purple-700 dark:text-purple-300">
+                      {"Error: Too many requests. Rate limit exceeded"}
+                    </div>
+                    <div className="mt-3 text-sm text-purple-600 dark:text-purple-400">
+                      <strong>Solution:</strong> Implement rate limiting in your code or upgrade your plan.
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <CodeEditor
-              language={selectedLanguage}
-              initialCode={codeExamples.basic[selectedLanguage]}
-              theme="dark"
-            />
+            <div className="space-y-6 mt-8">
+              <h3 className="font-semibold text-xl mb-4">Authentication Examples</h3>
+
+              <div className="grid sm:grid-cols-2 gap-6">
+                {/* Stable API */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-lg">Stable API</h4>
+                  <CodeEditor
+                    language={selectedLanguage}
+                    initialCode={codeExamples.basic[selectedLanguage]}
+                    theme="dark"
+                  />
+                </div>
+
+                {/* Beta API */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-lg">Beta API</h4>
+                  <CodeEditor
+                    language={selectedLanguage}
+                    initialCode={codeExamples.beta[selectedLanguage]}
+                    theme="dark"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-2 justify-center">
+                {(['python', 'javascript', 'curl'] as const).map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => setSelectedLanguage(lang)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      selectedLanguage === lang
+                        ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )
@@ -645,10 +740,79 @@ console.log(response.choices[0].message.content);`,
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="font-semibold">Streaming Example</h3>
-            
-            <div className="flex gap-2 mb-4">
+          <div className="space-y-6">
+            <h3 className="font-semibold text-xl mb-4">Streaming Examples</h3>
+
+            <div className="grid sm:grid-cols-2 gap-6">
+              {/* Stable API */}
+              <div className="space-y-4">
+                <h4 className="font-medium text-lg">Stable API</h4>
+                <CodeEditor
+                  language={selectedLanguage}
+                  initialCode={codeExamples.streaming[selectedLanguage]}
+                  theme="dark"
+                />
+              </div>
+
+              {/* Beta API */}
+              <div className="space-y-4">
+                <h4 className="font-medium text-lg">Beta API</h4>
+                <CodeEditor
+                  language={selectedLanguage}
+                  initialCode={{
+                    python: `import openai
+
+client = OpenAI(
+    base_url="https://beta.sree.shop/v1",
+    api_key="ddc-beta-xxx"  # Replace with your beta API key
+)
+
+stream = client.chat.completions.create(
+    model="DeepSeek-R1",  # Beta model
+    messages=[
+        {"role": "user", "content": "Write a story"}
+    ],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content is not None:
+        print(chunk.choices[0].delta.content, end="")`,
+                    javascript: `import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://beta.sree.shop/v1',
+  apiKey: 'ddc-beta-xxx'  # Replace with your beta API key
+});
+
+const stream = await client.chat.completions.create({
+  model: 'DeepSeek-R1',  # Beta model
+  messages: [
+    { role: 'user', content: 'Write a story' }
+  ],
+  stream: true
+});
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk.choices[0].delta.content || '');
+}`,
+                    curl: `curl https://beta.sree.shop/v1/chat/completions \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ddc-beta-xxx" \\
+  -d '{
+    "model": "DeepSeek-R1",
+    "messages": [
+      {"role": "user", "content": "Write a story"}
+    ],
+    "stream": true
+  }'`
+                  }[selectedLanguage]}
+                  theme="dark"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2 justify-center">
               {(['python', 'javascript', 'curl'] as const).map((lang) => (
                 <button
                   key={lang}
@@ -663,12 +827,6 @@ console.log(response.choices[0].message.content);`,
                 </button>
               ))}
             </div>
-
-            <CodeEditor
-              language={selectedLanguage}
-              initialCode={codeExamples.streaming[selectedLanguage]}
-              theme="dark"
-            />
           </div>
         </div>
       )

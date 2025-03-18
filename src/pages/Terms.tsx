@@ -1,7 +1,51 @@
 
 import { Shield, AlertCircle, Check, ExternalLink } from 'lucide-react';
+import { useEffect } from 'react';
 
 function Terms() {
+  useEffect(() => {
+    // Handle hash navigation on component mount and hash changes
+    const scrollToSection = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        // Add a small delay to ensure the element is mounted
+        setTimeout(() => {
+          const element = document.querySelector(hash);
+          if (element) {
+            // Add offset for fixed headers if needed
+            const offset = 80; // Adjust this value based on your header height
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
+      }
+    };
+
+    // Scroll on initial load if hash exists
+    scrollToSection();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', scrollToSection);
+
+    // Listen for router navigation completion if using React Router
+    const handleRouteChange = () => {
+      if (window.location.hash) {
+        scrollToSection();
+      }
+    };
+    window.addEventListener('popstate', handleRouteChange);
+
+    return () => {
+      window.removeEventListener('hashchange', scrollToSection);
+      window.removeEventListener('popstate', handleRouteChange);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen py-16 px-4">
       <div className="max-w-4xl mx-auto">
@@ -122,9 +166,106 @@ function Terms() {
             </div>
           </div>
 
+          {/* API Service Availability */}
+          <div id="api-availability" className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">6. API Service Availability and Reliability</h2>
+              <button
+                onClick={() => {
+                  // Construct full URL with current location (including port if on localhost)
+                  const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}#api-availability`;
+                  
+                  // Update browser URL
+                  window.history.pushState({}, '', `#api-availability`);
+                  
+                  // Scroll to section
+                  const element = document.querySelector('#api-availability');
+                  if (element) {
+                    const offset = 80;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                  }
+
+                  // Copy to clipboard
+                  navigator.clipboard.writeText(url).then(() => {
+                    const button = document.querySelector('#copy-link-btn');
+                    if (button) {
+                      const originalContent = button.innerHTML;
+                      button.innerHTML = '<span class="text-green-500">Copied!</span>';
+                      setTimeout(() => {
+                        button.innerHTML = originalContent;
+                      }, 2000);
+                    }
+                  });
+                }}
+                id="copy-link-btn"
+                className="inline-flex items-center gap-2 px-3 py-1 text-sm rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+                Copy link
+              </button>
+            </div>
+            <div className="space-y-6 text-gray-600 dark:text-gray-400">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Beta and Free Stable API Services</h3>
+                <div className="bg-amber-50 dark:bg-amber-900/30 rounded-xl p-4 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+                    <p className="text-amber-800 dark:text-amber-400">
+                      Both Beta and Free Stable API services are provided on an "as available" basis without any guarantee of continuous availability or stability.
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="p-1 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                      <Check className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-1">Service Status</h4>
+                      <p>
+                        Users can monitor service availability through our status page at{' '}
+                        <a href="https://sree.shop/status" className="text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center">
+                          sree.shop/status <ExternalLink className="w-4 h-4 ml-1" />
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Service Modifications</h3>
+                <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4 space-y-4">
+                  <p>
+                    Sree (devsdocode) reserves the right to:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>Modify, suspend, or terminate any API service at any time without prior notice</li>
+                    <li>Change available models in both Free Stable and Beta APIs</li>
+                    <li>Modify API parameters, arguments, and configurations</li>
+                    <li>Adjust or fine-tune API behavior and responses</li>
+                  </ul>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-4">
+                  <p className="text-sm text-blue-800 dark:text-blue-400">
+                    We recommend implementing robust error handling and fallback mechanisms in your applications to handle potential service changes or interruptions.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Contact Information */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700">
-            <h2 className="text-2xl font-bold mb-6">6. Contact Us</h2>
+            <h2 className="text-2xl font-bold mb-6">7. Contact Us</h2>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               If you have any questions about these Terms, please contact us:
             </p>
