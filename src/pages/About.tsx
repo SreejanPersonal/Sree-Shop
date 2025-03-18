@@ -1,292 +1,178 @@
-import React, { useState } from 'react';
-import { Heart, Star, Coffee, Github, Code2, ChevronDown, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
-interface Contributor {
-  github: string;
-  role: string;
-  description: string;
-  contributions: string[];
-  skills: string[];
-  joinedAt: string;
-}
-
-const contributors: Contributor[] = [
-  {
-    github: "springmusk026",
-    role: "Backend Developer",
-    description: "Building robust and scalable backend systems",
-    contributions: [
-      "API Development",
-      "Database Design",
-      "Security Implementation"
-    ],
-    skills: ["Node.js", "PostgreSQL", "System Design", "API Development"],
-    joinedAt: "2023"
-  },
-  {
-    github: "imChronos",
-    role: "Core Developer",
-    description: "Driving innovation in AI infrastructure and system architecture",
-    contributions: [
-      "API Infrastructure Development",
-      "Performance Optimization",
-      "System Architecture"
-    ],
-    skills: ["Python", "FastAPI", "DevOps", "AI/ML"],
-    joinedAt: "2023"
-  },
-  {
-    github: "nileshpatil6",
-    role: "Integration Specialist",
-    description: "Ensuring seamless integration of AI models and services",
-    contributions: [
-      "AI Model Integration",
-      "API Compatibility",
-      "Testing & QA"
-    ],
-    skills: ["Python", "AI Integration", "Testing", "Documentation"],
-    joinedAt: "2023"
-  }
-];
+import { CreditCard, Award, Users, Shield, MapPin } from 'lucide-react';
 
 function About() {
-  const [hoveredContributor, setHoveredContributor] = useState<string | null>(null);
-  const [pinnedContributor, setPinnedContributor] = useState<string | null>(null);
-
-  const handleMouseEnter = (github: string) => {
-    if (!pinnedContributor) {
-      setHoveredContributor(github);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!pinnedContributor) {
-      setHoveredContributor(null);
-    }
-  };
-
-  const togglePin = (github: string) => {
-    if (pinnedContributor === github) {
-      setPinnedContributor(null);
-      setHoveredContributor(null);
-    } else {
-      setPinnedContributor(github);
-      setHoveredContributor(github);
-    }
-  };
-
   return (
-    <div className="min-h-screen py-16 px-4">
+    <div className="container mx-auto px-4 py-16">
       <div className="max-w-4xl mx-auto">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6">
-            <Heart className="w-4 h-4" />
-            <span>Built with ❤️ by the community</span>
-          </div>
-          <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Making AI Accessible to Everyone
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
-            We believe in democratizing AI technology and making it available to developers worldwide.
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-bold mb-4">About Sree.shop</h1>
+          <p className="text-xl text-light-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
+            Providing unlimited AI power for everyone, making advanced AI technologies accessible and affordable.
           </p>
         </div>
 
-        <div className="prose prose-lg dark:prose-invert max-w-none mb-16">
-          {/* Special Thanks Section */}
-          <div className="space-y-6">
-            {/* NiansuhAI Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 mb-8">
-              <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
-                <Star className="w-6 h-6 text-amber-400" />
-                Special Thanks
-              </h2>
-              
-              {/* NiansuhAI */}
-              <div className="mb-8">
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  This project wouldn't be possible without the incredible contribution of NiansuhAI. As the original creator of the API infrastructure, his vision and expertise laid the foundation for what Sree.shop has become today.
-                </p>
-                <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl">
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <img
-                      src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/385.png"
-                      alt="NiansuhAI"
-                      className="w-16 h-16 rounded-full ring-2 ring-blue-500/20 group-hover:ring-blue-500/40 transition-all duration-300 object-cover bg-white dark:bg-gray-700"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">NiansuhAI</h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      The OG creator who made this possible
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* OE-LUCIFER */}
-              <div>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  A special shoutout to OE-LUCIFER, our resident chaos coordinator and bug-hunting extraordinaire. When he's not breaking things to make them better, he's probably plotting world domination through perfectly aligned code.
-                </p>
-                <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl">
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <img
-                      src="https://github.com/OE-LUCIFER.png"
-                      alt="OE-LUCIFER"
-                      className="w-16 h-16 rounded-full ring-2 ring-purple-500/20 group-hover:ring-purple-500/40 transition-all duration-300 object-cover bg-white dark:bg-gray-700"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">OE-LUCIFER</h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      The debugging wizard who makes bugs disappear like magic ✨
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Contributors Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 mb-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-white">
-                  <Code2 className="w-6 h-6" />
-                </div>
-                <h2 className="text-2xl font-bold">Key Contributors</h2>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {contributors.map((contributor) => (
-                  <div
-                    key={contributor.github}
-                    className="group relative"
-                    onMouseEnter={() => handleMouseEnter(contributor.github)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {/* Base Card */}
-                    <div className="relative h-full p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-600 transition-all duration-300 group-hover:border-purple-500 dark:group-hover:border-purple-400">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-lg opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                            <img
-                              src={`https://github.com/${contributor.github}.png`}
-                              alt={contributor.github}
-                              className="w-12 h-12 rounded-full ring-2 ring-purple-500/20 group-hover:ring-purple-500/40 transition-all duration-300"
-                            />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-sm">{contributor.github}</h3>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">{contributor.role}</p>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => togglePin(contributor.github)}
-                          className={`p-1.5 rounded-lg transition-colors ${
-                            pinnedContributor === contributor.github
-                              ? 'bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400'
-                              : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
-                          }`}
-                        >
-                          <ChevronDown className={`w-4 h-4 transition-transform ${
-                            (hoveredContributor === contributor.github || pinnedContributor === contributor.github) ? 'rotate-180' : ''
-                          }`} />
-                        </button>
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                        {contributor.description}
-                      </p>
-                    </div>
-
-                    {/* Hover/Pinned Card */}
-                    {(hoveredContributor === contributor.github || pinnedContributor === contributor.github) && (
-                      <div 
-                        className="absolute -top-2 left-0 right-0 transform -translate-y-full z-10"
-                        onMouseEnter={() => handleMouseEnter(contributor.github)}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <div className="relative">
-                          <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-xl blur-sm opacity-80"></div>
-                          <div className="relative bg-white dark:bg-gray-800 p-4 rounded-xl shadow-xl border border-gray-200 dark:border-gray-600">
-                            <div className="space-y-4">
-                              <div>
-                                <h4 className="text-sm font-semibold mb-2">Key Contributions</h4>
-                                <ul className="space-y-1">
-                                  {contributor.contributions.map((contribution, index) => (
-                                    <li key={index} className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-2">
-                                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                                      {contribution}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                              <div>
-                                <h4 className="text-sm font-semibold mb-2">Skills</h4>
-                                <div className="flex flex-wrap gap-1">
-                                  {contributor.skills.map((skill, index) => (
-                                    <span
-                                      key={index}
-                                      className="px-2 py-1 text-[10px] rounded-full bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300"
-                                    >
-                                      {skill}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                              <div className="pt-2 border-t border-gray-200 dark:border-gray-600">
-                                <a
-                                  href={`https://github.com/${contributor.github}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 text-xs text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
-                                >
-                                  <Github className="w-3 h-3" />
-                                  View Profile
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700">
-              <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
-                <Coffee className="w-6 h-6 text-amber-600" />
-                Maintained with ❤️
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Hey there! I'm DevsDoCode, the current maintainer of this project. I'm passionate about making AI technology accessible to everyone, and that's exactly what we're doing here at Sree.shop.
+        <div className="space-y-16">
+          {/* Mission Section */}
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Award className="text-light-primary-500 dark:text-dark-primary-400" />
+              Our Mission
+            </h2>
+            <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-xl p-6 shadow-sm">
+              <p className="mb-4">
+                At Sree.shop, our mission is to democratize access to AI technology. We believe powerful AI should not be limited to those who can afford premium prices but should be accessible to everyone, from individual developers to startups and small businesses.
               </p>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://github.com/devsdocode"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                >
-                  <Github className="w-4 h-4" />
-                  <span>Follow on GitHub</span>
-                </a>
-                <a
-                  href="https://buymeacoffee.com/devsdocode"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#FFDD00] hover:bg-[#FFDD00]/90 transition-colors text-black"
-                >
-                  <Coffee className="w-4 h-4" />
-                  <span>Buy me a coffee</span>
-                </a>
+              <p>
+                We're committed to offering free and affordable access to state-of-the-art AI models, enabling more people to leverage these powerful tools for innovation, education, and creative exploration.
+              </p>
+            </div>
+          </section>
+
+          {/* Story Section */}
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Users className="text-light-primary-500 dark:text-dark-primary-400" />
+              Our Story
+            </h2>
+            <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-xl p-6 shadow-sm">
+              <p className="mb-4">
+                Sree.shop began as a personal project by Sreejan, a developer who was frustrated by the high costs and limitations of existing AI services. What started as a simple wrapper API quickly evolved into a comprehensive platform providing affordable access to a wide range of AI models.
+              </p>
+              <p className="mb-4">
+                The project gained traction in developer communities, and a passionate team formed around the vision of making AI accessible to everyone, regardless of their budget or resources.
+              </p>
+              <p>
+                Today, we're proud to serve a growing community of users who are building innovative applications, exploring creative ideas, and learning about AI - all without breaking the bank.
+              </p>
+            </div>
+          </section>
+
+          {/* Values Section */}
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Shield className="text-light-primary-500 dark:text-dark-primary-400" />
+              Our Values
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-xl p-6 shadow-sm">
+                <h3 className="text-xl font-semibold mb-3">Accessibility</h3>
+                <p>
+                  We're committed to making powerful AI accessible to everyone, regardless of their financial resources or technical expertise.
+                </p>
+              </div>
+              <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-xl p-6 shadow-sm">
+                <h3 className="text-xl font-semibold mb-3">Transparency</h3>
+                <p>
+                  We believe in clear, honest communication about our services, pricing, and limitations. No hidden fees, no surprises.
+                </p>
+              </div>
+              <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-xl p-6 shadow-sm">
+                <h3 className="text-xl font-semibold mb-3">Innovation</h3>
+                <p>
+                  We continuously explore new models, capabilities, and features to provide our users with the best AI experience possible.
+                </p>
+              </div>
+              <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-xl p-6 shadow-sm">
+                <h3 className="text-xl font-semibold mb-3">Community</h3>
+                <p>
+                  We foster a supportive community of users who share knowledge, provide feedback, and help each other succeed.
+                </p>
               </div>
             </div>
-          </div>
+          </section>
+
+          {/* Contact Section */}
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <MapPin className="text-light-primary-500 dark:text-dark-primary-400" />
+              Get in Touch
+            </h2>
+            <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-xl p-6 shadow-sm">
+              <p className="mb-4">
+                We'd love to hear from you! Whether you have questions, feedback, or just want to say hello, you can reach us through our community channels:
+              </p>
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-start gap-2">
+                  <div className="p-1 rounded-full bg-light-primary-100 dark:bg-dark-primary-800 mt-0.5">
+                    <svg className="w-3 h-3 text-light-primary-600 dark:text-dark-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span>Telegram: <a href="https://t.me/devsdocode" target="_blank" rel="noopener noreferrer" className="text-light-primary-600 dark:text-dark-primary-400 hover:underline">@devsdocode</a></span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="p-1 rounded-full bg-light-primary-100 dark:bg-dark-primary-800 mt-0.5">
+                    <svg className="w-3 h-3 text-light-primary-600 dark:text-dark-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span>GitHub: <a href="https://github.com/SreejanPersonal/ai4free-wrapper" target="_blank" rel="noopener noreferrer" className="text-light-primary-600 dark:text-dark-primary-400 hover:underline">SreejanPersonal/ai4free-wrapper</a></span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="p-1 rounded-full bg-light-primary-100 dark:bg-dark-primary-800 mt-0.5">
+                    <svg className="w-3 h-3 text-light-primary-600 dark:text-dark-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span>Instagram: <a href="https://instagram.com/sree.shades_" target="_blank" rel="noopener noreferrer" className="text-light-primary-600 dark:text-dark-primary-400 hover:underline">@sree.shades_</a></span>
+                </li>
+              </ul>
+              <p>
+                We value your input and strive to respond to all inquiries as quickly as possible.
+              </p>
+            </div>
+          </section>
+
+          {/* Support Section */}
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <CreditCard className="text-light-primary-500 dark:text-dark-primary-400" />
+              Support Us
+            </h2>
+            <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-xl p-6 shadow-sm">
+              <p className="mb-4">
+                If you find our service valuable, there are several ways you can support us:
+              </p>
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-start gap-2">
+                  <div className="p-1 rounded-full bg-light-primary-100 dark:bg-dark-primary-800 mt-0.5">
+                    <svg className="w-3 h-3 text-light-primary-600 dark:text-dark-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span>Upgrade to a Pro plan for additional features and higher limits</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="p-1 rounded-full bg-light-primary-100 dark:bg-dark-primary-800 mt-0.5">
+                    <svg className="w-3 h-3 text-light-primary-600 dark:text-dark-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span>Buy us a coffee: <a href="https://buymeacoffee.com/devsdocode" target="_blank" rel="noopener noreferrer" className="text-light-primary-600 dark:text-dark-primary-400 hover:underline">buymeacoffee.com/devsdocode</a></span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="p-1 rounded-full bg-light-primary-100 dark:bg-dark-primary-800 mt-0.5">
+                    <svg className="w-3 h-3 text-light-primary-600 dark:text-dark-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span>Spread the word about our service on social media and in your network</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="p-1 rounded-full bg-light-primary-100 dark:bg-dark-primary-800 mt-0.5">
+                    <svg className="w-3 h-3 text-light-primary-600 dark:text-dark-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span>Contribute to our open-source projects on GitHub</span>
+                </li>
+              </ul>
+              <p>
+                Your support helps us maintain and improve our services, ensuring we can continue to provide affordable AI access to everyone.
+              </p>
+            </div>
+          </section>
         </div>
       </div>
     </div>
