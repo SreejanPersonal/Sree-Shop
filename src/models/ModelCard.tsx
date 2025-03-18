@@ -1,9 +1,6 @@
 
 import React, { useState } from 'react';
-import { Gauge, Brain, Workflow, ChevronDown, Image } from 'lucide-react';
-import ModelFeature from './components/ModelFeature';
-import ModelCardHeader from './components/ModelCardHeader';
-import ImageModelIndicator from './components/ImageModelIndicator';
+import { Gauge, Brain, Workflow, Rocket, Star, Zap, Image, ChevronDown, ChevronUp, ExternalLink, Sparkles } from 'lucide-react';
 
 interface ModelCardProps {
   model: string;
@@ -118,34 +115,71 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isPro, isBeta, provider, o
           'bg-green-300 dark:bg-green-700'
         }`}></div>
       </div>
-      
       {/* Header with gradient */}
-      <ModelCardHeader 
-        modelName={modelName}
-        provider={provider}
-        isPro={isPro}
-        isBeta={isBeta}
-        isImageModel={isImageModel}
-        styles={styles}
-      />
+      <div className={`${styles.gradientHeader} px-3 pt-3 pb-2 mb-1`}>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className={`p-1.5 rounded-md ${styles.iconBg} ${styles.iconColor} shadow-sm`}>
+              {isBeta ? <Rocket className="w-4 h-4" /> : isPro ? <Star className="w-4 h-4" /> : <Zap className="w-4 h-4" />}
+            </div>
+            <div className="min-w-0">
+              <h3 className="font-semibold text-sm truncate" title={modelName}>
+                {modelName}
+              </h3>
+              <div className="flex items-center gap-1">
+                <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                  {provider}
+                </p>
+                {isImageModel && (
+                  <span className="inline-flex items-center">
+                    <Image className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${styles.badgeBg} ${styles.badgeText} shadow-sm`}>
+            {isBeta ? 'Beta' : isPro ? 'Pro' : 'Free'}
+          </div>
+        </div>
+      </div>
 
       {/* Content area with shadow separation */}
       <div className="px-3 pb-3 pt-1">
         {/* Model type indicator */}
         {isImageModel && (
-          <ImageModelIndicator isBeta={isBeta} accentColor={styles.accentColor} />
+          <div className="mb-2 flex items-center gap-1.5">
+            <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${styles.accentColor}`}>
+              <Image className="w-3 h-3" />
+              <span>Image Generation</span>
+            </div>
+            {isBeta && (
+              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400">
+                <Sparkles className="w-3 h-3" />
+                <span>Limited Time</span>
+              </div>
+            )}
+          </div>
         )}
 
         {/* Features with enhanced styling */}
         <div className="grid grid-cols-3 gap-2">
           {features.map((feature, index) => (
-            <ModelFeature
-              key={index}
-              icon={feature.icon}
-              name={feature.name}
-              value={feature.value}
-              featureIconColor={styles.featureIconColor}
-            />
+            <div key={index} 
+              className={`flex flex-col items-center justify-center text-center p-2 rounded-lg 
+                bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700
+                shadow-sm transition-all duration-200 group-hover:shadow group-hover:-translate-y-0.5`}
+            >
+              <div className={`mb-1 ${styles.featureIconColor}`}>
+                {feature.icon}
+              </div>
+              <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300">
+                {feature.name}
+              </span>
+              <span className="text-[10px] font-semibold text-gray-900 dark:text-gray-100">
+                {feature.value}
+              </span>
+            </div>
           ))}
         </div>
 

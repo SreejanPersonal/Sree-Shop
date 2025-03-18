@@ -1,509 +1,987 @@
-import { useEffect, useState } from 'react';
-import {
-  Check,
-  ChevronDown,
+import React, { useState } from 'react';
+import { 
   ChevronRight,
-  Code,
-  Copy,
-  Database,
-  ExternalLink,
-  FileText,
-  Github,
-  Hash,
-  ImageIcon,
-  Key,
-  Lock,
-  Menu,
-  MessageSquare,
-  Play,
   Search,
-  Terminal,
-  X
+  BookOpen,
+  Shield,
+  Sparkles,
+  X,
+  Rocket,
+  Globe,
+  Settings,
+  AlertCircle,
+  HelpCircle,
+  Check,
+  FileCode,
+  Zap,
+  MessageSquare,
+  Cpu
 } from 'lucide-react';
-import CodeEditor from '../components/editor/CodeEditor';
+import CodeEditor from '../components/CodeEditor';
 
-function Documentation() {
-  const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('python');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredSections, setFilteredSections] = useState<string[]>([]);
-
-  // Mock sections for the documentation
-  const sections = [
-    'introduction',
-    'authentication',
-    'rate-limits',
-    'errors',
-    'text-completion',
-    'chat-completion',
-    'image-generation',
-    'stream-response',
-    'using-plugins',
-    'sdks',
-    'faq'
-  ];
-
-  // Filter sections based on search query
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setFilteredSections(sections);
-      return;
-    }
-
-    const filtered = sections.filter(section => 
-      section.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredSections(filtered);
-  }, [searchQuery]);
-
-  // Set first section as active by default when filteredSections change
-  useEffect(() => {
-    if (filteredSections.length > 0 && !filteredSections.includes(activeSection || '')) {
-      setActiveSection(filteredSections[0]);
-    }
-  }, [filteredSections, activeSection]);
-
-  // Set first section as active by default
-  useEffect(() => {
-    if (!activeSection && sections.length > 0) {
-      setActiveSection(sections[0]);
-    }
-  }, []);
-
-  // Close sidebar when user clicks outside on mobile
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setSidebarOpen(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Mock code examples
-  const codeExamples = {
-    python: `import requests
-
-# Replace with your API key
-api_key = "YOUR_API_KEY"
-
-def get_completion(prompt, model="gpt-3.5-turbo"):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {api_key}"
-    }
-    
-    data = {
-        "model": model,
-        "prompt": prompt,
-        "max_tokens": 150
-    }
-    
-    response = requests.post(
-        "https://api.sree.shop/v1/completions",
-        headers=headers,
-        json=data
-    )
-    
-    return response.json()
-
-# Example usage
-result = get_completion("Write a short poem about AI")
-print(result["choices"][0]["text"])`,
-
-    javascript: `// Replace with your API key
-const apiKey = "YOUR_API_KEY";
-
-async function getCompletion(prompt, model = "gpt-3.5-turbo") {
-  const response = await fetch("https://api.sree.shop/v1/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": \`Bearer \${apiKey}\`
-    },
-    body: JSON.stringify({
-      model: model,
-      prompt: prompt,
-      max_tokens: 150
-    })
-  });
-  
-  const data = await response.json();
-  return data;
+interface Section {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  content: React.ReactNode;
 }
 
-// Example usage
-getCompletion("Write a short poem about AI")
-  .then(result => console.log(result.choices[0].text))
-  .catch(error => console.error("Error:", error));`,
+interface CodeExample {
+  python: string;
+  javascript: string;
+  curl: string;
+}
 
-    curl: `curl -X POST \\
-  https://api.sree.shop/v1/completions \\
+function Documentation() {
+  const [activeSection, setActiveSection] = useState('quickstart');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState<'python' | 'javascript' | 'curl'>('python');
+
+  const codeExamples: Record<string, CodeExample> = {
+    basic: {
+      python: `import openai
+
+client = OpenAI(
+    base_url="https://api.sree.shop/v1",
+    api_key="ddc-xxx"  # Replace with your API key
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "user", "content": "Hello!"}
+    ]
+)
+
+print(response.choices[0].message.content)`,
+      javascript: `import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://api.sree.shop/v1',
+  apiKey: 'ddc-xxx'  # Replace with your API key
+});
+
+const response = await client.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    { role: 'user', content: 'Hello!' }
+  ]
+});
+
+console.log(response.choices[0].message.content);`,
+      curl: `curl https://api.sree.shop/v1/chat/completions \\
   -H "Content-Type: application/json" \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Authorization: Bearer ddc-xxx" \\
   -d '{
-    "model": "gpt-3.5-turbo",
-    "prompt": "Write a short poem about AI",
-    "max_tokens": 150
+    "model": "gpt-4o",
+    "messages": [
+      {"role": "user", "content": "Hello!"}
+    ]
   }'`
+    },
+    streaming: {
+      python: `import openai
+
+client = OpenAI(
+    base_url="https://api.sree.shop/v1",
+    api_key="ddc-xxx"  # Replace with your API key
+)
+
+stream = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "user", "content": "Write a story"}
+    ],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content is not None:
+        print(chunk.choices[0].delta.content, end="")`,
+      javascript: `import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://api.sree.shop/v1',
+  apiKey: 'ddc-xxx'  # Replace with your API key
+});
+
+const stream = await client.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    { role: 'user', content: 'Write a story' }
+  ],
+  stream: true
+});
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk.choices[0].delta.content || '');
+}`,
+      curl: `curl https://api.sree.shop/v1/chat/completions \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ddc-xxx" \\
+  -d '{
+    "model": "gpt-4o",
+    "messages": [
+      {"role": "user", "content": "Write a story"}
+    ],
+    "stream": true
+  }'`
+    },
+    beta: {
+      python: `import openai
+
+client = OpenAI(
+    base_url="https://beta.sree.shop/v1",
+    api_key="ddc-beta-xxx"  # Replace with your beta API key
+)
+
+response = client.chat.completions.create(
+    model="DeepSeek-R1",  # Beta model
+    messages=[
+        {"role": "user", "content": "Hello!"}
+    ]
+)
+
+print(response.choices[0].message.content)`,
+      javascript: `import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://beta.sree.shop/v1',
+  apiKey: 'ddc-beta-xxx'  # Replace with your beta API key
+});
+
+const response = await client.chat.completions.create({
+  model: 'DeepSeek-R1',  # Beta model
+  messages: [
+    { role: 'user', content: 'Hello!' }
+  ]
+});
+
+console.log(response.choices[0].message.content);`,
+      curl: `curl https://beta.sree.shop/v1/chat/completions \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ddc-beta-xxx" \\
+  -d '{
+    "model": "DeepSeek-R1",
+    "messages": [
+      {"role": "user", "content": "Hello!"}
+    ]
+  }'`
+    }
   };
 
-  const renderContent = () => {
-    // This is just a placeholder for the actual documentation content
-    const renderPlaceholderContent = (title: string, description: string, icon: JSX.Element) => (
-      <div className="pb-10 mb-10 border-b dark:border-gray-700">
-        <div className="flex items-center gap-3 mb-4">
-          {icon}
-          <h2 className="text-2xl font-bold" id={title.toLowerCase().replace(/ /g, '-')}>
-            {title}
-          </h2>
-        </div>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          {description}
-        </p>
+  const sections: Section[] = [
+    {
+      id: 'quickstart',
+      title: 'Quick Start',
+      icon: <Zap className="w-4 h-4" />,
+      content: (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold mb-4">Getting Started</h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Start using our API in minutes. Follow these simple steps to integrate AI capabilities into your application.
+          </p>
 
-        {/* Code examples */}
-        <div className="mb-6">
-          <div className="flex border-b dark:border-gray-700 mb-4">
-            <button
-              className={`px-4 py-2 ${activeTab === 'python' ? 'border-b-2 border-blue-500 dark:border-blue-400 font-medium' : 'text-gray-500 dark:text-gray-400'}`}
-              onClick={() => setActiveTab('python')}
-            >
-              Python
-            </button>
-            <button
-              className={`px-4 py-2 ${activeTab === 'javascript' ? 'border-b-2 border-blue-500 dark:border-blue-400 font-medium' : 'text-gray-500 dark:text-gray-400'}`}
-              onClick={() => setActiveTab('javascript')}
-            >
-              JavaScript
-            </button>
-            <button
-              className={`px-4 py-2 ${activeTab === 'curl' ? 'border-b-2 border-blue-500 dark:border-blue-400 font-medium' : 'text-gray-500 dark:text-gray-400'}`}
-              onClick={() => setActiveTab('curl')}
-            >
-              cURL
-            </button>
+          <div className="space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="p-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                <div className="w-4 h-4 text-blue-600 dark:text-blue-400 font-bold">1</div>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-2">Get your API key</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
+                  Join our Telegram group and use the bot to generate your API key.
+                </p>
+                <a
+                  href="https://t.me/devsdocode"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
+                >
+                  Join Telegram Group
+                  <ChevronRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="p-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                <div className="w-4 h-4 text-blue-600 dark:text-blue-400 font-bold">2</div>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-2">Install the client library</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
+                  Use your preferred package manager to install our OpenAI-compatible client.
+                </p>
+                <div className="space-y-3">
+                  <div className="relative">
+                    <div className="absolute top-3 left-3 text-gray-500">$</div>
+                    <div className="flex justify-between items-center bg-gray-100 dark:bg-gray-800 p-3 pl-7 rounded-lg">
+                      <code className="text-sm font-mono">npm install openai</code>
+                      <button 
+                        onClick={() => navigator.clipboard.writeText('npm install openai')}
+                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <div className="absolute top-3 left-3 text-gray-500">$</div>
+                    <div className="flex justify-between items-center bg-gray-100 dark:bg-gray-800 p-3 pl-7 rounded-lg">
+                      <code className="text-sm font-mono">pip install openai</code>
+                      <button 
+                        onClick={() => navigator.clipboard.writeText('pip install openai')}
+                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="p-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                <div className="w-4 h-4 text-blue-600 dark:text-blue-400 font-bold">3</div>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold mb-2">Make your first API call</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
+                  Choose your preferred language and try this example:
+                </p>
+                
+                <div className="flex gap-2 mb-4">
+                  {(['python', 'javascript', 'curl'] as const).map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => setSelectedLanguage(lang)}
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                        selectedLanguage === lang
+                          ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
+                          : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                      }`}
+                    >
+                      {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="relative">
+                  <CodeEditor
+                    language={selectedLanguage}
+                    initialCode={codeExamples.basic[selectedLanguage]}
+                    theme="dark"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'authentication',
+      title: 'Authentication',
+      icon: <Shield className="w-4 h-4" />,
+      content: (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold mb-4">Authentication</h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            All API requests require authentication using your API key. We provide two types of API keys:
+          </p>
+
+          <div className="grid sm:grid-cols-2 gap-4 mb-6">
+            <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-100 dark:border-blue-800">
+              <div className="flex items-center gap-3 mb-3">
+                <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <h3 className="font-semibold">Stable API</h3>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                Production-ready API with stable models and reliable performance.
+              </p>
+              <div className="font-mono text-sm bg-white dark:bg-gray-900/50 p-2 rounded">
+                ddc-xxx
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-100 dark:border-yellow-800">
+              <div className="flex items-center gap-3 mb-3">
+                <Rocket className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                <h3 className="font-semibold">Beta API</h3>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                Access to latest models and features in beta testing.
+              </p>
+              <div className="font-mono text-sm bg-white dark:bg-gray-900/50 p-2 rounded">
+                ddc-beta-xxx
+              </div>
+            </div>
           </div>
 
-          <CodeEditor
-            initialCode={codeExamples[activeTab as keyof typeof codeExamples]}
-            language={activeTab === 'curl' ? 'bash' : activeTab}
-          />
-        </div>
+          <div className="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-xl mb-6">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+              <div>
+                <h3 className="font-semibold mb-1">Security Best Practices</h3>
+                <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-2">
+                  <li>• Never expose your API key in client-side code</li>
+                  <li>• Use environment variables for API key storage</li>
+                  <li>• Rotate your API key if compromised</li>
+                  <li>• Don't share your API key with others</li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
-        {/* Example Response */}
-        <div className="mt-8">
-          <h3 className="font-semibold mb-4 flex items-center gap-2">
-            <Terminal className="w-5 h-5 text-green-500" />
-            Example Response
-          </h3>
-          <CodeEditor
-            initialCode={`{
-  "id": "cmpl-abc123",
-  "object": "text_completion",
-  "created": 1677858242,
-  "model": "gpt-3.5-turbo",
-  "choices": [
+          <div className="space-y-6">
+            <h3 className="font-semibold text-xl mb-4">Common Authentication Issues</h3>
+            
+            <div className="space-y-4">
+              {/* Invalid API Key */}
+              <div className="p-4 rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-2">Invalid API Key</h4>
+                    <p className="text-sm text-red-600 dark:text-red-400 mb-2">
+                      This error occurs when your API key is incorrect or expired.
+                    </p>
+                    <div className="bg-red-100 dark:bg-red-900/40 p-3 rounded text-sm font-mono text-red-700 dark:text-red-300">
+                      {"Error: Invalid API key provided"}
+                    </div>
+                    <div className="mt-3 text-sm text-red-600 dark:text-red-400">
+                      <strong>Solution:</strong> Double check your API key or generate a new one if needed.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Wrong API Base URL */}
+              <div className="p-4 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-2">Incorrect Base URL</h4>
+                    <p className="text-sm text-amber-600 dark:text-amber-400 mb-2">
+                      This happens when using the wrong API endpoint (beta vs stable).
+                    </p>
+                    <div className="bg-amber-100 dark:bg-amber-900/40 p-3 rounded text-sm font-mono text-amber-700 dark:text-amber-300">
+                      {"Error: Could not resolve host"}
+                    </div>
+                    <div className="mt-3 text-sm text-amber-600 dark:text-amber-400">
+                      <strong>Solution:</strong> Verify you're using the correct base URL for your API key type.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rate Limit */}
+              <div className="p-4 rounded-xl border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-2">Rate Limit Exceeded</h4>
+                    <p className="text-sm text-purple-600 dark:text-purple-400 mb-2">
+                      You've exceeded the requests per minute (RPM) limit.
+                    </p>
+                    <div className="bg-purple-100 dark:bg-purple-900/40 p-3 rounded text-sm font-mono text-purple-700 dark:text-purple-300">
+                      {"Error: Too many requests. Rate limit exceeded"}
+                    </div>
+                    <div className="mt-3 text-sm text-purple-600 dark:text-purple-400">
+                      <strong>Solution:</strong> Implement rate limiting in your code or upgrade your plan.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6 mt-8">
+              <h3 className="font-semibold text-xl mb-4">Authentication Examples</h3>
+
+              <div className="grid sm:grid-cols-2 gap-6">
+                {/* Stable API */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-lg">Stable API</h4>
+                  <CodeEditor
+                    language={selectedLanguage}
+                    initialCode={codeExamples.basic[selectedLanguage]}
+                    theme="dark"
+                  />
+                </div>
+
+                {/* Beta API */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-lg">Beta API</h4>
+                  <CodeEditor
+                    language={selectedLanguage}
+                    initialCode={codeExamples.beta[selectedLanguage]}
+                    theme="dark"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-2 justify-center">
+                {(['python', 'javascript', 'curl'] as const).map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => setSelectedLanguage(lang)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      selectedLanguage === lang
+                        ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
     {
-      "text": "In circuits of light and silicon minds,\\nAI dreams of understanding, learning kind.\\nWith patterns found in data's endless sea,\\nIt builds a bridge from what was to what might be.",
-      "index": 0,
-      "finish_reason": "length"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 6,
-    "completion_tokens": 150,
-    "total_tokens": 156
-  }
-}`}
-            language="json"
-            isResponse={true}
-          />
-        </div>
-      </div>
-    );
-
-    switch (activeSection) {
-      case 'introduction':
-        return renderPlaceholderContent(
-          "Introduction",
-          "Sree.shop provides a simple, reliable API for accessing powerful AI models. With our API, you can generate text completions, create AI-powered chat applications, generate images, and more.",
-          <FileText className="w-7 h-7 text-blue-500" />
-        );
-      case 'authentication':
-        return renderPlaceholderContent(
-          "Authentication",
-          "To authenticate with our API, you'll need an API key. Every request should include your API key in the Authorization header as a Bearer token. Keep your API key secure - don't share it publicly or expose it in client-side code.",
-          <Key className="w-7 h-7 text-yellow-500" />
-        );
-      case 'rate-limits':
-        return renderPlaceholderContent(
-          "Rate Limits",
-          "Free tier accounts are limited to 3 requests per minute (RPM). Pro tier accounts have unlimited RPM, ensuring your applications can scale without interruption. Rate limit headers are included in each response to help you track your usage.",
-          <Terminal className="w-7 h-7 text-purple-500" />
-        );
-      case 'errors':
-        return renderPlaceholderContent(
-          "Error Handling",
-          "Our API returns standard HTTP status codes and detailed error messages to help you debug issues. Always implement proper error handling in your applications to ensure a smooth user experience.",
-          <X className="w-7 h-7 text-red-500" />
-        );
-      case 'text-completion':
-        return renderPlaceholderContent(
-          "Text Completion",
-          "The text completion endpoint allows you to generate text completions based on a provided prompt. This is useful for content generation, writing assistance, code completion, and more.",
-          <FileText className="w-7 h-7 text-green-500" />
-        );
-      case 'chat-completion':
-        return renderPlaceholderContent(
-          "Chat Completion",
-          "The chat completion endpoint is designed for conversational interactions. You can provide a history of messages and the API will generate an appropriate response, maintaining context throughout the conversation.",
-          <MessageSquare className="w-7 h-7 text-blue-500" />
-        );
-      case 'image-generation':
-        return renderPlaceholderContent(
-          "Image Generation",
-          "Generate images from text descriptions using our image generation endpoint. Perfect for creating illustrations, design concepts, or visual content for your applications.",
-          <ImageIcon className="w-7 h-7 text-pink-500" />
-        );
-      case 'stream-response':
-        return renderPlaceholderContent(
-          "Streaming Responses",
-          "For a more interactive experience, you can use streaming to receive portions of the response as they're generated, rather than waiting for the complete response.",
-          <Play className="w-7 h-7 text-orange-500" />
-        );
-      case 'using-plugins':
-        return renderPlaceholderContent(
-          "Using Plugins",
-          "Extend the capabilities of our API with plugins that enable specialized functionality like web browsing, data analysis, or integration with external services.",
-          <Terminal className="w-7 h-7 text-indigo-500" />
-        );
-      case 'sdks':
-        return renderPlaceholderContent(
-          "SDKs & Libraries",
-          "We offer a variety of client libraries to make integrating with our API easier in your preferred programming language. These SDKs handle authentication, error handling, and provide convenient methods for all API endpoints.",
-          <Code className="w-7 h-7 text-cyan-500" />
-        );
-      case 'faq':
-        return renderPlaceholderContent(
-          "Frequently Asked Questions",
-          "Find answers to common questions about our API, including billing, usage, model capabilities, and troubleshooting tips.",
-          <MessageSquare className="w-7 h-7 text-yellow-500" />
-        );
-      default:
-        return null;
-    }
-  };
-
-  // Navigation item component
-  const NavItem = ({ section, icon }: { section: string; icon: JSX.Element }) => {
-    const formattedSection = section.split('-').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-    
-    const isActive = activeSection === section;
-    
-    return (
-      <li>
-        <button
-          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left ${
-            isActive
-              ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
-          }`}
-          onClick={() => {
-            setActiveSection(section);
-            if (window.innerWidth < 768) {
-              setSidebarOpen(false);
-            }
-          }}
-        >
-          {icon}
-          {formattedSection}
-        </button>
-      </li>
-    );
-  };
-
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-10">
-        {/* Mobile sidebar toggle */}
-        <div className="md:hidden flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Documentation</h1>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-        </div>
-        
-        {/* Sidebar/Navigation */}
-        <aside className={`md:w-64 flex-shrink-0 ${sidebarOpen ? 'fixed inset-0 z-50 bg-white dark:bg-gray-900 p-4 overflow-auto' : 'hidden md:block'}`}>
-          {sidebarOpen && (
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Documentation</h2>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          )}
+      id: 'endpoints',
+      title: 'API Endpoints',
+      icon: <Globe className="w-4 h-4" />,
+      content: (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold mb-4">API Endpoints</h2>
           
-          {/* Search */}
-          <div className="relative mb-6">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+              <div className="text-sm font-mono bg-white dark:bg-gray-800 px-3 py-1 rounded border border-gray-200 dark:border-gray-700">
+                Stable API
+              </div>
+              <code className="text-sm">https://api.sree.shop/v1</code>
             </div>
-            <input
-              type="search"
-              className="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search documentation..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+            
+            <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+              <div className="text-sm font-mono bg-white dark:bg-gray-800 px-3 py-1 rounded border border-gray-200 dark:border-gray-700">
+                Beta API
+              </div>
+              <code className="text-sm">https://beta.sree.shop/v1</code>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold mb-4">Available Endpoints</h3>
+            
+            <div className="space-y-4">
+              {/* Chat Completions */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                      <MessageSquare className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Chat Completions</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Create chat completions</p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                    POST
+                  </div>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-blue-500 dark:border-blue-400">
+                  <code className="block text-sm font-bold text-blue-700 dark:text-blue-300">
+                    /chat/completions
+                  </code>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    <span className="text-blue-600 dark:text-blue-400 mr-2">⚙️</span> 
+                    Required Parameters
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 dark:text-blue-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">model</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">The ID of the model to use</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 dark:text-blue-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">messages</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">Array of messages in the conversation</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              {/* Image Generations */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/30">
+                      <FileCode className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Image Generations</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Generate images from text prompts</p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                    POST
+                  </div>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-green-500 dark:border-green-400">
+                  <code className="block text-sm font-bold text-green-700 dark:text-green-300">
+                    /images/generations
+                  </code>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    <span className="text-green-600 dark:text-green-400 mr-2">⚙️</span> 
+                    Parameters
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 dark:text-green-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">prompt</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">The text prompt to generate an image from</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded mb-2">
+                    <span className="text-green-600 dark:text-green-400 mr-2">📝</span> 
+                    Example
+                  </h5>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg text-sm font-mono border border-gray-200 dark:border-gray-700 shadow-sm">
+                    {`{
+  "prompt": "A beautiful sunset over mountains"
+}`}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Models */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30">
+                      <Cpu className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Models</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">List available models</p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                    GET/POST
+                  </div>
+                </div>
+                <div className="bg-purple-50 dark:bg-purple-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-purple-500 dark:border-purple-400">
+                  <code className="block text-sm font-bold text-purple-700 dark:text-purple-300">
+                    /models
+                  </code>
+                </div>
+              </div>
+              
+              {/* Usage */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/30">
+                      <Settings className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Usage</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Retrieve API usage statistics</p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                    POST
+                  </div>
+                </div>
+                <div className="bg-amber-50 dark:bg-amber-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-amber-500 dark:border-amber-400">
+                  <code className="block text-sm font-bold text-amber-700 dark:text-amber-300">
+                    /usage
+                  </code>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    <span className="text-amber-600 dark:text-amber-400 mr-2">⚙️</span> 
+                    Required Parameters
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber-600 dark:text-amber-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">api_key</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">Your API key</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded mb-2">
+                    <span className="text-amber-600 dark:text-amber-400 mr-2">📝</span> 
+                    Example
+                  </h5>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg text-sm font-mono border border-gray-200 dark:border-gray-700 shadow-sm">
+                    {`{
+  "api_key": "ddc-xxx"
+}`}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Uptime */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
+                      <Zap className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Uptime Check</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Check if a specific model is available</p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                    GET
+                  </div>
+                </div>
+                <div className="bg-indigo-50 dark:bg-indigo-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-indigo-500 dark:border-indigo-400">
+                  <code className="block text-sm font-bold text-indigo-700 dark:text-indigo-300">
+                    /uptime/&lt;model_id&gt;
+                  </code>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                    <span className="text-indigo-600 dark:text-indigo-400 mr-2">🔍</span> 
+                    Path Parameters
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-indigo-600 dark:text-indigo-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">model_id</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">The ID of the model to check</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-4">
+                  <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded mb-2">
+                    <span className="text-indigo-600 dark:text-indigo-400 mr-2">↩️</span> 
+                    Response
+                  </h5>
+                  <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 dark:text-green-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">200 OK</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">Model is available</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-600 dark:text-red-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">404</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">Model not supported</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-600 dark:text-red-400">•</span>
+                      <div>
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">503</code>
+                        <span className="text-gray-600 dark:text-gray-400 ml-2">No response from provider</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'streaming',
+      title: 'Streaming',
+      icon: <Settings className="w-4 h-4" />,
+      content: (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold mb-4">Streaming Responses</h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Get real-time streaming responses from the API. This is useful for creating chat interfaces with typing indicators.
+          </p>
+
+          <div className="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-xl mb-6">
+            <div className="flex items-start gap-3">
+              <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+              <div>
+                <h3 className="font-semibold mb-1">Streaming Tips</h3>
+                <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-2">
+                  <li>• Set <code className="bg-blue-100 dark:bg-blue-900/50 px-1.5 py-0.5 rounded">stream=True</code> in your request</li>
+                  <li>• Handle the stream chunks as they arrive</li>
+                  <li>• Remember to properly close the stream when done</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h3 className="font-semibold text-xl mb-4">Streaming Examples</h3>
+
+            <div className="grid sm:grid-cols-2 gap-6">
+              {/* Stable API */}
+              <div className="space-y-4">
+                <h4 className="font-medium text-lg">Stable API</h4>
+                <CodeEditor
+                  language={selectedLanguage}
+                  initialCode={codeExamples.streaming[selectedLanguage]}
+                  theme="dark"
+                />
+              </div>
+
+              {/* Beta API */}
+              <div className="space-y-4">
+                <h4 className="font-medium text-lg">Beta API</h4>
+                <CodeEditor
+                  language={selectedLanguage}
+                  initialCode={{
+                    python: `import openai
+
+client = OpenAI(
+    base_url="https://beta.sree.shop/v1",
+    api_key="ddc-beta-xxx"  # Replace with your beta API key
+)
+
+stream = client.chat.completions.create(
+    model="DeepSeek-R1",  # Beta model
+    messages=[
+        {"role": "user", "content": "Write a story"}
+    ],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content is not None:
+        print(chunk.choices[0].delta.content, end="")`,
+                    javascript: `import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://beta.sree.shop/v1',
+  apiKey: 'ddc-beta-xxx'  # Replace with your beta API key
+});
+
+const stream = await client.chat.completions.create({
+  model: 'DeepSeek-R1',  # Beta model
+  messages: [
+    { role: 'user', content: 'Write a story' }
+  ],
+  stream: true
+});
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk.choices[0].delta.content || '');
+}`,
+                    curl: `curl https://beta.sree.shop/v1/chat/completions \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ddc-beta-xxx" \\
+  -d '{
+    "model": "DeepSeek-R1",
+    "messages": [
+      {"role": "user", "content": "Write a story"}
+    ],
+    "stream": true
+  }'`
+                  }[selectedLanguage]}
+                  theme="dark"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2 justify-center">
+              {(['python', 'javascript', 'curl'] as const).map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => setSelectedLanguage(lang)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    selectedLanguage === lang
+                      ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'beta',
+      title: 'Beta API',
+      icon: <Rocket className="w-4 h-4" />,
+      content: (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold mb-4">Beta API Access</h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Get early access to new features and models with our Beta API.
+          </p>
+
+          <div className="grid sm:grid-cols-2 gap-4 mb-6">
+            <div className="p-4 rounded-xl bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-100 dark:border-yellow-800">
+              <div className="flex items-center gap-3 mb-3">
+                <Sparkles className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                <h3 className="font-semibold">Beta Features</h3>
+              </div>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-yellow-600" />
+                  <span>10 RPM rate limit</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-yellow-600" />
+                  <span>32K context window</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-yellow-600" />
+                  <span>Latest model versions</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="p-4 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-100 dark:border-purple-800">
+              <div className="flex items-center gap-3 mb-3">
+                <Cpu className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <h3 className="font-semibold">Beta Models</h3>
+              </div>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-purple-600" />
+                  <span>DeepSeek-R1</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-purple-600" />
+                  <span>DeepSeek-R1-Distill-Llama-70B</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-purple-600" />
+                  <span>o3-mini</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="font-semibold">Beta API Example</h3>
+            
+            <div className="flex gap-2 mb-4">
+              {(['python', 'javascript', 'curl'] as const).map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => setSelectedLanguage(lang)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    selectedLanguage === lang
+                      ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            <CodeEditor
+              language={selectedLanguage}
+              initialCode={codeExamples.beta[selectedLanguage]}
+              theme="dark"
             />
           </div>
-          
-          {/* Navigation lists */}
-          <nav>
-            <div className="mb-6">
-              <div className="flex items-center gap-2 px-3 mb-2 text-sm font-semibold text-gray-900 dark:text-white">
-                <Hash className="w-4 h-4" />
-                Getting Started
-              </div>
-              <ul className="space-y-1">
-                {filteredSections.filter(s => ['introduction', 'authentication', 'rate-limits', 'errors'].includes(s)).map(section => (
-                  <NavItem
-                    key={section}
-                    section={section}
-                    icon={
-                      section === 'introduction' ? <FileText className="w-4 h-4" /> :
-                      section === 'authentication' ? <Key className="w-4 h-4" /> :
-                      section === 'rate-limits' ? <Terminal className="w-4 h-4" /> :
-                      <X className="w-4 h-4" />
-                    }
-                  />
-                ))}
-              </ul>
-            </div>
-            
-            <div className="mb-6">
-              <div className="flex items-center gap-2 px-3 mb-2 text-sm font-semibold text-gray-900 dark:text-white">
-                <Hash className="w-4 h-4" />
-                API Endpoints
-              </div>
-              <ul className="space-y-1">
-                {filteredSections.filter(s => ['text-completion', 'chat-completion', 'image-generation', 'stream-response'].includes(s)).map(section => (
-                  <NavItem
-                    key={section}
-                    section={section}
-                    icon={
-                      section === 'text-completion' ? <FileText className="w-4 h-4" /> :
-                      section === 'chat-completion' ? <MessageSquare className="w-4 h-4" /> :
-                      section === 'image-generation' ? <ImageIcon className="w-4 h-4" /> :
-                      <Play className="w-4 h-4" />
-                    }
-                  />
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <div className="flex items-center gap-2 px-3 mb-2 text-sm font-semibold text-gray-900 dark:text-white">
-                <Hash className="w-4 h-4" />
-                Resources
-              </div>
-              <ul className="space-y-1">
-                {filteredSections.filter(s => ['using-plugins', 'sdks', 'faq'].includes(s)).map(section => (
-                  <NavItem
-                    key={section}
-                    section={section}
-                    icon={
-                      section === 'using-plugins' ? <Terminal className="w-4 h-4" /> :
-                      section === 'sdks' ? <Code className="w-4 h-4" /> :
-                      <MessageSquare className="w-4 h-4" />
-                    }
-                  />
-                ))}
-              </ul>
-            </div>
-            
-            {/* External links */}
-            <div className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <div className="px-3 mb-2 text-sm font-semibold text-gray-900 dark:text-white">
-                External Resources
-              </div>
-              <ul className="space-y-1">
-                <li>
-                  <a
-                    href="https://github.com/SreejanPersonal/ai4free-wrapper"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
+        </div>
+      )
+    }
+  ];
+
+  const filteredSections = sections.filter(section =>
+    section.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen py-16">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6">
+            <BookOpen className="w-4 h-4" />
+            <span>Developer Documentation</span>
+          </div>
+          <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            API Documentation
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Everything you need to know about integrating with our API
+          </p>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="lg:w-64 flex-shrink-0">
+            <div className="sticky top-20">
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search documentation..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
-                    <Github className="w-4 h-4" />
-                    GitHub Repository
-                    <ExternalLink className="w-3 h-3 ml-1" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://t.me/devsdocode"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
+              <nav className="space-y-1">
+                {filteredSections.map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSection(section.id)}
+                    className={`w-full px-4 py-2 rounded-lg text-left flex items-center gap-3 transition-colors ${
+                      activeSection === section.id
+                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400'
+                    }`}
                   >
-                    <MessageSquare className="w-4 h-4" />
-                    Community Support
-                    <ExternalLink className="w-3 h-3 ml-1" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/models"
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
-                  >
-                    <Database className="w-4 h-4" />
-                    Available Models
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </nav>
-        </aside>
-        
-        {/* Main Content */}
-        <div className="flex-1">
-          <div className="hidden md:block">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-4">API Documentation</h1>
-              <p className="text-xl text-gray-600 dark:text-gray-400">
-                Everything you need to know to integrate with our AI API.
-              </p>
+                    {section.icon}
+                    <span className="text-sm font-medium">{section.title}</span>
+                  </button>
+                ))}
+              </nav>
             </div>
           </div>
-          
-          {/* Version info */}
-          <div className="flex items-center gap-3 mb-8 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-100 dark:border-blue-800">
-            <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-800">
-              <Lock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div>
-              <div className="font-medium">Current API Version: v1</div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Documentation for Sree.shop API v1. All endpoints are accessible at https://api.sree.shop/v1/
-              </p>
+
+          <div className="flex-1">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-xl border border-gray-100 dark:border-gray-700">
+              {sections.find(s => s.id === activeSection)?.content}
             </div>
           </div>
-          
-          {/* Documentation Content */}
-          {renderContent()}
         </div>
       </div>
     </div>
