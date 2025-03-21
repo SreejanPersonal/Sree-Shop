@@ -24,7 +24,8 @@ import {
   Clock,
   Activity,
   BarChart2,
-  PieChart as PieChartIcon
+  PieChart as PieChartIcon,
+  ArrowRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -256,7 +257,7 @@ function Dashboard() {
             {
               icon: <Zap className="w-5 h-5 text-amber-500" />,
               label: "Rate Limit",
-              value: "3 RPM",
+              value: "10 RPM",
               subtext: "Free Tier",
               gradient: "from-amber-500/10 to-orange-500/10"
             }
@@ -397,7 +398,7 @@ function Dashboard() {
                       {usageData?.input_tokens.toLocaleString() || '0'}
                     </div>
                     <div className="text-sm text-light-text-tertiary dark:text-dark-text-tertiary">
-                      {((usageData?.input_tokens || 0) / ((usageData?.input_tokens || 0) + (usageData?.output_tokens || 0)) * 100).toFixed(1)}% of total
+                      {((usageData?.input_tokens || 0) / Math.max(1, ((usageData?.input_tokens || 0) + (usageData?.output_tokens || 0))) * 100).toFixed(1)}% of total
                     </div>
                   </div>
                   <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 dark:from-purple-500/20 dark:to-pink-500/20">
@@ -409,7 +410,7 @@ function Dashboard() {
                       {usageData?.output_tokens.toLocaleString() || '0'}
                     </div>
                     <div className="text-sm text-light-text-tertiary dark:text-dark-text-tertiary">
-                      {((usageData?.output_tokens || 0) / ((usageData?.input_tokens || 0) + (usageData?.output_tokens || 0)) * 100).toFixed(1)}% of total
+                      {((usageData?.output_tokens || 0) / Math.max(1, ((usageData?.input_tokens || 0) + (usageData?.output_tokens || 0))) * 100).toFixed(1)}% of total
                     </div>
                   </div>
                 </div>

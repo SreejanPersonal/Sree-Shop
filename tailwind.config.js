@@ -49,11 +49,41 @@ export default {
         'slideUp': 'slideUpFade 0.6s ease-out forwards',
         'float': 'softFloat 3s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite',
+        'border-glow': 'border-glow 2s ease-in-out infinite',
+        'border-shine': 'border-shine 4s linear infinite',
+        'shimmer': 'shimmer 2.5s linear infinite',
       },
       keyframes: {
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+        },
+        'border-glow': {
+          '0%, 100%': {
+            'border-color': 'rgba(147, 51, 234, 0.5)', /* Purple glow */
+          },
+          '50%': {
+            'border-color': 'rgba(59, 130, 246, 0.5)', /* Blue glow */
+          }
+        },
+        'border-shine': {
+          '0%': {
+            backgroundPosition: '0% 50%'
+          },
+          '50%': {
+            backgroundPosition: '100% 50%'
+          },
+          '100%': {
+            backgroundPosition: '0% 50%'
+          }
+        },
+        'shimmer': {
+          '0%': {
+            backgroundPosition: '-200% 0'
+          },
+          '100%': {
+            backgroundPosition: '200% 0'
+          }
         },
         blob: {
           '0%': { transform: 'translate(0, 0) scale(1)' },
@@ -71,17 +101,37 @@ export default {
             transform: 'translateY(0)'
           },
         },
+        sparkle: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' }
+        },
+        'gradient-x': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
+        },
+        pulse: {
+          '0%, 100%': { opacity: 1 },
+          '50%': { opacity: .5 }
+        },
       },
       backgroundImage: {
-        'gradient-premium': 'linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to))',
+        'gradient-premium': 'linear-gradient(45deg, #2C5EBD, #7B4397, #2C5EBD)',
+        'gradient-shine': 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
       },
       backdropBlur: {
         'premium': '12px',
       },
       boxShadow: {
-        'premium-sm': '0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
-        'premium-lg': '0 4px 12px -2px rgba(0, 0, 0, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.1)',
-        'premium-xl': '0 8px 16px -4px rgba(0, 0, 0, 0.15), 0 6px 12px -3px rgba(0, 0, 0, 0.1)',
+        'premium-sm': '0 2px 8px -1px rgba(147, 51, 234, 0.1), 0 2px 4px -2px rgba(59, 130, 246, 0.1)',
+        'premium-lg': '0 4px 12px -2px rgba(147, 51, 234, 0.15), 0 4px 8px -2px rgba(59, 130, 246, 0.1)',
+        'premium-xl': '0 8px 16px -4px rgba(147, 51, 234, 0.2), 0 6px 12px -3px rgba(59, 130, 246, 0.15)',
+        'premium-glow': '0 0 15px rgba(147, 51, 234, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)',
       },
       transitionProperty: {
         'all': 'all',

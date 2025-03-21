@@ -15,7 +15,8 @@ import {
   FileCode,
   Zap,
   MessageSquare,
-  Cpu
+  Cpu,
+  Image
 } from 'lucide-react';
 import CodeEditor from '../components/CodeEditor';
 
@@ -38,6 +39,51 @@ function Documentation() {
   const [selectedLanguage, setSelectedLanguage] = useState<'python' | 'javascript' | 'curl'>('python');
 
   const codeExamples: Record<string, CodeExample> = {
+    imageGen: {
+      python: `import openai
+
+client = OpenAI(
+    base_url="https://beta.sree.shop/v1",
+    api_key="ddc-beta-xxx"  # Replace with your beta API key
+)
+
+response = client.images.generate(
+    model="Provider-5/flux-pro",
+    prompt="A beautiful sunset over mountains with vibrant colors",
+    n=1,  # Number of images to generate
+    size="1024x1024"  # Image size
+)
+
+# Get the image URL
+image_url = response.data[0].url
+print(f"Generated image URL: {image_url}")`,
+      javascript: `import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://beta.sree.shop/v1',
+  apiKey: 'ddc-beta-xxx'  // Replace with your beta API key
+});
+
+const response = await client.images.generate({
+  model: 'Provider-5/flux-pro',
+  prompt: 'A beautiful sunset over mountains with vibrant colors',
+  n: 1,  // Number of images to generate
+  size: '1024x1024'  // Image size
+});
+
+// Get the image URL
+const imageUrl = response.data[0].url;
+console.log(\`Generated image URL: \${imageUrl}\`);`,
+      curl: `curl https://beta.sree.shop/v1/images/generations \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ddc-beta-xxx" \\
+  -d '{
+    "model": "Provider-5/flux-pro",
+    "prompt": "A beautiful sunset over mountains with vibrant colors",
+    "n": 1,
+    "size": "1024x1024"
+  }'`
+    },
     basic: {
       python: `import openai
 
@@ -709,6 +755,229 @@ console.log(response.choices[0].message.content);`,
                     </li>
                   </ul>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'image-generation',
+      title: 'Image Generation',
+      icon: <Image className="w-4 h-4" />,
+      content: (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold mb-4">Image Generation</h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Generate high-quality images from text prompts using our image generation API.
+          </p>
+
+          <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-xl mb-6">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+              <div>
+                <h3 className="font-semibold mb-1">Beta Feature</h3>
+                <p className="text-sm text-green-800 dark:text-green-200">
+                  Image generation is currently available through our Beta API. You'll need a beta API key to access this feature.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h3 className="font-semibold text-xl mb-4">Basic Usage</h3>
+            
+            <div className="flex gap-2 mb-4">
+              {(['python', 'javascript', 'curl'] as const).map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => setSelectedLanguage(lang)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    selectedLanguage === lang
+                      ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            <CodeEditor
+              language={selectedLanguage}
+              initialCode={codeExamples.imageGen[selectedLanguage]}
+              theme="dark"
+            />
+          </div>
+
+          <div className="space-y-4 mt-8">
+            <h3 className="font-semibold text-xl mb-4">API Reference</h3>
+            
+            <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/30">
+                    <Image className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">Image Generations</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Generate images from text prompts</p>
+                  </div>
+                </div>
+                <div className="text-sm font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
+                  POST
+                </div>
+              </div>
+              <div className="bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-lg mb-5 border-l-4 border-green-500 dark:border-green-400">
+                <code className="block text-sm font-bold text-green-700 dark:text-green-300">
+                  /images/generations
+                </code>
+              </div>
+              
+              <div className="space-y-2 mb-4">
+                <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                  <span className="text-green-600 dark:text-green-400 mr-2">⚙️</span> 
+                  Required Parameters
+                </h5>
+                <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 dark:text-green-400">•</span>
+                    <div>
+                      <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">model</code>
+                      <span className="text-gray-600 dark:text-gray-400 ml-2">The ID of the model to use (e.g., "Provider-5/flux-pro")</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 dark:text-green-400">•</span>
+                    <div>
+                      <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">prompt</code>
+                      <span className="text-gray-600 dark:text-gray-400 ml-2">The text prompt to generate an image from</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="space-y-2 mb-4">
+                <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                  <span className="text-green-600 dark:text-green-400 mr-2">⚙️</span> 
+                  Optional Parameters
+                </h5>
+                <ul className="text-sm space-y-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 dark:text-green-400">•</span>
+                    <div>
+                      <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">n</code>
+                      <span className="text-gray-600 dark:text-gray-400 ml-2">Number of images to generate (default: 1)</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 dark:text-green-400">•</span>
+                    <div>
+                      <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">size</code>
+                      <span className="text-gray-600 dark:text-gray-400 ml-2">Size of the generated images. Options: "256x256", "512x512", "1024x1024"</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 dark:text-green-400">•</span>
+                    <div>
+                      <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">response_format</code>
+                      <span className="text-gray-600 dark:text-gray-400 ml-2">The format in which the generated images are returned. Options: "url", "b64_json"</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="mt-4">
+                <h5 className="font-medium text-sm inline-flex items-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded mb-2">
+                  <span className="text-green-600 dark:text-green-400 mr-2">↩️</span> 
+                  Response Format
+                </h5>
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg text-sm font-mono border border-gray-200 dark:border-gray-700 shadow-sm">
+                  {`{
+  "created": 1684161139,
+  "data": [
+    {
+      "url": "https://beta.sree.shop/images/generated/example-image-1.png"
+    }
+  ]
+}`}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-4 mt-8">
+            <h3 className="font-semibold text-xl mb-4">Advanced Examples</h3>
+            
+            <div className="grid sm:grid-cols-1 gap-6">
+              <div className="space-y-4">
+                <h4 className="font-medium text-lg">Multiple Images</h4>
+                <CodeEditor
+                  language={selectedLanguage}
+                  initialCode={{
+                    python: `import openai
+
+client = OpenAI(
+    base_url="https://beta.sree.shop/v1",
+    api_key="ddc-beta-xxx"  # Replace with your beta API key
+)
+
+response = client.images.generate(
+    model="Provider-5/flux-pro",
+    prompt="A futuristic city with flying cars and tall skyscrapers",
+    n=3,  # Generate 3 images
+    size="512x512"
+)
+
+# Print all image URLs
+for i, image in enumerate(response.data):
+    print(f"Image {i+1}: {image.url}")`,
+                    javascript: `import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://beta.sree.shop/v1',
+  apiKey: 'ddc-beta-xxx'  // Replace with your beta API key
+});
+
+const response = await client.images.generate({
+  model: 'Provider-5/flux-pro',
+  prompt: 'A futuristic city with flying cars and tall skyscrapers',
+  n: 3,  // Generate 3 images
+  size: '512x512'
+});
+
+// Print all image URLs
+response.data.forEach((image, i) => {
+  console.log(\`Image \${i+1}: \${image.url}\`);
+});`,
+                    curl: `curl https://beta.sree.shop/v1/images/generations \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ddc-beta-xxx" \\
+  -d '{
+    "model": "Provider-5/flux-pro",
+    "prompt": "A futuristic city with flying cars and tall skyscrapers",
+    "n": 3,
+    "size": "512x512"
+  }'`
+                  }[selectedLanguage]}
+                  theme="dark"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-xl mt-8">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+              <div>
+                <h3 className="font-semibold mb-1">Best Practices</h3>
+                <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-2">
+                  <li>• Use detailed, descriptive prompts for better results</li>
+                  <li>• Specify artistic styles if you want a particular look</li>
+                  <li>• Include details about lighting, perspective, and composition</li>
+                  <li>• For best quality, use the 1024x1024 size option</li>
+                  <li>• Store generated images on your own servers for production use</li>
+                </ul>
               </div>
             </div>
           </div>

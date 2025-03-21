@@ -1,12 +1,34 @@
 import { useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { useMemo } from 'react';
+import { Crown, Sparkles } from 'lucide-react';
 import freeModels from '../utility/models/freeModels.json';
 import betaModels from '../utility/models/betaModels.json';
 import paidModels from '../utility/models/paidModels.json';
 import ModelInfoModal from '../models/ModelInfoModal';
 import ProviderDropdown from '../models/ProviderDropdown';
 import ModelCard from '../models/ModelCard';
+
+function isPremiumModel(model: string): boolean {
+  // Claude models 3.5 and above
+  if (model.includes('claude-3.5-sonnet') || 
+      model.includes('claude-3.7') || 
+      model.includes('claude-3-7')) return true;
+  
+  // OpenAI 'o' Series and GPT-4o
+  if (model.includes('o3-') || model.includes('gpt-4o')) return true;
+  
+  // Gemini 2.0 models
+  if (model.includes('gemini-1.5')) return true;
+  
+  // Llama 3.3 models
+  if (model.includes('llama-3.3') || model.includes('Llama-3.3')) return true;
+  
+  // Deepseek R1 models
+  if (model.includes('deepseek-r1')) return true;
+
+  return false;
+}
 
 function getProviderFromModel(model: string) {
   if (model.toLowerCase().includes('deepseek') || model === 'DeepSeekV3') return 'DeepSeek';
@@ -65,9 +87,50 @@ function Models() {
     filterModels(betaModels)
   , [searchTerm, selectedProvider]);
 
-  const filteredPaidModels = useMemo(() => 
-    filterModels(paidModels)
-  , [searchTerm, selectedProvider]);
+  const filteredPaidModels = useMemo(() => {
+    const filtered = filterModels(paidModels);
+    
+    // Get premium and standard models
+    const premium = filtered.filter(isPremiumModel);
+    const standard = filtered.filter(m => !isPremiumModel(m));
+
+    // Sort premium models in specific order
+    const sortedPremium = [];
+    
+    // 1. Claude models (3.5 and above)
+    sortedPremium.push(
+      ...premium.filter(m => m.includes('claude-3.5-sonnet')),
+      ...premium.filter(m => m.includes('claude-3.7') || m.includes('claude-3-7'))
+    );
+    
+    // 2. OpenAI models
+    sortedPremium.push(
+      ...premium.filter(m => m.includes('o3-') || m.includes('gpt-4o'))
+    );
+    
+    // 3. Gemini models
+    sortedPremium.push(
+      ...premium.filter(m => m.includes('gemini-1.5'))
+    );
+    
+    // 4. Llama models
+    sortedPremium.push(
+      ...premium.filter(m => m.includes('llama-3.3') || m.includes('Llama-3.3'))
+    );
+    
+    // 5. Deepseek R1 models
+    sortedPremium.push(
+      ...premium.filter(m => m.includes('deepseek-r1'))
+    );
+
+    // Remove duplicates
+    const uniquePremium = Array.from(new Set(sortedPremium));
+
+    return {
+      premium: uniquePremium,
+      standard: standard
+    };
+  }, [searchTerm, selectedProvider]);
 
   const betaImageModels = useMemo(() => 
     filteredBetaModels.filter(model => isImageModel(model))
@@ -77,7 +140,10 @@ function Models() {
     filteredBetaModels.filter(model => !isImageModel(model))
   , [filteredBetaModels]);
 
-  const noResults = filteredFreeModels.length === 0 && filteredBetaModels.length === 0 && filteredPaidModels.length === 0;
+  const noResults = filteredFreeModels.length === 0 && 
+    filteredBetaModels.length === 0 && 
+    filteredPaidModels.premium.length === 0 && 
+    filteredPaidModels.standard.length === 0;
 
   return (
     <div className="py-16 px-4">
@@ -235,35 +301,83 @@ function Models() {
         )}
 
         {/* Pro Tier Section */}
-        {filteredPaidModels.length > 0 && (
-          <div className="relative">
+        {(filteredPaidModels.premium.length > 0 || filteredPaidModels.standard.length > 0) && (
+          <div className="relative mb-16">
             <div className="pt-6 pb-4 mb-8">
               <h2 className="text-3xl font-bold text-purple-800 dark:text-purple-400">Pro Tier</h2>
-              <div className="flex items-center gap-2 mt-2">
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Access our comprehensive collection of advanced language models
+              </p>
+              <div className="flex items-center gap-2 mt-4">
                 <span className="px-3 py-1 text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 rounded-full">
-                  {filteredPaidModels.length} models
+                  {filteredPaidModels.premium.length + filteredPaidModels.standard.length} models
                 </span>
+                {filteredPaidModels.premium.length > 0 && (
+                  <span className="px-3 py-1 text-sm font-medium bg-gradient-premium text-white rounded-full shadow-premium-sm">
+                    {filteredPaidModels.premium.length} Premium
+                  </span>
+                )}
               </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-              {filteredPaidModels.map((model: string) => (
-                <ModelCard 
-                  key={model} 
-                  model={model} 
-                  isPro={true} 
-                  isBeta={false} 
-                  provider={getProviderFromModel(model)}
-                  onClick={() => setSelectedModel({
-                    name: model,
-                    provider: getProviderFromModel(model),
-                    isPro: true,
-                    isBeta: false
-                  })}
-                />
-              ))}
-            </div>
+
+            {/* Premium Models */}
+            {filteredPaidModels.premium.length > 0 && (
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent inline-flex items-center gap-2">
+                  <Crown className="w-6 h-6" />
+                  State of the Art Models
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+                  {filteredPaidModels.premium.map((model: string) => (
+                    <ModelCard 
+                      key={model} 
+                      model={model} 
+                      isPro={true} 
+                      isBeta={false}
+                      isPremium={true}
+                      provider={getProviderFromModel(model)}
+                      onClick={() => setSelectedModel({
+                        name: model,
+                        provider: getProviderFromModel(model),
+                        isPro: true,
+                        isBeta: false
+                      })}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Standard Pro Models */}
+            {filteredPaidModels.standard.length > 0 && (
+              <div>
+                {filteredPaidModels.premium.length > 0 && (
+                  <h3 className="text-xl font-semibold mb-4 text-purple-800 dark:text-purple-400">
+                    Additional Pro Models
+                  </h3>
+                )}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+                  {filteredPaidModels.standard.map((model: string) => (
+                    <ModelCard 
+                      key={model} 
+                      model={model} 
+                      isPro={true} 
+                      isBeta={false}
+                      provider={getProviderFromModel(model)}
+                      onClick={() => setSelectedModel({
+                        name: model,
+                        provider: getProviderFromModel(model),
+                        isPro: true,
+                        isBeta: false
+                      })}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
+
 
         {/* Modal */}
         {selectedModel && (
