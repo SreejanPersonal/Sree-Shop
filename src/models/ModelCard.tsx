@@ -6,11 +6,12 @@ interface ModelCardProps {
   model: string;
   isPro: boolean;
   isBeta: boolean;
+  isPremium?: boolean;
   provider: string;
   onClick: () => void;
 }
 
-const ModelCard: React.FC<ModelCardProps> = ({ model, isPro, isBeta, provider, onClick }) => {
+const ModelCard: React.FC<ModelCardProps> = ({ model, isPro, isBeta, isPremium = false, provider, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const modelName = model.split('/').pop() || model;
   const isImageModel = model.includes("flux-");
@@ -53,7 +54,22 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isPro, isBeta, provider, o
 
   // Get tier-specific styling
   const getTierStyles = () => {
-    if (isBeta) {
+    if (isPro && isPremium) {
+      return {
+        wrapper: "before:absolute before:inset-0 before:rounded-xl before:p-[2px] before:bg-gradient-premium before:animate-border-shine before:content-['']",
+        gradientHeader: "bg-gradient-to-r from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20",
+        borderColor: "border-transparent",
+        hoverBorderColor: "group-hover:border-transparent",
+        shadowColor: "shadow-premium-glow",
+        iconBg: "bg-gradient-premium",
+        iconColor: "text-white",
+        badgeBg: "bg-gradient-premium",
+        badgeText: "text-white",
+        featureIconColor: "text-indigo-600 dark:text-indigo-400",
+        accentColor: "bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20",
+        cardBg: "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm" // Semi-transparent background
+      };
+    } else if (isBeta) {
       return {
         gradientHeader: "bg-gradient-to-r from-yellow-100 to-amber-200 dark:from-yellow-900/40 dark:to-amber-800/40",
         borderColor: "border-yellow-300 dark:border-yellow-700",
@@ -102,12 +118,12 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isPro, isBeta, provider, o
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`group relative w-full text-left bg-white dark:bg-gray-800 rounded-xl overflow-hidden 
-        border-2 ${styles.borderColor} ${styles.hoverBorderColor} 
+      className={`group relative w-full text-left rounded-xl overflow-hidden 
         transition-all duration-300 transform hover:-translate-y-1 
-        shadow-sm ${styles.shadowColor} hover:shadow-xl`}
+        shadow-sm hover:shadow-xl ${styles.wrapper}`}
     >
-      {/* Decorative corner accent */}
+      <div className={`relative w-full h-full ${styles.cardBg}`}>
+        {/* Decorative corner accent */}
       <div className="absolute top-0 right-0 w-12 h-12 overflow-hidden">
         <div className={`absolute transform rotate-45 translate-x-4 -translate-y-1 w-16 h-3 ${
           isBeta ? 'bg-yellow-300 dark:bg-yellow-700' : 
@@ -138,8 +154,17 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isPro, isBeta, provider, o
               </div>
             </div>
           </div>
-          <div className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${styles.badgeBg} ${styles.badgeText} shadow-sm`}>
-            {isBeta ? 'Beta' : isPro ? 'Pro' : 'Free'}
+          {/* Badge with sparkling effect for premium models */}
+          <div className={`${isPro && isPremium ? 'relative overflow-hidden' : ''}`}>
+            <div className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${styles.badgeBg} ${styles.badgeText} shadow-sm`}>
+              {isBeta ? 'Beta' : isPro ? 'Pro' : 'Free'}
+            </div>
+            {isPro && isPremium && (
+              <>
+                <div className="absolute inset-0 bg-gradient-shine opacity-50 animate-shimmer bg-[length:200%_100%]"></div>
+                <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-yellow-400 animate-pulse" />
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -188,6 +213,7 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isPro, isBeta, provider, o
           <div className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 ${isHovered ? 'transform translate-y-0.5' : ''}`}>
             <ChevronDown className="w-4 h-4" />
           </div>
+        </div>
         </div>
       </div>
     </button>

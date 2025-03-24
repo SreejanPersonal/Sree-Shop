@@ -8,9 +8,6 @@ import {
   Database, 
   ArrowRight, 
   Youtube, 
-  ExternalLink,
-  ChevronRight,
-  ChevronLeft,
   ChevronUp,
   ChevronDown,
   Cloud,
@@ -21,26 +18,25 @@ import {
   Server,
   Zap
 } from 'lucide-react';
-import { getAllPosts, getAllCategories, urlFor, formatDate } from '../utility/sanity';
+import { getAllPosts, getAllCategories, formatDate } from '../utility/contentLoader';
 
 // Interface for content card data
 interface ContentCard {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   icon: string;
   iconColor: string;
   publishedAt: string;
   category: string;
-  slug: {
-    current: string;
-  };
-  mainImage?: any;
+  slug: string;
+  mainImage?: string;
 }
 
 const ContentHub = () => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [isIntersecting, setIsIntersecting] = useState<Record<string, boolean>>({});
+  const [isInitialRender, setIsInitialRender] = useState(true);
   const [showAllTags, setShowAllTags] = useState(false);
   const [contentCards, setContentCards] = useState<ContentCard[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -48,39 +44,39 @@ const ContentHub = () => {
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const MAX_VISIBLE_TAGS = 6;
 
-  // Fetch content cards from Sanity
+  // Fetch content cards
   useEffect(() => {
     async function fetchContent() {
       try {
         setIsLoading(true);
-        console.log('Fetching posts from Sanity...');
+        console.log('Loading posts from content directory...');
         const posts = await getAllPosts();
-        console.log('Posts received:', posts);
+        console.log('Posts loaded:', posts);
         
         if (!posts || posts.length === 0) {
-          console.warn('No posts returned from Sanity');
-          setIsLoading(false);
+          console.warn('No posts found in content directory');
+        setIsLoading(false);
+        // Set a small timeout to ensure all cards are visible on initial render
+        setTimeout(() => setIsInitialRender(false), 100);
           return;
         }
         
         setContentCards(posts);
         
-        // Extract unique categories
-        const categoryList = Array.from(new Set(posts.map((post: ContentCard) => post.category).filter(Boolean)));
-        console.log('Categories extracted:', categoryList);
-        setCategories(categoryList as string[]);
+        // Extract unique categories from posts
+        const uniqueCategories = Array.from(new Set(posts.map(post => post.category)));
+        setCategories(uniqueCategories);
         
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching content:', error);
-        alert('Error fetching content. See console for details.');
+        console.error('Error loading content:', error);
+        alert('Error loading content. See console for details.');
         setIsLoading(false);
       }
     }
     
     fetchContent();
   }, []);
-
 
   // Filter content cards based on active filter
   const filteredCards = activeFilter 
@@ -233,17 +229,17 @@ const ContentHub = () => {
               ))
             ) : filteredCards.map((card, index) => (
               <div 
-                key={card._id}
-                ref={el => cardRefs.current[card._id] = el}
-                data-id={card._id}
+                key={card.id}
+                ref={el => cardRefs.current[card.id] = el}
+                data-id={card.id}
                 className={`group relative transform transition-all duration-700 ${
-                  isIntersecting[card._id] 
+                  isInitialRender || isIntersecting[card.id] 
                     ? 'translate-y-0 opacity-100 rotate-0' 
                     : 'translate-y-12 opacity-0 rotate-2'
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <Link to={`/content/${card.slug.current}`} className="block h-full perspective-1000">
+                <Link to={`/content/${card.slug}`} className="block h-full perspective-1000">
                   <div className="absolute inset-0 bg-gradient-to-br from-light-bg-tertiary to-light-bg-quaternary dark:from-dark-bg-tertiary dark:to-dark-bg-quaternary rounded-2xl transform transition-all duration-500 group-hover:scale-[0.98]"></div>
                   
                   {/* Card glow effect */}

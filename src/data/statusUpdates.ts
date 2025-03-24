@@ -9,7 +9,62 @@ interface StatusUpdate {
 }
 
 export const statusUpdates: StatusUpdate[] = [
-  // Current Status (Beta API) - Mar 11
+  // Current Status (Beta API) - Mar 21
+  {
+    id: 'beta-update-7',
+    date: 'Mar 21',
+    time: '09:01 IST',
+    message:'The dashboard issue has been resolved. The white screen that was appearing has been fixed, and the dashboard is now fully functional. Thank you for your patience and understanding.',
+    type: 'positive',
+    models: ['Dashboard'],
+    apiType: 'beta'
+  },
+  {
+    id: 'beta-update-7',
+    date: 'Mar 21',
+    time: '08:30 IST',
+    message: 'API key generation has been fixed and now everything is working smoothly.',
+    type: 'positive',
+    models: ['API Key'],
+    apiType: 'beta'
+  },
+  {
+    id: 'beta-update-6',
+    date: 'Mar 21',
+    time: '08:25 IST',
+    message: 'Providers 1, 5, and 6 are perfectly working with optimal performance.',
+    type: 'positive',
+    models: ['Provider 1', 'Provider 5', 'Provider 6'],
+    apiType: 'beta'
+  },
+  {
+    id: 'beta-update-5',
+    date: 'Mar 21',
+    time: '08:20 IST',
+    message: 'Provider 3 is experiencing extreme instability. Our team is working to resolve the issues.',
+    type: 'negative',
+    models: ['Provider 3'],
+    apiType: 'beta'
+  },
+  {
+    id: 'beta-update-4',
+    date: 'Mar 21',
+    time: '08:15 IST',
+    message: 'Providers 2 and 4 have been terminated and are no longer available.',
+    type: 'negative',
+    models: ['Provider 2', 'Provider 4'],
+    apiType: 'beta'
+  },
+  {
+    id: 'beta-update-3-1',
+    date: 'Mar 19',
+    time: '14:30 IST',
+    message: 'New image generation models have been added including flux-pro, flux-dev, and more.',
+    type: 'positive',
+    models: ['flux-pro', 'flux-dev', 'flux-schnell', 'sana-6b'],
+    apiType: 'beta'
+  },
+  // Previous Status (Beta API) - Mar 11
   {
     id: 'beta-update-3',
     date: 'Mar 11',
@@ -25,7 +80,7 @@ export const statusUpdates: StatusUpdate[] = [
     time: '08:10 IST',
     message: 'The Beta API is now functional. Providrer 5 has been included',
     type: 'positive',
-    models: ['ALL'],
+    models: ['Provider 5'],
     apiType: 'beta'
   },
   {

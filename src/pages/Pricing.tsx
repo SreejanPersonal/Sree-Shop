@@ -1,217 +1,15 @@
-
 import React, { useState } from 'react';
-import { Check, ArrowRight, ChevronDown, Info, Rocket, Shield, Sparkles, Coffee, ChevronUp } from 'lucide-react';
+import { Check, ArrowRight, ChevronDown, Info, Rocket, Shield, Sparkles, Crown, AlertTriangle, ChevronUp } from 'lucide-react';
 import ApiKeyModal from '../components/ApiKeyModal';
 import ContactModal from '../components/ContactModal';
 import BetaAccessModal from '../components/BetaAccessModal';
-import betaModels from '../utility/models/betaModels.json';
-import freeModels from '../utility/models/freeModels.json';
-
-interface FAQItem {
-  question: string;
-  answer: string;
-}
-
-interface TooltipProps {
-  content: string;
-  children: React.ReactNode;
-}
-
-const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return (
-    <div className="relative inline-flex items-center group">
-      <div
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
-        className="cursor-help"
-      >
-        {children}
-      </div>
-      {isVisible && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 text-sm z-50">
-          <div className="relative">
-            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white dark:bg-gray-800 border-r border-b border-gray-200 dark:border-gray-700 transform rotate-45"></div>
-            {content}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const faqs: FAQItem[] = [
-  {
-    question: "What's included in the Free tier?",
-    answer: "The Free tier includes unlimited API access with a 3 RPM rate limit, 4K context window, and access to 100+ AI models. Perfect for personal projects and testing."
-  },
-  {
-    question: "How much does the Pro tier cost?",
-    answer: "Our Pro tier costs just the price of a coffee! This is incredibly cost-effective compared to OpenAI's $200/month plan, saving you up to 90% while providing access to all premium features."
-  },
-  {
-    question: "Can I upgrade or downgrade at any time?",
-    answer: "Yes! You can switch between tiers at any time. Your new tier benefits will be available immediately after upgrading."
-  },
-  {
-    question: "Do you offer refunds?",
-    answer: "No, we do not offer refunds. However, you can try our Free tier indefinitely before upgrading to ensure our service meets your needs."
-  },
-  {
-    question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards, PayPal, and cryptocurrency payments for maximum flexibility."
-  }
-];
 
 function Pricing() {
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isBetaModalOpen, setIsBetaModalOpen] = useState(false);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
-  const [expandedBetaSection, setExpandedBetaSection] = useState(true);
-  const [expandedProDetailsSection, setExpandedProDetailsSection] = useState(true);
-
-  const toggleBetaSection = () => {
-    setExpandedBetaSection(!expandedBetaSection);
-  };
-
-  const toggleProDetailsSection = () => {
-    setExpandedProDetailsSection(!expandedProDetailsSection);
-  };
-
-  const tiers = [
-    {
-      name: "Free",
-      icon: <Sparkles className="w-6 h-6" />,
-      price: "$0",
-      period: "forever",
-      highlight: "Perfect for personal projects",
-      description: "Get started with unlimited access",
-      subOptions: [
-        {
-          name: "Stable API",
-          icon: <Shield className="w-5 h-5" />,
-          features: [
-            {
-              text: "3 requests per minute",
-              tooltip: "Rate limit of 3 requests per minute, may reduce during high traffic"
-            },
-            {
-              text: "4K tokens per response",
-              tooltip: "Maximum of 4,000 tokens per API response"
-            },
-            {
-              text: "4K context window",
-              tooltip: "Process up to 4,000 tokens of context in each request"
-            },
-            {
-              text: `${freeModels.length}+ AI models access`,
-              tooltip: `Access to ${freeModels.length}+ AI models including selected gpt-4o and Claude models`
-            },
-            {
-              text: "Production ready",
-              tooltip: "Stable environment suitable for production use cases"
-            },
-            {
-              text: "Community support",
-              tooltip: "Get help from our active community on Telegram"
-            }
-          ]
-        },
-        {
-          name: "Beta API",
-          icon: <Rocket className="w-5 h-5" />,
-          features: [
-            {
-              text: "10 requests per minute",
-              tooltip: "Higher rate limit of 10 requests per minute for development"
-            },
-            {
-              text: "8K tokens per response",
-              tooltip: "Double the tokens per response compared to Stable API"
-            },
-            {
-              text: "32K context window",
-              tooltip: "Extended context window for more complex tasks"
-            },
-            {
-              text: `${betaModels.length}+ cutting-edge models`,
-              tooltip: `Access to ${betaModels.length}+ latest AI models including experimental versions`
-            },
-            {
-              text: "Early access to new features",
-              tooltip: "Be the first to try new capabilities and improvements"
-            },
-            {
-              text: "Dashboard access",
-              tooltip: "Monitor your usage with our beta dashboard"
-            }
-          ]
-        }
-      ],
-      cta: "Get Started",
-      betaCta: "Get Beta Access",
-      highlighted: false,
-      gradient: "from-gray-500 to-gray-600"
-    },
-    {
-      name: "Pro",
-      icon: <Coffee className="w-6 h-6" />,
-      price: "☕️",
-      period: "per month",
-      highlight: "Save 90% vs OpenAI ($200/mo)",
-      description: "What OpenAI charges $200/month for",
-      features: [
-        {
-          text: "Unlimited requests under fair use",
-          tooltip: "No hard request limits - use as much as you need within fair usage policy"
-        },
-        {
-          text: "Original model capabilities",
-          tooltip: "Access models with their full context window and capabilities"
-        },
-        {
-          text: "100+ premium AI models",
-          tooltip: "Full access to all models including latest versions and premium variants"
-        },
-        {
-          text: "Full streaming support",
-          tooltip: "Get real-time streaming responses for interactive applications"
-        },
-        {
-          text: "Priority support",
-          tooltip: "Get priority assistance from our dedicated support team"
-        },
-        {
-          text: "OpenAI-compatible API",
-          tooltip: "Seamlessly replace OpenAI's API with our more affordable solution"
-        }
-      ],
-      // Additional benefits for Pro tier to fill space more effectively
-      additionalBenefits: [
-        {
-          text: "Dedicated technical account manager",
-          tooltip: "Get personalized assistance from a dedicated technical expert"
-        },
-        {
-          text: "Custom API integration support",
-          tooltip: "Receive help with integrating our API into your specific workflow"
-        },
-        {
-          text: "Performance optimization consulting",
-          tooltip: "Get expert advice on optimizing your AI implementation for best results"
-        },
-        {
-          text: "Monthly usage reports",
-          tooltip: "Detailed insights into your API usage patterns and optimization opportunities"
-        }
-      ],
-      cta: "Contact Us",
-      highlighted: true,
-      gradient: "from-blue-600 to-indigo-600"
-    }
-  ];
+  const [activeApiSection, setActiveApiSection] = useState<'stable' | 'beta'>('stable');
 
   return (
     <div className="py-16 px-4">
@@ -232,119 +30,134 @@ function Pricing() {
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
           {/* Free Tier Card */}
-          <div
-            className={`relative group rounded-2xl h-full ${
-              tiers[0].highlighted
-                ? 'scale-105 shadow-2xl'
-                : 'hover:scale-105 hover:shadow-xl'
-            } transition-all duration-300`}
-          >
-            <div className={`absolute inset-0 bg-gradient-to-br ${tiers[0].gradient} opacity-[0.08] dark:opacity-[0.16] rounded-2xl`} />
+          <div className="relative group rounded-2xl h-full hover:scale-105 hover:shadow-xl transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-500 to-gray-600 opacity-[0.08] dark:opacity-[0.16] rounded-2xl"></div>
             
             <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 h-full flex flex-col">
-              {tiers[0].highlighted && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full shadow-lg">
-                  Most Popular
-                </div>
-              )}
-
               <div className="mb-8">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${tiers[0].gradient} text-white mb-4`}>
-                  {tiers[0].icon}
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 text-white mb-4">
+                  <Sparkles className="w-6 h-6" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">{tiers[0].name}</h3>
+                <h3 className="text-2xl font-bold mb-2">Free</h3>
                 <div className="mb-4">
-                  <span className="text-4xl font-bold">{tiers[0].price}</span>
-                  <span className="text-gray-500 dark:text-gray-400">/{tiers[0].period}</span>
+                  <span className="text-4xl font-bold">$0</span>
+                  <span className="text-gray-500 dark:text-gray-400">/forever</span>
                 </div>
                 <div className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-2">
-                  {tiers[0].highlight}
+                  Perfect for personal projects
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  {tiers[0].description}
+                  Get started with unlimited access
                 </p>
-              </div>
-
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-1 rounded-lg bg-blue-100 dark:bg-blue-900/30">
-                    {tiers[0].subOptions?.[0]?.icon}
+                
+                {/* Free tier limitations warning */}
+                <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-amber-700 dark:text-amber-400">
+                      <p className="font-medium mb-1">Important limitations:</p>
+                      <ul className="list-disc pl-4 space-y-1">
+                        <li>Services may be terminated or modified at any time</li>
+                        <li>Lower stability during high traffic periods</li>
+                        <li>API parameters and limits subject to change</li>
+                        <li>No uptime guarantees or SLAs</li>
+                      </ul>
+                    </div>
                   </div>
-                  <h4 className="font-medium">{tiers[0].subOptions?.[0]?.name}</h4>
                 </div>
-                <ul className="space-y-4 mb-6 pl-2 border-l-2 border-blue-200 dark:border-blue-800">
-                  {tiers[0].subOptions?.[0]?.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start gap-3">
-                      <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[0].gradient}`}>
-                        <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
-                          <Check className={`w-4 h-4 ${
-                            tiers[0].highlighted ? 'text-blue-600' : 'text-gray-600'
-                          }`} />
-                        </div>
-                      </div>
-                      <span className="text-gray-700 dark:text-gray-300">
-                        {feature.text}
-                        <Tooltip content={feature.tooltip}>
-                          <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
-                        </Tooltip>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
               </div>
 
-              <div className="mb-6">
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1 rounded-lg bg-amber-100 dark:bg-amber-900/30">
-                      {tiers[0].subOptions?.[1]?.icon}
-                    </div>
-                    <h4 className="font-medium">{tiers[0].subOptions?.[1]?.name}</h4>
-                    <div className="px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
-                      New
-                    </div>
-                  </div>
-                  <button 
-                    onClick={toggleBetaSection}
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                    aria-expanded={expandedBetaSection}
-                    aria-controls="beta-features"
+              {/* Collapsible API Sections */}
+              <div className="mb-6 space-y-4">
+                {/* Stable API Section */}
+                <div>
+                  <button
+                    onClick={() => setActiveApiSection('stable')}
+                    className="w-full flex items-center justify-between gap-2 mb-4"
                   >
-                    {expandedBetaSection ? (
+                    <div className="flex items-center gap-2">
+                      <div className="p-1 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                        <Shield className="w-5 h-5" />
+                      </div>
+                      <h4 className="font-medium">Stable API</h4>
+                    </div>
+                    {activeApiSection === 'stable' ? (
                       <ChevronUp className="w-5 h-5" />
                     ) : (
                       <ChevronDown className="w-5 h-5" />
                     )}
                   </button>
-                </div>
-                
-                <div id="beta-features" className={`transition-all duration-300 overflow-hidden ${
-                  expandedBetaSection ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-                }`}>
-                  <ul className="space-y-4 mb-6 pl-2 border-l-2 border-amber-200 dark:border-amber-800">
-                    {tiers[0].subOptions?.[1]?.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start gap-3">
-                        <div className={`p-0.5 rounded-full bg-gradient-to-br from-amber-500 to-orange-500`}>
-                          <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
-                            <Check className="w-4 h-4 text-amber-600" />
+                  
+                  <div className={`transition-all duration-300 overflow-hidden ${
+                    activeApiSection === 'stable' ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                  }`}>
+                    <ul className="space-y-4 mb-6 pl-2 border-l-2 border-blue-200 dark:border-blue-800">
+                      {["3 requests per minute", "4K tokens per response", "4K context window", "100+ AI models access"].map((feature, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <div className="p-0.5 rounded-full bg-gradient-to-br from-gray-500 to-gray-600">
+                            <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
+                              <Check className="w-4 h-4 text-gray-600" />
+                            </div>
                           </div>
-                        </div>
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {feature.text}
-                          <Tooltip content={feature.tooltip}>
-                            <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
-                          </Tooltip>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                          <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Beta API Section */}
+                <div>
+                  <button
+                    onClick={() => setActiveApiSection('beta')}
+                    className="w-full flex items-center justify-between gap-2 mb-4"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="p-1 rounded-lg bg-amber-100 dark:bg-amber-900/30">
+                        <Rocket className="w-5 h-5" />
+                      </div>
+                      <h4 className="font-medium">Beta API</h4>
+                      <div className="px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
+                        New
+                      </div>
+                    </div>
+                    {activeApiSection === 'beta' ? (
+                      <ChevronUp className="w-5 h-5" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5" />
+                    )}
+                  </button>
+                  
+                  <div className={`transition-all duration-300 overflow-hidden ${
+                    activeApiSection === 'beta' ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                  }`}>
+                    <ul className="space-y-4 mb-6 pl-2 border-l-2 border-amber-200 dark:border-amber-800">
+                      {[
+                        "10 requests per minute",
+                        "8K tokens per response",
+                        "32K context window",
+                        "Latest cutting-edge models",
+                        "Early access to new features",
+                        "Dashboard access"
+                      ].map((feature, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <div className="p-0.5 rounded-full bg-gradient-to-br from-amber-500 to-orange-500">
+                            <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
+                              <Check className="w-4 h-4 text-amber-600" />
+                            </div>
+                          </div>
+                          <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
 
               <div className="space-y-3 mt-auto">
                 <button
                   onClick={() => setIsApiKeyModalOpen(true)}
-                  className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 font-medium`}
+                  className="w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 font-medium"
                 >
                   Get Stable API
                   <ArrowRight className="w-4 h-4" />
@@ -352,7 +165,7 @@ function Pricing() {
                 
                 <button
                   onClick={() => setIsBetaModalOpen(true)}
-                  className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all duration-300 font-medium`}
+                  className="w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all duration-300 font-medium"
                 >
                   Get Beta Access
                   <ArrowRight className="w-4 h-4" />
@@ -362,119 +175,81 @@ function Pricing() {
           </div>
 
           {/* Pro Tier Card */}
-          <div
-            className={`relative group rounded-2xl h-full ${
-              tiers[1].highlighted
-                ? 'scale-105 shadow-2xl'
-                : 'hover:scale-105 hover:shadow-xl'
-            } transition-all duration-300`}
-          >
-            <div className={`absolute inset-0 bg-gradient-to-br ${tiers[1].gradient} opacity-[0.08] dark:opacity-[0.16] rounded-2xl`} />
+          <div className="relative group rounded-2xl h-full hover:scale-105 hover:shadow-xl transition-all duration-300">
+            {/* Premium background effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-amber-500/20 dark:from-purple-600/30 dark:to-amber-500/30 rounded-2xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-amber-500 opacity-[0.08] dark:opacity-[0.16] rounded-2xl"></div>
             
-            <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 h-full flex flex-col">
-              {tiers[1].highlighted && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full shadow-lg">
-                  Most Popular
-                </div>
-              )}
+            {/* Subtle border glow effect */}
+            <div className="absolute -inset-0.5 bg-gradient-to-br from-purple-600/30 to-amber-500/30 rounded-2xl blur-sm"></div>
+            
+            <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-purple-200 dark:border-purple-700 h-full flex flex-col">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-purple-600 to-amber-500 text-white text-sm font-medium rounded-full shadow-lg">
+                Enterprise Ready
+              </div>
+
+              {/* Limited time offer badge */}
+              <div className="absolute -right-3 top-6 px-3 py-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-l-full shadow-lg">
+                Limited Time Offer
+              </div>
 
               <div className="mb-8">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${tiers[1].gradient} text-white mb-4`}>
-                  {tiers[1].icon}
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-purple-600 to-amber-500 text-white mb-4 shadow-lg">
+                  <Crown className="w-6 h-6" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">{tiers[1].name}</h3>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold">{tiers[1].price}</span>
-                  <span className="text-gray-500 dark:text-gray-400">/{tiers[1].period}</span>
+                <h3 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-amber-500 bg-clip-text text-transparent">Pro</h3>
+                <div className="mb-4 flex items-baseline">
+                  <span className="text-4xl font-bold">☕️</span>
+                  <span className="text-gray-500 dark:text-gray-400 ml-1">/per month</span>
+                  <span className="ml-2 line-through text-gray-400 text-lg">$200</span>
                 </div>
-                <div className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-2">
-                  {tiers[1].highlight}
+                <div className="text-sm font-medium text-purple-600 dark:text-purple-400 mb-2">
+                  Save 90% vs OpenAI ($200/mo)
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  {tiers[1].description}
+                  Enterprise-grade reliability & support
                 </p>
               </div>
 
-              {/* Core Features */}
               <div className="mb-6">
-                <h4 className="font-medium mb-4">Core Features</h4>
+                <h4 className="font-medium mb-4 flex items-center">
+                  <span className="w-5 h-5 mr-2 text-purple-500">⚡</span>
+                  <span className="text-lg">Premium Features</span>
+                </h4>
                 <ul className="space-y-4 mb-6">
-                  {tiers[1].features?.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start gap-3">
-                      <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[1].gradient}`}>
+                  {[
+                    "Unlimited requests under fair use",
+                    "Original model capabilities",
+                    "100+ premium AI models",
+                    "Full streaming support",
+                    "Priority support",
+                    "OpenAI-compatible API",
+                    "Dedicated technical account manager",
+                    "Custom API integration support"
+                  ].map((feature, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <div className="p-0.5 rounded-full bg-gradient-to-br from-purple-600 to-amber-500">
                         <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
-                          <Check className={`w-4 h-4 ${
-                            tiers[1].highlighted ? 'text-blue-600' : 'text-gray-600'
-                          }`} />
+                          <Check className="w-4 h-4 text-purple-600" />
                         </div>
                       </div>
-                      <span className="text-gray-700 dark:text-gray-300">
-                        {feature.text}
-                        <Tooltip content={feature.tooltip}>
-                          <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
-                        </Tooltip>
-                      </span>
+                      <span className="text-gray-700 dark:text-gray-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* Additional Benefits Section - Collapsible */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-medium">Additional Benefits</h4>
-                  <button 
-                    onClick={toggleProDetailsSection}
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                    aria-expanded={expandedProDetailsSection}
-                    aria-controls="pro-additional-benefits"
-                  >
-                    {expandedProDetailsSection ? (
-                      <ChevronUp className="w-5 h-5" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
-
-                <div id="pro-additional-benefits" className={`transition-all duration-300 overflow-hidden ${
-                  expandedProDetailsSection ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-                }`}>
-                  <ul className="space-y-4 mb-4">
-                    {tiers[1].additionalBenefits?.map((benefit, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <div className={`p-0.5 rounded-full bg-gradient-to-br ${tiers[1].gradient}`}>
-                          <div className="bg-white dark:bg-gray-800 rounded-full p-0.5">
-                            <Check className="w-4 h-4 text-blue-600" />
-                          </div>
-                        </div>
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {benefit.text}
-                          <Tooltip content={benefit.tooltip}>
-                            <Info className="w-4 h-4 ml-1 inline-block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
-                          </Tooltip>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="py-4 px-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl mb-8">
-                <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+              <div className="py-4 px-5 bg-purple-50 dark:bg-purple-900/20 rounded-xl mb-8">
+                <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">
                   Perfect for developers who need reliable API access with premium features and support.
                 </p>
               </div>
 
               <button
                 onClick={() => setIsContactModalOpen(true)}
-                className={`w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 mt-auto ${
-                  tiers[1].highlighted
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700'
-                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
-                } transition-all duration-300 font-medium`}
+                className="w-full py-3 px-6 rounded-xl flex items-center justify-center gap-2 mt-auto bg-gradient-to-r from-purple-600 to-amber-500 text-white hover:from-purple-700 hover:to-amber-600 transition-all duration-300 font-medium"
               >
-                {tiers[1].cta}
+                Upgrade to Pro
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -484,7 +259,28 @@ function Pricing() {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
           <div className="space-y-4">
-            {faqs.map((faq, index) => (
+            {[
+              {
+                question: "What's included in the Free tier?",
+                answer: "The Free tier includes unlimited API access with a 3 RPM rate limit, 4K context window, and access to 100+ AI models. Perfect for personal projects and testing."
+              },
+              {
+                question: "How much does the Pro tier cost?",
+                answer: "Our Pro tier costs just the price of a coffee! This is incredibly cost-effective compared to OpenAI's $200/month plan, saving you up to 90% while providing access to all premium features."
+              },
+              {
+                question: "Can I upgrade or downgrade at any time?",
+                answer: "Yes! You can switch between tiers at any time. Your new tier benefits will be available immediately after upgrading."
+              },
+              {
+                question: "Do you offer refunds?",
+                answer: "No, we do not offer refunds. However, you can try our Free tier indefinitely before upgrading to ensure our service meets your needs."
+              },
+              {
+                question: "What payment methods do you accept?",
+                answer: "We accept all major credit cards, PayPal, and cryptocurrency payments for maximum flexibility."
+              }
+            ].map((faq, index) => (
               <div
                 key={index}
                 className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden"

@@ -12,12 +12,13 @@
     "proxy": "node src/utility/corsProxy.js"
   },
   "dependencies": {
-    "@sanity/client": "^6.28.3",
-    "@sanity/image-url": "^1.1.0",
+    "@firebase/auth": "^1.9.1",
+    "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^16.4.7",
+    "firebase": "^11.5.0",
     "gray-matter": "^4.0.3",
     "lovable-tagger": "^1.1.7",
     "lucide-react": "^0.344.0",
-    "next-sanity": "^9.9.4",
     "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

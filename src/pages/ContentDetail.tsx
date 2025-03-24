@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { getPostBySlug, urlFor, formatDate } from '../utility/sanity';
+import { getPostBySlug, formatDate, calculateReadTime } from '../utility/contentLoader';
+import ReadingProgress from '../components/ReadingProgress';
+import TableOfContents from '../components/TableOfContents';
+import LikeButton from '../components/LikeButton';
+import SaveButton from '../components/SaveButton';
+import ShareButton from '../components/ShareButton';
+import '../styles/postDetail.css';
 
 interface ContentDetails {
-  _id: string;
+  id: string;
   title: string;
   subtitle: string;
   category: string;
@@ -15,9 +21,9 @@ interface ContentDetails {
   readTime: string;
   author: {
     name: string;
-    image: any;
+    image: string;
   };
-  mainImage: any;
+  mainImage?: string;
   body: string;
   iconColor: string;
 }
@@ -26,13 +32,21 @@ const ContentDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [content, setContent] = useState<ContentDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [estimatedReadTime, setEstimatedReadTime] = useState('');
+  const contentRef = useRef<HTMLDivElement>(null);
+  const articleRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to top on mount
+  // Scroll to top on mount and calculate read time
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    
+    // Calculate estimated read time based on content length
+    if (content?.body) {
+      setEstimatedReadTime(calculateReadTime(content.body));
+    }
+  }, [content]);
 
-  // Fetch content from Sanity based on slug
+  // Fetch content based on slug
   useEffect(() => {
     async function fetchContent() {
       if (!id) return;
@@ -47,7 +61,7 @@ const ContentDetail = () => {
         
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching content:', error);
+        console.error('Error loading content:', error);
         setIsLoading(false);
       }
     }
@@ -97,11 +111,17 @@ const ContentDetail = () => {
 
   // Main content view
   return (
-    <div className="min-h-screen bg-gradient-to-b from-light-bg-secondary to-light-bg dark:from-dark-bg-secondary dark:to-dark-bg">
+    <div className="min-h-screen bg-gradient-to-b from-light-bg-secondary to-light-bg dark:from-dark-bg-secondary dark:to-dark-bg" ref={articleRef}>
+      {/* Reading Progress Bar */}
+      {content && <ReadingProgress target={articleRef} />}
+      
       {/* Hero Section */}
       <div 
         className="relative h-80 md:h-96 lg:h-[500px] bg-cover bg-center"
-        style={{ backgroundImage: `url(${content.mainImage ? urlFor(content.mainImage).url() : ''})` }}
+        style={{ 
+          backgroundImage: content.mainImage ? `url(${content.mainImage})` : undefined,
+          backgroundColor: !content.mainImage ? '#1a1a1a' : undefined
+        }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/80"></div>
         
@@ -125,7 +145,7 @@ const ContentDetail = () => {
               </span>
               <span className="text-white/70 text-sm flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                {content.readTime}
+                {content.readTime || estimatedReadTime}
               </span>
             </div>
             
@@ -139,7 +159,7 @@ const ContentDetail = () => {
             
             <div className="flex items-center gap-3">
               <img 
-                src={content.author?.image ? urlFor(content.author.image).width(40).height(40).url() : 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'} 
+                src={content.author?.image || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'}
                 alt={content.author?.name || 'Author'} 
                 className="w-10 h-10 rounded-full border-2 border-white/20"
               />
@@ -152,69 +172,106 @@ const ContentDetail = () => {
       </div>
       
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="bg-light-bg dark:bg-dark-bg rounded-2xl shadow-xl p-6 md:p-10 mb-10">
-          {/* Content */}
-          <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-headings:text-light-text dark:prose-headings:text-dark-text prose-p:text-light-text-secondary dark:prose-p:text-dark-text-secondary prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-img:shadow-md">
-            <ReactMarkdown
-              components={{
-                code({node, inline, className, children, ...props}: any) {
-                  const match = /language-(\w+)/.exec(className || '');
-                  return !inline && match ? (
-                    <SyntaxHighlighter
-                      style={vscDarkPlus as any}
-                      language={match[1]}
-                      PreTag="div"
-                      className="rounded-md my-4"
-                      {...props}
-                    >
-                      {String(children).replace(/\n$/, '')}
-                    </SyntaxHighlighter>
-                  ) : (
-                    <code className={`${className} px-1 py-0.5 rounded bg-gray-200 dark:bg-gray-800`} {...props}>
-                      {children}
-                    </code>
-                  );
-                },
-                h1: ({node, ...props}) => <h1 className="text-3xl mt-8 mb-4" {...props} />,
-                h2: ({node, ...props}) => <h2 className="text-2xl mt-6 mb-3" {...props} />,
-                h3: ({node, ...props}) => <h3 className="text-xl mt-5 mb-2" {...props} />,
-                ul: ({node, ...props}) => <ul className="list-disc pl-6 my-4" {...props} />,
-                ol: ({node, ...props}) => <ol className="list-decimal pl-6 my-4" {...props} />,
-                li: ({node, ...props}) => <li className="mb-1" {...props} />,
-                blockquote: ({node, ...props}) => (
-                  <blockquote className="border-l-4 border-blue-500 pl-4 italic my-4 text-gray-700 dark:text-gray-300" {...props} />
-                ),
-                img: ({node, ...props}) => (
-                  <img className="my-6 mx-auto" {...props} />
-                ),
-                table: ({node, ...props}) => (
-                  <div className="overflow-x-auto my-6">
-                    <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700" {...props} />
-                  </div>
-                ),
-                th: ({node, ...props}) => (
-                  <th className="px-4 py-3 bg-gray-100 dark:bg-gray-800 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" {...props} />
-                ),
-                td: ({node, ...props}) => (
-                  <td className="px-4 py-3 whitespace-nowrap text-sm" {...props} />
-                ),
-              }}
-            >
-              {content.body || ''}
-            </ReactMarkdown>
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Sidebar with Table of Contents - Desktop */}
+          <div className="hidden lg:block lg:col-span-3">
+            {content && <TableOfContents contentRef={contentRef} slug={id} />}
           </div>
           
-          {/* Interaction Footer */}
-          <div className="mt-12 pt-6 border-t border-light-primary-100 dark:border-dark-primary-800 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link 
-                to="/content" 
-                className="flex items-center gap-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+          {/* Article Content */}
+          <div className="lg:col-span-9">
+            <div className="bg-light-bg dark:bg-dark-bg rounded-2xl shadow-xl p-6 md:p-10 mb-10">
+              {/* Estimated Reading Time */}
+              {estimatedReadTime && (
+                <div className="mb-6 flex items-center text-light-text-secondary dark:text-dark-text-secondary">
+                  <Clock className="w-4 h-4 mr-2" />
+                  <span className="text-sm">{estimatedReadTime}</span>
+                </div>
+              )}
+              
+              {/* Content */}
+              <div 
+                ref={contentRef} 
+                className="post-content prose prose-lg dark:prose-invert max-w-none"
               >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Content Hub
-              </Link>
+                <ReactMarkdown
+                  components={{
+                    code({node, inline, className, children, ...props}: any) {
+                      const match = /language-(\w+)/.exec(className || '');
+                      return !inline && match ? (
+                        <div className="code-block-wrapper relative">
+                          <div className="code-language absolute top-0 right-0 bg-gray-700 text-xs text-white px-2 py-1 rounded-bl-md rounded-tr-md">
+                            {match[1]}
+                          </div>
+                          <SyntaxHighlighter
+                            style={vscDarkPlus as any}
+                            language={match[1]}
+                            PreTag="div"
+                            className="rounded-md my-4 !pt-8"
+                            {...props}
+                          >
+                            {String(children).replace(/\n$/, '')}
+                          </SyntaxHighlighter>
+                        </div>
+                      ) : (
+                        <code className={`${className} px-1 py-0.5 rounded`} {...props}>
+                          {children}
+                        </code>
+                      );
+                    },
+                    a({node, href, children, ...props}: any) {
+                      const isExternal = href?.startsWith('http');
+                      return (
+                        <a 
+                          href={href} 
+                          target={isExternal ? "_blank" : undefined}
+                          rel={isExternal ? "noopener noreferrer" : undefined}
+                          {...props}
+                        >
+                          {children}
+                        </a>
+                      );
+                    },
+                    img({node, ...props}: any) {
+                      return (
+                        <figure className="my-8">
+                          <img className="w-full rounded-lg shadow-lg" {...props} />
+                          {props.alt && <figcaption className="text-center text-sm mt-2 text-light-text-secondary dark:text-dark-text-secondary">{props.alt}</figcaption>}
+                        </figure>
+                      );
+                    },
+                    blockquote({node, children, ...props}: any) {
+                      return (
+                        <blockquote {...props}>
+                          {children}
+                        </blockquote>
+                      );
+                    },
+                  }}
+                >
+                  {content?.body || ''}
+                </ReactMarkdown>
+              </div>
+              
+              {/* Interaction Footer */}
+              <div className="mt-12 pt-6 border-t border-light-primary-100 dark:border-dark-primary-800">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <Link 
+                    to="/content" 
+                    className="flex items-center gap-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to Content Hub
+                  </Link>
+                  
+                  <div className="flex items-center gap-4">
+                    <LikeButton />
+                    <SaveButton />
+                    <ShareButton title={content.title} slug={id || ''} />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

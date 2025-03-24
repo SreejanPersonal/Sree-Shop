@@ -1,7 +1,11 @@
 
-import { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy, useEffect } from 'react';
+import ErrorBoundary from './components/ErrorBoundary';
+import { ErrorProvider } from './contexts/ErrorContext';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Layout from './components/Layout';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Pricing from './pages/Pricing';
 import Dashboard from './pages/Dashboard';
@@ -13,6 +17,8 @@ import Status from './pages/Status';
 import ContentHub from './pages/ContentHub';
 import ContentDetail from './pages/ContentDetail';
 import RefundPolicy from './pages/RefundPolicy';
+import ApiKeyManagement from './pages/ApiKeyManagement';
+import BetaApiKeyManagement from './pages/BetaApiKeyManagement';
 
 // Lazy load Documentation component
 const Documentation = lazy(() => import('./pages/Documentation'));
@@ -34,10 +40,30 @@ const LoadingDocs = () => (
   </div>
 );
 
+// Auth redirect handler component
+const AuthRedirectHandler = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const redirectTo = params.get('redirectTo');
+    if (redirectTo) {
+      navigate(redirectTo);
+    }
+  }, [location, navigate]);
+
+  return null;
+};
+
 function App() {
   return (
-    <Router>
-      <Routes>
+    <ErrorBoundary>
+      <ErrorProvider>
+        <Router>
+          <AuthProvider>
+          <AuthRedirectHandler />
+          <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="pricing" element={<Pricing />} />
@@ -55,9 +81,28 @@ function App() {
           } />
           <Route path="content" element={<ContentHub />} />
           <Route path="content/:id" element={<ContentDetail />} />
-        </Route>
-      </Routes>
-    </Router>
+          <Route 
+            path="api-keys" 
+            element={
+              <ProtectedRoute>
+                <ApiKeyManagement />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="beta-api-keys" 
+            element={
+              <ProtectedRoute>
+                <BetaApiKeyManagement />
+              </ProtectedRoute>
+            } 
+          />
+          </Route>
+        </Routes>
+          </AuthProvider>
+        </Router>
+      </ErrorProvider>
+    </ErrorBoundary>
   );
 }
 

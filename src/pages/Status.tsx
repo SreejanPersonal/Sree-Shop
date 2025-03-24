@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   AlertCircle, 
   CheckCircle2, 
@@ -18,6 +18,31 @@ type ApiType = 'stable' | 'beta';
 
 function Status() {
   const [selectedApiType, setSelectedApiType] = useState<ApiType>('stable');
+
+  // Handle hash navigation
+  useEffect(() => {
+    // Check for hash on initial load
+    const checkHash = () => {
+      const hash = window.location.hash.substring(1);
+      if (hash === 'beta' || hash === 'stable') {
+        setSelectedApiType(hash as ApiType);
+      }
+    };
+
+    checkHash();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', checkHash);
+    
+    return () => {
+      window.removeEventListener('hashchange', checkHash);
+    };
+  }, []);
+
+  // Update hash when API type changes
+  useEffect(() => {
+    window.history.replaceState(null, '', `#${selectedApiType}`);
+  }, [selectedApiType]);
 
   const filteredUpdates = statusUpdates.filter(update => update.apiType === selectedApiType);
 
@@ -73,6 +98,7 @@ function Status() {
           {/* API Type Selector - Enhanced with premium styling */}
           <div className="inline-flex p-1 rounded-xl bg-gray-100 dark:bg-gray-800 backdrop-blur-sm shadow-premium-md">
             <button
+              id="stable-api"
               onClick={() => setSelectedApiType('stable')}
               className={`relative px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                 selectedApiType === 'stable'
@@ -91,6 +117,7 @@ function Status() {
               </div>
             </button>
             <button
+              id="beta-api"
               onClick={() => setSelectedApiType('beta')}
               className={`relative px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                 selectedApiType === 'beta'
