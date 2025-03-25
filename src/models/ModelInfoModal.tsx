@@ -15,8 +15,18 @@ import {
   Clock,
   Workflow,
   Sparkles,
-  ShieldCheck
+  ShieldCheck,
+  Server
 } from 'lucide-react';
+import modelProviderMapping from '../utility/models/modelProviderMapping.json';
+
+// Define type for the modelProviderMapping
+type ModelProviderMappingType = {
+  [key: string]: string[];
+};
+
+// Cast the imported JSON to the defined type
+const typedModelProviderMapping = modelProviderMapping as ModelProviderMappingType;
 
 interface ModelInfoModalProps {
   model: string;
@@ -206,6 +216,26 @@ const ModelInfoModal: React.FC<ModelInfoModalProps> = ({ model, provider, isPro,
               </p>
             </div>
           </div>
+
+          {/* Available Providers Section */}
+          {isBeta && typedModelProviderMapping[model] && typedModelProviderMapping[model].length > 0 && (
+            <div className="p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <Server className="w-4 h-4 text-amber-500 dark:text-amber-400" />
+                <h4 className="text-sm font-medium">Available Providers</h4>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {typedModelProviderMapping[model].map((provider: string, index: number) => (
+                  <div 
+                    key={index}
+                    className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 border border-amber-200 dark:border-amber-800/50 shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    <span className="text-xs font-medium text-amber-700 dark:text-amber-300">{provider}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Full Model Name */}
           <div className="p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">

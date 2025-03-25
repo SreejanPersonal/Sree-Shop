@@ -381,7 +381,7 @@ function Layout() {
               
               <div className="flex items-center gap-2">
                 <a
-                  href="https://github.com/SreejanPersonal"
+                  href="https://github.com/SreejanPersonal/Sree-Shop"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg bg-light-bg-secondary/80 dark:bg-dark-bg-tertiary/80 hover:bg-light-bg-tertiary dark:hover:bg-dark-bg-secondary transition-colors"
