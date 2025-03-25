@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useHashNavigation from '../hooks/useHashNavigation';
 import { 
   AlertCircle, 
   CheckCircle2, 
@@ -19,29 +20,20 @@ type ApiType = 'stable' | 'beta';
 function Status() {
   const [selectedApiType, setSelectedApiType] = useState<ApiType>('stable');
 
-  // Handle hash navigation
+  // Handle initial hash on page load only (not during navigation)
   useEffect(() => {
-    // Check for hash on initial load
-    const checkHash = () => {
-      const hash = window.location.hash.substring(1);
-      if (hash === 'beta' || hash === 'stable') {
-        setSelectedApiType(hash as ApiType);
-      }
-    };
-
-    checkHash();
-
-    // Listen for hash changes
-    window.addEventListener('hashchange', checkHash);
-    
-    return () => {
-      window.removeEventListener('hashchange', checkHash);
-    };
+    const hash = window.location.hash.substring(1);
+    if (hash === 'beta' || hash === 'stable') {
+      setSelectedApiType(hash as ApiType);
+    }
   }, []);
 
-  // Update hash when API type changes
+  // Update hash when API type changes, but prevent creating a loop
   useEffect(() => {
-    window.history.replaceState(null, '', `#${selectedApiType}`);
+    // Only update if the current hash doesn't match the selected type
+    if (window.location.hash.substring(1) !== selectedApiType) {
+      window.history.replaceState(null, '', `#${selectedApiType}`);
+    }
   }, [selectedApiType]);
 
   const filteredUpdates = statusUpdates.filter(update => update.apiType === selectedApiType);
@@ -81,6 +73,9 @@ function Status() {
 
   return (
     <div className="min-h-screen py-16 px-4 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950">
+      {/* Hidden anchor elements for hash navigation */}
+      <div id="stable" style={{ position: 'absolute', top: '-100px' }}></div>
+      <div id="beta" style={{ position: 'absolute', top: '-100px' }}></div>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

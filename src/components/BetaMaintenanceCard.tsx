@@ -50,7 +50,7 @@ const BetaMaintenanceCard: React.FC = () => {
           
           <div className="inline-flex items-center gap-2 text-light-text-secondary dark:text-dark-text-secondary">
             <Sparkles className="w-5 h-5 text-purple-500 dark:text-purple-400" />
-            <span>Please check back at {getTimeString()} IST</span>
+            <span>Please check back at 25th March 2025 - {getTimeString()} IST</span>
           </div>
         </div>
       </div>

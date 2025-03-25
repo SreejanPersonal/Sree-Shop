@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { 
   ChevronRight,
+  ChevronDown,
   Search,
   BookOpen,
   Shield,
@@ -16,7 +17,10 @@ import {
   Zap,
   MessageSquare,
   Cpu,
-  Image
+  Image,
+  Book,
+  Server,
+  Lightbulb
 } from 'lucide-react';
 import CodeEditor from '../components/CodeEditor';
 
@@ -25,6 +29,13 @@ interface Section {
   title: string;
   icon: React.ReactNode;
   content: React.ReactNode;
+}
+
+interface Category {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  sections: string[]; // Array of section IDs
 }
 
 interface CodeExample {
@@ -36,6 +47,11 @@ interface CodeExample {
 function Documentation() {
   const [activeSection, setActiveSection] = useState('quickstart');
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
+    'getting-started': true,
+    'core-api': true,
+    'advanced-features': true
+  });
   const [selectedLanguage, setSelectedLanguage] = useState<'python' | 'javascript' | 'curl'>('python');
 
   const codeExamples: Record<string, CodeExample> = {
@@ -1185,9 +1201,67 @@ for await (const chunk of stream) {
     }
   ];
 
-  const filteredSections = sections.filter(section =>
-    section.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Define categories
+  const categories: Category[] = [
+    {
+      id: 'getting-started',
+      title: 'Getting Started',
+      icon: <Book className="w-4 h-4" />,
+      sections: ['quickstart', 'authentication']
+    },
+    {
+      id: 'core-api',
+      title: 'Core API',
+      icon: <Server className="w-4 h-4" />,
+      sections: ['endpoints', 'streaming']
+    },
+    {
+      id: 'advanced-features',
+      title: 'Advanced Features',
+      icon: <Lightbulb className="w-4 h-4" />,
+      sections: ['image-generation', 'beta']
+    }
+  ];
+
+  // Toggle category expansion
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [categoryId]: !prev[categoryId]
+    }));
+  };
+
+  // Filter sections based on search query
+  const getFilteredSections = () => {
+    if (!searchQuery) {
+      return { filteredCategories: categories, filteredSections: sections };
+    }
+
+    const query = searchQuery.toLowerCase();
+    
+    // Filter sections that match the query
+    const matchingSections = sections.filter(section =>
+      section.title.toLowerCase().includes(query)
+    );
+    
+    // Get the IDs of matching sections
+    const matchingSectionIds = matchingSections.map(section => section.id);
+    
+    // Filter categories that have at least one matching section
+    const matchingCategories = categories.map(category => ({
+      ...category,
+      sections: category.sections.filter(sectionId => 
+        matchingSectionIds.includes(sectionId)
+      )
+    })).filter(category => category.sections.length > 0);
+
+    return { 
+      filteredCategories: matchingCategories, 
+      filteredSections: matchingSections 
+    };
+  };
+
+  const { filteredCategories, filteredSections } = getFilteredSections();
 
   return (
     <div className="min-h-screen py-16">
@@ -1227,21 +1301,70 @@ for await (const chunk of stream) {
                 )}
               </div>
 
-              <nav className="space-y-1">
-                {filteredSections.map((section) => (
-                  <button
-                    key={section.id}
-                    onClick={() => setActiveSection(section.id)}
-                    className={`w-full px-4 py-2 rounded-lg text-left flex items-center gap-3 transition-colors ${
-                      activeSection === section.id
-                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                        : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400'
-                    }`}
-                  >
-                    {section.icon}
-                    <span className="text-sm font-medium">{section.title}</span>
-                  </button>
+              <nav className="space-y-4">
+                {filteredCategories.map((category) => (
+                  <div key={category.id} className="space-y-1">
+                    <button
+                      onClick={() => toggleCategory(category.id)}
+                      className="w-full px-3 py-2 rounded-lg text-left flex items-center justify-between transition-colors bg-gray-50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      <div className="flex items-center gap-2">
+                        {category.icon}
+                        <span className="text-sm font-semibold">{category.title}</span>
+                      </div>
+                      {expandedCategories[category.id] ? (
+                        <ChevronDown className="w-4 h-4" />
+                      ) : (
+                        <ChevronRight className="w-4 h-4" />
+                      )}
+                    </button>
+                    
+                    {expandedCategories[category.id] && (
+                      <div className="ml-2 pl-2 border-l-2 border-gray-200 dark:border-gray-700 space-y-1 pt-1">
+                        {category.sections.map(sectionId => {
+                          const section = sections.find(s => s.id === sectionId);
+                          if (!section) return null;
+                          
+                          return (
+                            <button
+                              key={section.id}
+                              onClick={() => setActiveSection(section.id)}
+                              className={`w-full px-3 py-1.5 rounded-lg text-left flex items-center gap-2 transition-colors ${
+                                activeSection === section.id
+                                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                                  : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400'
+                              }`}
+                            >
+                              {section.icon}
+                              <span className="text-sm">{section.title}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 ))}
+                
+                {/* If search is active but no categories match, show flat list of matching sections */}
+                {searchQuery && filteredCategories.length === 0 && filteredSections.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    <div className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400">Search results:</div>
+                    {filteredSections.map((section) => (
+                      <button
+                        key={section.id}
+                        onClick={() => setActiveSection(section.id)}
+                        className={`w-full px-3 py-1.5 rounded-lg text-left flex items-center gap-2 transition-colors ${
+                          activeSection === section.id
+                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400'
+                        }`}
+                      >
+                        {section.icon}
+                        <span className="text-sm">{section.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </nav>
             </div>
           </div>

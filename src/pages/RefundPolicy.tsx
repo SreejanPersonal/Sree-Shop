@@ -18,7 +18,7 @@ function RefundPolicy() {
           </div>
           
           <h1 className="text-4xl font-bold mb-6 relative">
-            <span className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 dark:from-purple-300 dark:via-indigo-200 dark:to-blue-200 bg-clip-text text-transparent">
               Refund Policy
             </span>
             <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full"></div>
@@ -41,7 +41,7 @@ function RefundPolicy() {
                 <div className="p-2 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400">
                   <CheckCircle className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-300 dark:to-indigo-200 bg-clip-text text-transparent">
 Refund Eligibility Section
                 </h2>
               </div>
@@ -146,7 +146,7 @@ Refund Eligibility Section
                 <div className="p-2 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400">
                   <RefreshCcw className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-300 dark:to-purple-200 bg-clip-text text-transparent">
                   Refund Process
                 </h2>
               </div>
@@ -272,7 +272,7 @@ Refund Eligibility Section
                 <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
                   <HelpCircle className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-300 dark:to-purple-200 bg-clip-text text-transparent">
                   Need Help?
                 </h2>
               </div>

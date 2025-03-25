@@ -11,7 +11,7 @@ interface StatusUpdate {
 export const statusUpdates: StatusUpdate[] = [
   // Current Status (Beta API) - Mar 21
   {
-    id: 'beta-update-7',
+    id: 'beta-update-8',
     date: 'Mar 21',
     time: '09:01 IST',
     message:'The dashboard issue has been resolved. The white screen that was appearing has been fixed, and the dashboard is now fully functional. Thank you for your patience and understanding.',
@@ -147,6 +147,15 @@ export const statusUpdates: StatusUpdate[] = [
   },
 
   // Stable API Updates (Professional Language)
+  {
+    id: 'stable-update-latest',
+    date: 'Mar 21',
+    time: '00:00 IST',
+    message: 'The Stable API has been temporarily suspsended due to security concerns. ',
+    type: 'negative',
+    models: ['ALL'],
+    apiType: 'stable'
+  },
   {
     id: 'stable-current',
     date: 'Feb 7',

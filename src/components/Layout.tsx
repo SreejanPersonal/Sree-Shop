@@ -199,7 +199,7 @@ function Layout() {
                   {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
                 <a
-                  href="https://github.com/SreejanPersonal"
+                  href="https://github.com/SreejanPersonal/sree-shop"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg bg-light-bg/80 dark:bg-dark-bg-secondary/80 hover:bg-light-bg-secondary dark:hover:bg-dark-bg-tertiary transition-colors"

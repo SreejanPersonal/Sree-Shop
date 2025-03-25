@@ -16,7 +16,8 @@ import {
   BarChart,
   Camera,
   Server,
-  Zap
+  Zap,
+  AlertTriangle
 } from 'lucide-react';
 import { getAllPosts, getAllCategories, formatDate } from '../utility/contentLoader';
 
@@ -297,7 +298,8 @@ const getIconComponent = (iconName: string) => {
     'BarChart': <BarChart className="w-6 h-6" />,
     'Camera': <Camera className="w-6 h-6" />,
     'Server': <Server className="w-6 h-6" />,
-    'Zap': <Zap className="w-6 h-6" />
+    'Zap': <Zap className="w-6 h-6" />,
+    'AlertTriangle': <AlertTriangle className="w-6 h-6" />
   };
 
   return iconMap[iconName] || <Database className="w-6 h-6" />;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Check } from 'lucide-react';
+import useHashNavigation from '../hooks/useHashNavigation';
 
 interface TocItem {
   id: string;
@@ -16,6 +17,16 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, slug }) =
   const [headings, setHeadings] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Use the hash navigation hook with a callback to set the active ID
+  const { navigateToHash } = useHashNavigation({
+    offset: 100,
+    onHashChange: (hash) => {
+      if (hash) {
+        setActiveId(hash);
+      }
+    }
+  });
 
   useEffect(() => {
     if (!contentRef.current) return;
@@ -38,30 +49,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, slug }) =
 
     setHeadings(items);
 
-    // Handle initial hash navigation
-    const handleInitialHash = () => {
-      const hash = window.location.hash.substring(1);
-      if (hash) {
-        const element = document.getElementById(hash);
-        if (element) {
-          setTimeout(() => {
-            const offset = 100; // Adjust based on your header height
-            const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - offset;
-            
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
-            
-            setActiveId(hash);
-          }, 100);
-        }
-      }
-    };
-
-    handleInitialHash();
-
     // Set up intersection observer for active heading
     const observer = new IntersectionObserver(
       (entries) => {
@@ -83,31 +70,14 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, slug }) =
 
     elements.forEach((element) => observer.observe(element));
 
-    // Listen for hash changes
-    window.addEventListener('hashchange', handleInitialHash);
-
     return () => {
       elements.forEach((element) => observer.unobserve(element));
-      window.removeEventListener('hashchange', handleInitialHash);
     };
   }, [contentRef]);
 
   const scrollToHeading = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      // Update URL hash
-      window.location.hash = id;
-      
-      // Scroll with offset
-      const offset = 100; // Adjust based on your header height
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    }
+    // Use the navigateToHash function from our hook
+    navigateToHash(id);
   };
 
   const copyLinkToHeading = (id: string) => {
